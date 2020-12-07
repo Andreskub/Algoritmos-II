@@ -1,0 +1,6 @@
+Oscar Cordoba;15;10;azulyoro
+Hugo Ibarra;23;15;azulyoro
+Jorge Bermudez;17;8;azulyoro
+ESTE ES LARGUISIMO JAJAJAJJAJA;7;20;rosa
+hola;2;1;verde
+atr;1;3;dorado
