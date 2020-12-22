@@ -79,7 +79,7 @@ int main(){
     arbol_insertar(arbol, c3);
     arbol_insertar(arbol, c5);
     arbol_insertar(arbol, c7);
-
+    
     printf("El nodo raiz deberia ser 4: %s\n", ((cosa*)arbol_raiz(arbol))->clave==4?"SI":"NO");
 
     auxiliar->clave = 5;
@@ -96,7 +96,7 @@ int main(){
 
     auxiliar->clave = 4;
     printf("Borro la raiz (4): %s\n", (arbol_borrar(arbol, auxiliar))==0?"SI":"NO");
-    /*
+    
     auxiliar->clave = 3;
     printf("Busco el elemento (3): %s\n", ((cosa*)arbol_buscar(arbol, auxiliar))->clave==3?"SI":"NO");
     
@@ -107,14 +107,13 @@ int main(){
     for(size_t i=0;i<cantidad;i++)
         printf("%i ", elementos[i]->clave);
     printf("\n");
-
+    
     printf("\n\nInserto mas valores y pruebo el iterador interno\n\n");
     arbol_insertar(arbol, crear_cosa(15));
     arbol_insertar(arbol, crear_cosa(0));
     arbol_insertar(arbol, crear_cosa(9));
     arbol_insertar(arbol, crear_cosa(7));
     arbol_insertar(arbol, crear_cosa(4));
-
     
     printf("Recorrido inorden iterador interno: ");    
     abb_con_cada_elemento(arbol, ABB_RECORRER_INORDEN, mostrar_elemento, NULL);
@@ -154,7 +153,7 @@ int main(){
     printf("Recorrido postorden acumulando los valores: ");    
     abb_con_cada_elemento(arbol, ABB_RECORRER_POSTORDEN, mostrar_acumulado, &acumulador);
     printf("\n");
-    */
+    
     free(auxiliar);
     arbol_destruir(arbol);
     return 0;
