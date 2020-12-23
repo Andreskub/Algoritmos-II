@@ -1,9 +1,11 @@
 #include "abb.h"
 #include <stdio.h>
 
+#define ERROR -1
 #define VACIO 0
+
 /*
- * Crea un struct arbol vacio, reservando la memoria necesaria y asignando las funciones pasadas por parametro
+ * Crea un struct de arbol vacio, reservando la memoria necesaria y asignando las funciones pasadas por parametro
  * como elementos del struct. Retorna NULL si no puede crearlo.
  * INPUT: function; function.
  * OUTPUT: struct pointer abb_t.
@@ -21,6 +23,21 @@ abb_t* arbol_crear(abb_comparador comparador, abb_liberar_elemento destructor){
     return arbol;
 }
 
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES DE RECORRIDO ++++++++++++++++++++++++++++++++++++++++++++++++++ */
+
+/*
+ * Crea un struct nodo y le asigna el elemento pasado por paramtero.
+ * INPUT: void pointer.
+ * OUTPUT: struct pointer nodo_abb_t.
+ */
+nodo_abb_t* crear_nodo(void* elemento){
+    nodo_abb_t* nodo_actual = calloc(1, sizeof(nodo_abb_t));
+    if (!nodo_actual) return NULL;
+
+    nodo_actual->elemento = elemento;
+    return nodo_actual;
+}
+
 /*
  * Funcion recursiva que dado un elemento, lo inserta en el arbol.
  * INPUT: struct pointer nodo_abb_t; void pointer; function.
@@ -28,15 +45,8 @@ abb_t* arbol_crear(abb_comparador comparador, abb_liberar_elemento destructor){
  */
 nodo_abb_t* recorrer_arbol_insertar(nodo_abb_t* nodo_actual, void* elemento, abb_comparador comparador){
     //Hago el caso para un arbol vacio
-    if(!nodo_actual){
-
-        nodo_abb_t* nodo_actual = calloc(1, sizeof(nodo_abb_t));
-        if (!nodo_actual) return NULL;
-
-        nodo_actual->elemento = elemento;
-        
-        return nodo_actual;
-    }
+    if(!nodo_actual)
+        return crear_nodo(elemento);
 
     //Hago caso de los hijos del nodo
     if (comparador(elemento, nodo_actual->elemento) <= 0){
@@ -55,21 +65,30 @@ nodo_abb_t* recorrer_arbol_insertar(nodo_abb_t* nodo_actual, void* elemento, abb
  * OUTPUT: int.
  */
 int arbol_insertar(abb_t* arbol, void* elemento){
-    if (!arbol || !elemento) return -1;
+    if (!arbol || !elemento) return ERROR;
 
     arbol->nodo_raiz = recorrer_arbol_insertar(arbol->nodo_raiz, elemento, arbol->comparador);
-    if(!arbol->nodo_raiz) return -1;
+    if(!arbol->nodo_raiz) return ERROR;
     
     return 0;
 }
 
-
+/*
+ * Funcion que dado un nodo, lo destruye.
+ * INPUT: struct pointer nodo_abb_t; function.
+ * OUTPUT: None.
+ */
 void destruir_nodo(nodo_abb_t* nodo, abb_liberar_elemento destructor){
     if(nodo && destructor)
         destructor(nodo->elemento);
     free(nodo);
 }
 
+/*
+ * Funcion que dado un nodo (inmediato inferior) busca al nodo padre del mismo.
+ * INPUT: struct pointer nodo_abb_t; struct pointer nodo_abb_t.
+ * OUTPUT: struct pointer nodo_abb_t.
+ */
 nodo_abb_t* recorrer_padre_inmediato_inferior(nodo_abb_t* nodo_actual, nodo_abb_t* nodo_destino){
     if (!nodo_actual->derecha)
         return NULL;
@@ -78,18 +97,32 @@ nodo_abb_t* recorrer_padre_inmediato_inferior(nodo_abb_t* nodo_actual, nodo_abb_
     return recorrer_padre_inmediato_inferior(nodo_actual->derecha, nodo_destino);
 }
 
+/*
+ * Funcion que dado un nodo, busca su inmediato inferior.
+ * INPUT: struct pointer nodo_abb_t.
+ * OUTPUT: struct pointer nodo_abb_t.
+ */
 nodo_abb_t* recorrer_inmediato_inferior(nodo_abb_t* nodo_actual){
     if(!nodo_actual->derecha)
         return nodo_actual;
     return recorrer_inmediato_inferior(nodo_actual->derecha); 
 }
 
+/*
+ * Analiza la cantidad de nodos hijos que posee el nodo pasado por parametro, para proceder a eliminar y/o reasignar el arbol.
+ * El nodo puede tener 3 casos: 0 hijos, 1 nodo hijo o 2 nodos hijos.
+ * INPUT: struct pointer nodo_abb_t; function.
+ * OUTPUT:struct pointer nodo_abb_t.
+ */
 nodo_abb_t* reordenar_arbol(nodo_abb_t* nodo_actual, abb_liberar_elemento destructor){
-    if (!nodo_actual->izquierda && !nodo_actual->derecha){ //Si el nodo no tiene hijos, lo elimino
+    //Si el nodo no tiene hijos
+    if (!nodo_actual->izquierda && !nodo_actual->derecha){ 
         destruir_nodo(nodo_actual, destructor); 
         return NULL;
     }
-    if (nodo_actual->izquierda && nodo_actual->derecha){ //Si el nodo tiene 2 hijos
+
+    //Si el nodo tiene 2 hijos
+    if (nodo_actual->izquierda && nodo_actual->derecha){ 
 
         nodo_abb_t* nodo_insertar = recorrer_inmediato_inferior(nodo_actual->izquierda);
         nodo_abb_t* nodo_padre = recorrer_padre_inmediato_inferior(nodo_actual->izquierda, nodo_insertar);
@@ -102,8 +135,9 @@ nodo_abb_t* reordenar_arbol(nodo_abb_t* nodo_actual, abb_liberar_elemento destru
         destruir_nodo(nodo_actual, destructor);
         return nodo_insertar;
     }
-        
-    nodo_abb_t* nodo_aux = nodo_actual->izquierda?nodo_actual->izquierda:nodo_actual->derecha; //Si el nodo solo tiene 1 hijo
+    
+    //Si el nodo solo tiene 1 hijo
+    nodo_abb_t* nodo_aux = nodo_actual->izquierda?nodo_actual->izquierda:nodo_actual->derecha; 
     destruir_nodo(nodo_actual, destructor);
     return nodo_aux;
 }
@@ -137,10 +171,10 @@ nodo_abb_t* recorrer_arbol_borrar(nodo_abb_t* nodo_actual, void* elemento, abb_c
  * OUTPUT: int.
  */
 int arbol_borrar(abb_t* arbol, void* elemento){
-    if (!elemento || !arbol || !arbol->comparador) return -1;
+    if (!elemento || !arbol || !arbol->comparador) return ERROR;
 
     arbol->nodo_raiz = recorrer_arbol_borrar(arbol->nodo_raiz, elemento, arbol->comparador, arbol->destructor);
-    if (!arbol->nodo_raiz) return -1;
+    if (!arbol->nodo_raiz) return ERROR;
 
     return 0;
 }
@@ -179,46 +213,57 @@ void* arbol_buscar(abb_t* arbol, void* elemento){
     return recorrer_arbol_buscar(arbol->nodo_raiz, elemento, arbol->comparador);
 }
 
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES DE AYUDA ++++++++++++++++++++++++++++++++++++++++++++++++++ */
+
 /*
- * Devuelve el elemento almacenado como raiz o NULL si el árbol está
- * vacío o no existe.
+ * Devuelve el elemento almacenado como raiz o NULL si el árbol está vacío o no existe.
+ * INPUT: struct pointer abb_t.
+ * OUTPUT: void pointer.
  */
 void* arbol_raiz(abb_t* arbol){
     if (!arbol || !arbol->nodo_raiz) return NULL;
+
     return arbol->nodo_raiz->elemento;
 }
 
 /*
- * Determina si el árbol está vacío.
- * Devuelve true si está vacío o el arbol es NULL, false si el árbol tiene elementos.
+ * Determina si el árbol está vacío, devolviendo true si está vacío o el arbol es NULL, false si el árbol tiene elementos.
+ * INPUT: struct pointer abb_t.
+ * OUTPUT: bool.
  */
 bool arbol_vacio(abb_t* arbol){
     if(!arbol || !arbol->nodo_raiz)
         return true;
+
     return false;
 }
 
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++ RECORRIDO ARBOL ++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
-
+/*
+ * Recorre el arbol en secuencia inorden, guardando el elemento del nodo recorrido en el array e incrementando 
+ * en 1 el contador, hasta terminar el arbol o hasta el limite del tamanio del array. 
+ * INPUT: struct pointer nodo_abb_t, void pointer pointer, size_t, int pointer.
+ * OUTPUT: None.
+ */
 void recorrer_arbol_inorden(nodo_abb_t* nodo_actual, void** array, size_t tamanio_array, int* cantidad_elementos){
     if(!nodo_actual) return;
 
     recorrer_arbol_inorden(nodo_actual->izquierda, array, tamanio_array, cantidad_elementos);
-
     if( (*cantidad_elementos) >= tamanio_array) return;
 
     array[*cantidad_elementos] = nodo_actual->elemento;
     (*cantidad_elementos)++;
+    
     recorrer_arbol_inorden(nodo_actual->derecha, array, tamanio_array, cantidad_elementos);
 }
 
 /*
- * Llena el array del tamaño dado con los elementos de arbol
- * en secuencia inorden.
- * Devuelve la cantidad de elementos del array que pudo llenar (si el
- * espacio en el array no alcanza para almacenar todos los elementos,
- * llena hasta donde puede y devuelve la cantidad de elementos que
- * pudo poner).
+ * Llena el array del tamaño dado con los elementos de arbol en secuencia inorden.
+ * Devuelve la cantidad de elementos del array que pudo llenar (si el espacio en el array no alcanza para almacenar todos los elementos,
+ * llena hasta donde puede y devuelve la cantidad de elementos que pudo poner).
+ * INPUT: struct pointer abb_t; void pointer pointer; size_t
+ * OUTPUT: size_t.
  */
 size_t arbol_recorrido_inorden(abb_t* arbol, void** array, size_t tamanio_array){
     if (!arbol) return VACIO;
@@ -229,12 +274,14 @@ size_t arbol_recorrido_inorden(abb_t* arbol, void** array, size_t tamanio_array)
 }
 
 
-
-
-
+/*
+ * Recorre el arbol en secuencia preorden, guardando el elemento del nodo recorrido en el array e incrementando 
+ * en 1 el contador, hasta terminar el arbol o hasta el limite del tamanio del array. 
+ * INPUT: struct pointer nodo_abb_t, void pointer pointer, size_t, int pointer.
+ * OUTPUT: None.
+ */
 void recorrer_arbol_preorden(nodo_abb_t* nodo_actual, void** array, size_t tamanio_array, int* cantidad_elementos){
-    if(!nodo_actual) return;
-    if( (*cantidad_elementos) >= tamanio_array) return;
+    if(!nodo_actual || (*cantidad_elementos) >= tamanio_array) return;
 
     array[*cantidad_elementos] = nodo_actual->elemento;
     (*cantidad_elementos)++;
@@ -244,24 +291,29 @@ void recorrer_arbol_preorden(nodo_abb_t* nodo_actual, void** array, size_t taman
 }
 
 /*
- * Llena el array del tamaño dado con los elementos de arbol
- * en secuencia preorden.
- * Devuelve la cantidad de elementos del array que pudo llenar (si el
- * espacio en el array no alcanza para almacenar todos los elementos,
- * llena hasta donde puede y devuelve la cantidad de elementos que
- * pudo poner).
+ * Llena el array del tamaño dado con los elementos de arbol en secuencia preorden.
+ * Devuelve la cantidad de elementos del array que pudo llenar (si el espacio en el array no alcanza para almacenar todos los elementos,
+ * llena hasta donde puede y devuelve la cantidad de elementos que pudo poner).
+ * INPUT: struct pointer abb_t; void pointer pointer; size_t
+ * OUTPUT: size_t.
  */
 size_t arbol_recorrido_preorden(abb_t* arbol, void** array, size_t tamanio_array){
     if(!arbol) return VACIO;
 
     int cantidad_elementos = 0;
     recorrer_arbol_preorden(arbol->nodo_raiz, array, tamanio_array, &cantidad_elementos);
+
     return cantidad_elementos;
 }
 
 
 
-
+/*
+ * Recorre el arbol en secuencia postorden, guardando el elemento del nodo recorrido en el array e incrementando 
+ * en 1 el contador, hasta terminar el arbol o hasta el limite del tamanio del array. 
+ * INPUT: struct pointer nodo_abb_t, void pointer pointer, size_t, int pointer.
+ * OUTPUT: None.
+ */
 void recorrer_arbol_postorden(nodo_abb_t* nodo_actual, void** array, size_t tamanio_array, int* cantidad_elementos){
     if(!nodo_actual) return;
 
@@ -276,12 +328,11 @@ void recorrer_arbol_postorden(nodo_abb_t* nodo_actual, void** array, size_t tama
 }
 
 /*
- * Llena el array del tamaño dado con los elementos de arbol
- * en secuencia postorden.
- * Devuelve la cantidad de elementos del array que pudo llenar (si el
- * espacio en el array no alcanza para almacenar todos los elementos,
- * llena hasta donde puede y devuelve la cantidad de elementos que
- * pudo poner).
+ * Llena el array del tamaño dado con los elementos de arbol en secuencia postorden.
+ * Devuelve la cantidad de elementos del array que pudo llenar (si el espacio en el array no alcanza para almacenar todos los elementos,
+ * llena hasta donde puede y devuelve la cantidad de elementos que pudo poner).
+ * INPUT: struct pointer abb_t; void pointer pointer; size_t
+ * OUTPUT: size_t.
  */
 size_t arbol_recorrido_postorden(abb_t* arbol, void** array, size_t tamanio_array){
     if(!arbol) return VACIO;
@@ -291,10 +342,7 @@ size_t arbol_recorrido_postorden(abb_t* arbol, void** array, size_t tamanio_arra
     return cantidad_elementos;
 }
 
-
-
-
-
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++ DESTRUIR ARBOL ++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
 
 void arbol_destruir_nodos(nodo_abb_t* nodo_actual, abb_liberar_elemento destructor){
@@ -316,6 +364,9 @@ void arbol_destruir(abb_t* arbol){
     if (arbol)    
         free(arbol);
 }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++ ITERADOR INTERNO ++++++++++++++++++++++++++++++++++++++++++++++++++ */
+
 
 void iterador_interno_inorden(nodo_abb_t* nodo_actual, bool (*funcion)(void*,void*), void* extra, bool* bandera, int* cantidad_elementos){
     if(!nodo_actual || bandera) return;
@@ -350,18 +401,15 @@ void iterador_interno_postorden(nodo_abb_t* nodo_actual, bool (*funcion)(void*,v
 
 }
 /*
- * Iterador interno. Recorre el arbol e invoca la funcion con cada
- * elemento del mismo. El puntero 'extra' se pasa como segundo
- * parámetro a la función. Si la función devuelve true, se finaliza el
- * recorrido aun si quedan elementos por recorrer. Si devuelve false
+ * Iterador interno. Recorre el arbol e invoca la funcion con cada elemento del mismo. El puntero 'extra' se pasa como segundo
+ * parámetro a la función. Si la función devuelve true, se finaliza el recorrido aun si quedan elementos por recorrer. Si devuelve false
  * se sigue recorriendo mientras queden elementos.
- * El recorrido se realiza de acuerdo al recorrido solicitado.  Los
- * recorridos válidos son: ABB_RECORRER_INORDEN, ABB_RECORRER_PREORDEN
- * y ABB_RECORRER_POSTORDEN.
+ * El recorrido se realiza de acuerdo al recorrido solicitado. Los recorridos válidos son:
+ * ABB_RECORRER_INORDEN, ABB_RECORRER_PREORDEN y ABB_RECORRER_POSTORDEN.
  * Devuelve la cantidad de elementos que fueron recorridos.
 */
 size_t abb_con_cada_elemento(abb_t* arbol, int recorrido, bool (*funcion)(void*, void*), void* extra){
-    if(!arbol || !funcion) return 0;
+    if(!arbol || !funcion) return VACIO;
 
     bool bandera = false;
     int cantidad_elementos = 0;
