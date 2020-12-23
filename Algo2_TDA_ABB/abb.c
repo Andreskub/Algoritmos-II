@@ -254,7 +254,7 @@ void recorrer_arbol_inorden(nodo_abb_t* nodo_actual, void** array, size_t tamani
 
     array[*cantidad_elementos] = nodo_actual->elemento;
     (*cantidad_elementos)++;
-    
+
     recorrer_arbol_inorden(nodo_actual->derecha, array, tamanio_array, cantidad_elementos);
 }
 
@@ -367,28 +367,47 @@ void arbol_destruir(abb_t* arbol){
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++ ITERADOR INTERNO ++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
-
+/*
+ * Recorre el arbol en secuencia inorden, pasando el elemento del nodo recorrido a la funcion pasada por parametro. Si esta devuelve 
+ * true, se corta el recorrido.
+ * INPUT: struct pointer nodo_abb_t; bool pointer function; void pointer; bool pointer; int pointer.
+ * OUTPUT: None
+ */
 void iterador_interno_inorden(nodo_abb_t* nodo_actual, bool (*funcion)(void*,void*), void* extra, bool* bandera, int* cantidad_elementos){
     if(!nodo_actual || bandera) return;
-    //if(*bandera) return;
 
     iterador_interno_inorden(nodo_actual->izquierda, funcion, extra, bandera, cantidad_elementos);
     if(*bandera) return;
+
     (*cantidad_elementos)++;
-    (*bandera) = (*funcion)(nodo_actual->elemento,extra); 
+    (*bandera) = (*funcion)(nodo_actual->elemento,extra);
+
     iterador_interno_inorden(nodo_actual->derecha, funcion, extra, bandera, cantidad_elementos);
 }
 
+/*
+ * Recorre el arbol en secuencia preorden, pasando el elemento del nodo recorrido a la funcion pasada por parametro. Si esta devuelve 
+ * true, se corta el recorrido.
+ * INPUT: struct pointer nodo_abb_t; bool pointer function; void pointer; bool pointer; int pointer.
+ * OUTPUT: None
+ */
 void iterador_interno_preorden(nodo_abb_t* nodo_actual, bool (*funcion)(void*,void*), void* extra, bool* bandera, int* cantidad_elementos){
     if(!nodo_actual || bandera) return;
 
     (*cantidad_elementos)++;
     (*bandera) = (*funcion)(nodo_actual->elemento,extra);
+
     iterador_interno_preorden(nodo_actual->izquierda, funcion, extra, bandera, cantidad_elementos);
     if(*bandera) return;
     iterador_interno_preorden(nodo_actual->derecha, funcion, extra, bandera, cantidad_elementos);
 }
 
+/*
+ * Recorre el arbol en secuencia postorden, pasando el elemento del nodo recorrido a la funcion pasada por parametro. Si esta devuelve 
+ * true, se corta el recorrido.
+ * INPUT: struct pointer nodo_abb_t; bool pointer function; void pointer; bool pointer; int pointer.
+ * OUTPUT: None
+ */
 void iterador_interno_postorden(nodo_abb_t* nodo_actual, bool (*funcion)(void*,void*), void* extra, bool* bandera, int* cantidad_elementos){
     if(!nodo_actual || (*bandera)) return;
 
@@ -396,17 +415,21 @@ void iterador_interno_postorden(nodo_abb_t* nodo_actual, bool (*funcion)(void*,v
     if(*bandera) return;
     iterador_interno_postorden(nodo_actual->derecha, funcion, extra, bandera, cantidad_elementos);
     if(*bandera) return;
+
     (*bandera) = (*funcion)(nodo_actual->elemento, extra);
     (*cantidad_elementos)++;
-
 }
+
 /*
- * Iterador interno. Recorre el arbol e invoca la funcion con cada elemento del mismo. El puntero 'extra' se pasa como segundo
- * parámetro a la función. Si la función devuelve true, se finaliza el recorrido aun si quedan elementos por recorrer. Si devuelve false
+ * Iterador interno. 
+ * Recorre el arbol e invoca la funcion con cada elemento del mismo. El puntero 'extra' se pasa como segundo parámetro a la función.
+ * Si la función devuelve true, se finaliza el recorrido aun si quedan elementos por recorrer. Si devuelve false
  * se sigue recorriendo mientras queden elementos.
  * El recorrido se realiza de acuerdo al recorrido solicitado. Los recorridos válidos son:
  * ABB_RECORRER_INORDEN, ABB_RECORRER_PREORDEN y ABB_RECORRER_POSTORDEN.
  * Devuelve la cantidad de elementos que fueron recorridos.
+ * INPUT: struct pointer abb_t; int; bool pointer function; void pointer.
+ * OUTPUT: size_t.
 */
 size_t abb_con_cada_elemento(abb_t* arbol, int recorrido, bool (*funcion)(void*, void*), void* extra){
     if(!arbol || !funcion) return VACIO;
