@@ -59,7 +59,7 @@ bool mostrar_acumulado(void* elemento, void* extra){
     return false;
 }
 
-
+/*
 int main(){
     abb_t* arbol = arbol_crear(comparar_cosas, destructor_de_cosas);
 
@@ -158,3 +158,4 @@ int main(){
     arbol_destruir(arbol);
     return 0;
 }
+ */

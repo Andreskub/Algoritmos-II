@@ -1,10 +1,27 @@
 #include "abb.h"
+#include "pa2mm.h"
 
-//Mi strct a trabajar
+#define MAX_MARCA 25
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++ PERSONALIZACION ARBOL ++++++++++++++++++++++++++++++++++++++++++++++++++ */
+
+//Mi struct a trabajar
 typedef struct{
-    char modelo;
+    char marca[MAX_MARCA];
     size_t precio;
 }bicicleta_t;
+
+bicicleta_t* crear_bicicleta(char marca, size_t precio){
+    if (!marca || !precio) return NULL;
+
+    bicicleta_t* bicicleta = malloc(sizeof(bicicleta_t));
+    if(!bicicleta) return NULL;
+
+    bicicleta->marca = marca;
+    bicicleta->precio = precio;
+
+    return bicicleta;
+}
 
 //Mi comparador de bicicletas
 int comparar_precio_bicicleta(void* bicicleta1, void* bicicleta2){
@@ -17,26 +34,35 @@ int comparar_precio_bicicleta(void* bicicleta1, void* bicicleta2){
     return 0;
 }
 
-
-
-//Comparador
-int comparador_elementos(void* elemento, void* comparador){
-    if (elemento == comparador) return 0;
-    if (elemento < comparador) return -1;
-    if (elemento > comparador) return 1;
-}
-
 //Destructor
-void borrar_del_arbol(void* nodo){
-    free(nodo);
+void destructor_de_bicicletas(void* x){
+    if(!x) return;
+    free((bicicleta_t*)x);
 }
 
-/*
-int main(){
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++ PRUEBAS ARBOL ++++++++++++++++++++++++++++++++++++++++++++++++++ */
+void pruebas_arbol_vacio(abb_t* arbol){
 
-    abb_t* arbol_prueba = arbol_crear(comparador_elementos, NULL);
-    free(arbol_prueba);
+    pa2m_afirmar(arbol_crear(NULL,NULL) == NULL, "Devuelve NULL si el comparador es erroneo");
     
+
+}
+
+int main(){
+    abb_t* arbol = NULL;
+
+    pa2m_nuevo_grupo("PRUEBAS ARBOL VACIO");
+    pruebas_arbol_vacio(arbol);
+
+    
+
+    pa2m_nuevo_grupo("PRUEBAS RECORRIDO INORDEN");
+
+    pa2m_nuevo_grupo("PRUEBAS RECORRIDO PREORDEN");
+
+    pa2m_nuevo_grupo("PRUEBAS RECORRIDO POSTORDEN");
+
+    pa2m_nuevo_grupo("PRUEBAS ITERADOR INTERNO");
+
     return 0;
 }
-*/
