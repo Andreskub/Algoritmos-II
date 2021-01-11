@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 #define ERROR -1
+#define OK 0
 #define VACIO 0
 
 /*
@@ -11,7 +12,7 @@
  * OUTPUT: struct pointer abb_t.
  */
 abb_t* arbol_crear(abb_comparador comparador, abb_liberar_elemento destructor){
-    if(!destructor) return NULL;
+    if(!comparador) return NULL;
 
     abb_t* arbol = malloc(sizeof(abb_t));
     if(!arbol) return NULL;
@@ -30,9 +31,12 @@ abb_t* arbol_crear(abb_comparador comparador, abb_liberar_elemento destructor){
  * INPUT: void pointer.
  * OUTPUT: struct pointer nodo_abb_t.
  */
-nodo_abb_t* crear_nodo(void* elemento){
+nodo_abb_t* crear_nodo(void* elemento, int* bandera){
     nodo_abb_t* nodo_actual = calloc(1, sizeof(nodo_abb_t));
-    if (!nodo_actual) return NULL;
+    if (!nodo_actual){
+        (*bandera)=ERROR;
+        return NULL;
+    } 
 
     nodo_actual->elemento = elemento;
     return nodo_actual;
@@ -43,16 +47,16 @@ nodo_abb_t* crear_nodo(void* elemento){
  * INPUT: struct pointer nodo_abb_t; void pointer; function.
  * OUTPUT: struct pointer nodo_abb_t.
  */
-nodo_abb_t* recorrer_arbol_insertar(nodo_abb_t* nodo_actual, void* elemento, abb_comparador comparador){
+nodo_abb_t* recorrer_arbol_insertar(nodo_abb_t* nodo_actual, void* elemento, abb_comparador comparador, int* bandera){
     //Hago el caso para un arbol vacio
     if(!nodo_actual)
-        return crear_nodo(elemento);
+        return crear_nodo(elemento, bandera);
 
     //Hago caso de los hijos del nodo
     if (comparador(elemento, nodo_actual->elemento) <= 0){
-        nodo_actual->izquierda = recorrer_arbol_insertar(nodo_actual->izquierda, elemento, comparador);
+        nodo_actual->izquierda = recorrer_arbol_insertar(nodo_actual->izquierda, elemento, comparador, bandera);
     } else {
-        nodo_actual->derecha = recorrer_arbol_insertar(nodo_actual->derecha, elemento, comparador);
+        nodo_actual->derecha = recorrer_arbol_insertar(nodo_actual->derecha, elemento, comparador, bandera);
     }
  
     return nodo_actual;
@@ -67,10 +71,10 @@ nodo_abb_t* recorrer_arbol_insertar(nodo_abb_t* nodo_actual, void* elemento, abb
 int arbol_insertar(abb_t* arbol, void* elemento){
     if (!arbol || !elemento) return ERROR;
 
-    arbol->nodo_raiz = recorrer_arbol_insertar(arbol->nodo_raiz, elemento, arbol->comparador);
-    if(!arbol->nodo_raiz) return ERROR;
+    int bandera = OK;
+    arbol->nodo_raiz = recorrer_arbol_insertar(arbol->nodo_raiz, elemento, arbol->comparador, &bandera);
     
-    return 0;
+    return bandera;
 }
 
 /*
@@ -114,7 +118,7 @@ nodo_abb_t* recorrer_inmediato_inferior(nodo_abb_t* nodo_actual){
  * INPUT: struct pointer nodo_abb_t; function.
  * OUTPUT:struct pointer nodo_abb_t.
  */
-nodo_abb_t* reordenar_arbol(nodo_abb_t* nodo_actual, abb_liberar_elemento destructor){
+nodo_abb_t* reordenar_arbol(nodo_abb_t* nodo_actual, abb_liberar_elemento destructor, int* bandera){
     //Si el nodo no tiene hijos
     if (!nodo_actual->izquierda && !nodo_actual->derecha){ 
         destruir_nodo(nodo_actual, destructor); 
@@ -147,18 +151,18 @@ nodo_abb_t* reordenar_arbol(nodo_abb_t* nodo_actual, abb_liberar_elemento destru
  * INPUT: struct pointer nodo_abb_t; void pointer; function; function.
  * OUTPUT: struct pointer nodo_abb_t.
  */
-nodo_abb_t* recorrer_arbol_borrar(nodo_abb_t* nodo_actual, void* elemento, abb_comparador comparador, abb_liberar_elemento destructor){
+nodo_abb_t* recorrer_arbol_borrar(nodo_abb_t* nodo_actual, void* elemento, abb_comparador comparador, abb_liberar_elemento destructor, int* bandera){
     if (!nodo_actual) return NULL;
 
     int devolucion_comparacion = comparador(elemento, nodo_actual->elemento);
 
     if (devolucion_comparacion == 0)
-        return reordenar_arbol(nodo_actual, destructor); 
+        return reordenar_arbol(nodo_actual, destructor, bandera); 
     
     if (comparador(elemento, nodo_actual->elemento) == -1){ //Si el elemento es menor al recorrido
-        nodo_actual->izquierda = recorrer_arbol_borrar(nodo_actual->izquierda, elemento, comparador, destructor);
+        nodo_actual->izquierda = recorrer_arbol_borrar(nodo_actual->izquierda, elemento, comparador, destructor, bandera);
     } else if (comparador(elemento, nodo_actual->elemento) == 1){ //Si el elemento es mayor al recorrido
-        nodo_actual->derecha = recorrer_arbol_borrar(nodo_actual->derecha, elemento, comparador, destructor);
+        nodo_actual->derecha = recorrer_arbol_borrar(nodo_actual->derecha, elemento, comparador, destructor, bandera);
     }
 
     return nodo_actual;
@@ -173,10 +177,12 @@ nodo_abb_t* recorrer_arbol_borrar(nodo_abb_t* nodo_actual, void* elemento, abb_c
 int arbol_borrar(abb_t* arbol, void* elemento){
     if (!elemento || !arbol || !arbol->comparador) return ERROR;
 
-    arbol->nodo_raiz = recorrer_arbol_borrar(arbol->nodo_raiz, elemento, arbol->comparador, arbol->destructor);
-    if (!arbol->nodo_raiz) return ERROR;
+    int bandera = OK;
+    arbol->nodo_raiz = recorrer_arbol_borrar(arbol->nodo_raiz, elemento, arbol->comparador, arbol->destructor, &bandera);
+    if (!arbol->nodo_raiz) 
+        bandera = ERROR;
 
-    return 0;
+    return bandera;
 }
 
 
@@ -195,7 +201,7 @@ nodo_abb_t* recorrer_arbol_buscar(nodo_abb_t* nodo_actual, void* elemento, abb_c
         return nodo_actual->elemento;
     } else if (devolucion_comparacion < 0){
         return recorrer_arbol_buscar(nodo_actual->izquierda, elemento, comparador);
-    } else if (devolucion_comparacion > 0) {
+    } else { //devolucion_comparacion > 0
         return recorrer_arbol_buscar(nodo_actual->derecha, elemento, comparador);
     }
 
@@ -246,7 +252,7 @@ bool arbol_vacio(abb_t* arbol){
  * INPUT: struct pointer nodo_abb_t, void pointer pointer, size_t, int pointer.
  * OUTPUT: None.
  */
-void recorrer_arbol_inorden(nodo_abb_t* nodo_actual, void** array, size_t tamanio_array, int* cantidad_elementos){
+void recorrer_arbol_inorden(nodo_abb_t* nodo_actual, void** array, size_t tamanio_array, size_t* cantidad_elementos){
     if(!nodo_actual) return;
 
     recorrer_arbol_inorden(nodo_actual->izquierda, array, tamanio_array, cantidad_elementos);
@@ -268,7 +274,7 @@ void recorrer_arbol_inorden(nodo_abb_t* nodo_actual, void** array, size_t tamani
 size_t arbol_recorrido_inorden(abb_t* arbol, void** array, size_t tamanio_array){
     if (!arbol) return VACIO;
 
-    int cantidad_elementos = 0;
+    size_t cantidad_elementos = 0;
     recorrer_arbol_inorden(arbol->nodo_raiz, array, tamanio_array, &cantidad_elementos);
     return cantidad_elementos;
 }
@@ -280,7 +286,7 @@ size_t arbol_recorrido_inorden(abb_t* arbol, void** array, size_t tamanio_array)
  * INPUT: struct pointer nodo_abb_t, void pointer pointer, size_t, int pointer.
  * OUTPUT: None.
  */
-void recorrer_arbol_preorden(nodo_abb_t* nodo_actual, void** array, size_t tamanio_array, int* cantidad_elementos){
+void recorrer_arbol_preorden(nodo_abb_t* nodo_actual, void** array, size_t tamanio_array, size_t* cantidad_elementos){
     if(!nodo_actual || (*cantidad_elementos) >= tamanio_array) return;
 
     array[*cantidad_elementos] = nodo_actual->elemento;
@@ -300,7 +306,7 @@ void recorrer_arbol_preorden(nodo_abb_t* nodo_actual, void** array, size_t taman
 size_t arbol_recorrido_preorden(abb_t* arbol, void** array, size_t tamanio_array){
     if(!arbol) return VACIO;
 
-    int cantidad_elementos = 0;
+    size_t cantidad_elementos = 0;
     recorrer_arbol_preorden(arbol->nodo_raiz, array, tamanio_array, &cantidad_elementos);
 
     return cantidad_elementos;
@@ -314,7 +320,7 @@ size_t arbol_recorrido_preorden(abb_t* arbol, void** array, size_t tamanio_array
  * INPUT: struct pointer nodo_abb_t, void pointer pointer, size_t, int pointer.
  * OUTPUT: None.
  */
-void recorrer_arbol_postorden(nodo_abb_t* nodo_actual, void** array, size_t tamanio_array, int* cantidad_elementos){
+void recorrer_arbol_postorden(nodo_abb_t* nodo_actual, void** array, size_t tamanio_array, size_t* cantidad_elementos){
     if(!nodo_actual) return;
 
     recorrer_arbol_postorden(nodo_actual->izquierda, array, tamanio_array, cantidad_elementos);
@@ -337,7 +343,7 @@ void recorrer_arbol_postorden(nodo_abb_t* nodo_actual, void** array, size_t tama
 size_t arbol_recorrido_postorden(abb_t* arbol, void** array, size_t tamanio_array){
     if(!arbol) return VACIO;
 
-    int cantidad_elementos = 0;
+    size_t cantidad_elementos = 0;
     recorrer_arbol_postorden(arbol->nodo_raiz, array, tamanio_array, &cantidad_elementos);
     return cantidad_elementos;
 }
@@ -373,7 +379,7 @@ void arbol_destruir(abb_t* arbol){
  * INPUT: struct pointer nodo_abb_t; bool pointer function; void pointer; bool pointer; int pointer.
  * OUTPUT: None
  */
-void iterador_interno_inorden(nodo_abb_t* nodo_actual, bool (*funcion)(void*,void*), void* extra, bool* bandera, int* cantidad_elementos){
+void iterador_interno_inorden(nodo_abb_t* nodo_actual, bool (*funcion)(void*,void*), void* extra, bool* bandera, size_t* cantidad_elementos){
     if(!nodo_actual || bandera) return;
 
     iterador_interno_inorden(nodo_actual->izquierda, funcion, extra, bandera, cantidad_elementos);
@@ -391,7 +397,7 @@ void iterador_interno_inorden(nodo_abb_t* nodo_actual, bool (*funcion)(void*,voi
  * INPUT: struct pointer nodo_abb_t; bool pointer function; void pointer; bool pointer; int pointer.
  * OUTPUT: None
  */
-void iterador_interno_preorden(nodo_abb_t* nodo_actual, bool (*funcion)(void*,void*), void* extra, bool* bandera, int* cantidad_elementos){
+void iterador_interno_preorden(nodo_abb_t* nodo_actual, bool (*funcion)(void*,void*), void* extra, bool* bandera, size_t* cantidad_elementos){
     if(!nodo_actual || bandera) return;
 
     (*cantidad_elementos)++;
@@ -408,7 +414,7 @@ void iterador_interno_preorden(nodo_abb_t* nodo_actual, bool (*funcion)(void*,vo
  * INPUT: struct pointer nodo_abb_t; bool pointer function; void pointer; bool pointer; int pointer.
  * OUTPUT: None
  */
-void iterador_interno_postorden(nodo_abb_t* nodo_actual, bool (*funcion)(void*,void*), void* extra, bool* bandera, int* cantidad_elementos){
+void iterador_interno_postorden(nodo_abb_t* nodo_actual, bool (*funcion)(void*,void*), void* extra, bool* bandera, size_t* cantidad_elementos){
     if(!nodo_actual || (*bandera)) return;
 
     iterador_interno_postorden(nodo_actual->izquierda, funcion, extra, bandera, cantidad_elementos);
@@ -435,7 +441,7 @@ size_t abb_con_cada_elemento(abb_t* arbol, int recorrido, bool (*funcion)(void*,
     if(!arbol || !funcion) return VACIO;
 
     bool bandera = false;
-    int cantidad_elementos = 0;
+    size_t cantidad_elementos = 0;
 
     if(recorrido == ABB_RECORRER_INORDEN)
         iterador_interno_inorden(arbol->nodo_raiz, funcion, extra, &bandera, &cantidad_elementos);
