@@ -179,9 +179,6 @@ int arbol_borrar(abb_t* arbol, void* elemento){
 
     int bandera = OK;
     arbol->nodo_raiz = recorrer_arbol_borrar(arbol->nodo_raiz, elemento, arbol->comparador, arbol->destructor, &bandera);
-    if (!arbol->nodo_raiz) 
-        bandera = ERROR;
-
     return bandera;
 }
 
