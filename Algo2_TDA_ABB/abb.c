@@ -358,8 +358,7 @@ void arbol_destruir_nodos(nodo_abb_t* nodo_actual, abb_liberar_elemento destruct
 }
 /*
  * Destruye el arbol liberando la memoria reservada por el mismo.
- * Adicionalmente invoca el destructor con cada elemento presente en
- * el arbol.
+ * Adicionalmente invoca el destructor con cada elemento presente en el arbol.
  */
 void arbol_destruir(abb_t* arbol){
     if(arbol && arbol->nodo_raiz)
