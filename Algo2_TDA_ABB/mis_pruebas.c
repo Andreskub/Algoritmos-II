@@ -42,23 +42,27 @@ int comparar_bicicletas(void* bicicleta1, void* bicicleta2){
 }
 
 //Destructor
-void destruir_bicicleta(void* x){
-    if(!x) return;
-    free((bicicleta_t*)x);
+void destruir_bicicleta(void* bicicleta){
+    if(!bicicleta) return;
+    free((bicicleta_t*)bicicleta);
 }
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++ PRUEBAS ARBOL ++++++++++++++++++++++++++++++++++++++++++++++++++ */
-abb_t* pruebas_arbol_vacio(abb_t* arbol){
+abb_t* pruebas_arbol_vacio(){
+    pa2m_nuevo_grupo("PRUEBAS DE CREACIÓN");
+    abb_t* arbol = NULL;
+
     pa2m_afirmar((arbol = arbol_crear(comparar_bicicletas,destruir_bicicleta)) != NULL, "Se puede crear un ABB con comparador y destructor");
     pa2m_afirmar(arbol->nodo_raiz == NULL, "El nodo raiz es NULL");
     abb_t* aux = NULL;
     pa2m_afirmar((aux = arbol_crear(comparar_bicicletas,NULL)) != NULL, "Se puede crear un ABB sin destructor");
     pa2m_afirmar(arbol_crear(NULL,NULL) == NULL, "No se puede crear un ABB sin comparador");
-    arbol_destruir(aux);
+    
+    arbol_destruir(aux); 
     return arbol;
 }
 
-void pruebas_insercion_borrado(abb_t* arbol){
+abb_t* pruebas_insercion(abb_t* arbol){
     pa2m_nuevo_grupo("PRUEBAS DE INSERCIÓN");
 
     bicicleta_t* b1 = crear_bicicleta("Specialized", 679000);
@@ -92,10 +96,10 @@ void pruebas_insercion_borrado(abb_t* arbol){
 
     pa2m_nuevo_grupo("PRUEBAS DE BUSQUEDA");
     pa2m_afirmar(arbol_buscar(arbol, b6) == b6,"Busca un elemento existente y lo encuentra");
-    pa2m_afirmar(arbol_buscar(arbol, b6) == b6,"Busca un elemento existente y lo encuentra");
-    pa2m_afirmar(arbol_buscar(arbol, b6) == b6,"Busca un elemento existente y lo encuentra");
+    pa2m_afirmar(arbol_buscar(arbol, b10) == b10,"Busca un elemento existente y lo encuentra");
+    pa2m_afirmar(arbol_buscar(arbol, b7) == b7,"Busca un elemento existente y lo encuentra");
     pa2m_afirmar(arbol_buscar(arbol, b9) == NULL,"Buscar un elemento inexistente devuelve NULL");
-    free(b9);
+    destruir_bicicleta(b9);
 
     pa2m_nuevo_grupo("PRUEBAS DE BORRADO");
     pa2m_afirmar(arbol_borrar(arbol, b7) == OK,"Puede borrar un nodo hoja");
@@ -117,30 +121,40 @@ void pruebas_insercion_borrado(abb_t* arbol){
     pa2m_afirmar(arbol->nodo_raiz == NULL, "Se eliminaron todos los nodos del ABB");
     pa2m_afirmar(arbol_vacio(arbol) == true, "La funcion arbol_vacio devuelve true");
 
-    /*
-    pa2m_nuevo_grupo("ALGUNAS PRUEBAS MAS GENERALES");
-    arbol_insertar(arbol, b3);
-    arbol_insertar(arbol, b2);
-    arbol_insertar(arbol, b1);
-    arbol_insertar(arbol, b4);
-    arbol_insertar(arbol, b5);
-    pa2m_afirmar(arbol_borrar(arbol,b3) == OK, "Borra la raiz del ABB");
-    pa2m_afirmar(arbol_buscar(arbol, b3) == NULL, "El elemento no existe mas en el ABB");
-    pa2m_afirmar(arbol_insertar(arbol, b3) == OK, "Puede volver a insertar el elemento");
-    pa2m_afirmar(arbol->nodo_raiz->derecha->izquierda->elemento == b3, "El elemento fue insertado como nodo hoja");
-    */
+    return arbol;
 }
 
+void pruebas_generales(){
+    abb_t* arbol = arbol_crear(comparar_bicicletas, destruir_bicicleta);
+        
+    bicicleta_t* b11 = crear_bicicleta("Specialized", 679000);
+    bicicleta_t* b12 = crear_bicicleta("Trek", 400000);
+    bicicleta_t* b13 = crear_bicicleta("Scott", 550000);
+    bicicleta_t* b14 = crear_bicicleta("Vairo", 215000);
+    bicicleta_t* b15 = crear_bicicleta("Venzo", 455000);
+    arbol_insertar(arbol, b13);
+    arbol_insertar(arbol, b12);
+    arbol_insertar(arbol, b11);
+    arbol_insertar(arbol, b14);
+    arbol_insertar(arbol, b15);
+
+    pa2m_afirmar(arbol_borrar(arbol,b13) == OK, "Borra la raiz del ABB");
+    bicicleta_t* aux = crear_bicicleta("Scott", 550000);
+    pa2m_afirmar(arbol_buscar(arbol, aux) == NULL, "El elemento no existe mas en el ABB");
+    pa2m_afirmar(arbol_insertar(arbol, aux) == OK, "Puede volver a insertar el mismo elemento");
+    pa2m_afirmar(arbol->nodo_raiz->derecha->izquierda->elemento == aux, "El elemento fue insertado como nodo hoja");
+
+    arbol_destruir(arbol);
+}
 
 int main(){
-    abb_t* arbol = NULL;
-
-    pa2m_nuevo_grupo("PRUEBAS DE CREACIÓN");
-    arbol = pruebas_arbol_vacio(arbol);
+    abb_t* arbol = pruebas_arbol_vacio();
 
     
-    pruebas_insercion_borrado(arbol);
+    pruebas_insercion(arbol);
 
+    pa2m_nuevo_grupo("ALGUNAS PRUEBAS MAS GENERALES");
+    pruebas_generales();
 
     pa2m_nuevo_grupo("PRUEBAS RECORRIDO INORDEN");
 
