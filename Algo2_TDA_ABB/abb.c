@@ -327,7 +327,6 @@ void recorrer_arbol_postorden(nodo_abb_t* nodo_actual, void** array, size_t tama
 
     array[*cantidad_elementos] = nodo_actual->elemento;
     (*cantidad_elementos)++;
-
 }
 
 /*
@@ -376,7 +375,7 @@ void arbol_destruir(abb_t* arbol){
  * OUTPUT: None
  */
 void iterador_interno_inorden(nodo_abb_t* nodo_actual, bool (*funcion)(void*,void*), void* extra, bool* bandera, size_t* cantidad_elementos){
-    if(!nodo_actual || bandera) return;
+    if(!nodo_actual || (*bandera)) return;
 
     iterador_interno_inorden(nodo_actual->izquierda, funcion, extra, bandera, cantidad_elementos);
     if(*bandera) return;
@@ -394,7 +393,7 @@ void iterador_interno_inorden(nodo_abb_t* nodo_actual, bool (*funcion)(void*,voi
  * OUTPUT: None
  */
 void iterador_interno_preorden(nodo_abb_t* nodo_actual, bool (*funcion)(void*,void*), void* extra, bool* bandera, size_t* cantidad_elementos){
-    if(!nodo_actual || bandera) return;
+    if(!nodo_actual || (*bandera)) return;
 
     (*cantidad_elementos)++;
     (*bandera) = (*funcion)(nodo_actual->elemento,extra);

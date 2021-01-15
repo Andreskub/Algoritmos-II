@@ -208,8 +208,8 @@ void llenar_arbol_7(abb_t* arbol){
     bicicleta_t* b3 = crear_bicicleta("Specialized", 679000);
     bicicleta_t* b4 = crear_bicicleta("Vairo", 215000);
     bicicleta_t* b5 = crear_bicicleta("Venzo", 455000);
-    bicicleta_t* b6 = crear_bicicleta("Santa Cruz", 1100000);
-    bicicleta_t* b7 = crear_bicicleta("Cannondale", 600000);
+    bicicleta_t* b6 = crear_bicicleta("Cannondale", 600000);
+    bicicleta_t* b7 = crear_bicicleta("Santa Cruz", 1100000);
     arbol_insertar(arbol, b1);
     arbol_insertar(arbol, b2);
     arbol_insertar(arbol, b3);
@@ -239,13 +239,13 @@ void pruebas_recorrido_inorden(abb_t* arbol){
     pa2m_afirmar(contador == 7, "Los elementos en el vector tienen el oden esperado");
     
     bicicleta_t* elementos2[7];
-    size_t cantidad2 = arbol_recorrido_inorden(arbol, (void**)elementos, 5);
+    size_t cantidad2 = arbol_recorrido_inorden(arbol, (void**)elementos2, 5);
     contador = aux_recorrido(arbol, elementos, precios_inorden, cantidad2);    
     pa2m_afirmar(cantidad2 == 5,"Pido recorrer menos elementos de los existentes para hacer el recorrido");
     pa2m_afirmar(contador == 5, "Los elementos en el vector tienen el oden esperado");
 
     bicicleta_t* elementos3[7];
-    size_t cantidad3 = arbol_recorrido_inorden(arbol, (void**)elementos, 10);
+    size_t cantidad3 = arbol_recorrido_inorden(arbol, (void**)elementos3, 10);
     contador = aux_recorrido(arbol, elementos, precios_inorden, cantidad3); 
     pa2m_afirmar(cantidad3 == 7,"Pido recorrer mas elementos de los existentes para hacer el recorrido");
     pa2m_afirmar(contador == 7, "Los elementos en el vector tienen el oden esperado");
@@ -262,13 +262,13 @@ void pruebas_recorrido_preorden(abb_t* arbol){
     pa2m_afirmar(contador == 7, "Los elementos en el vector tienen el oden esperado");
     
     bicicleta_t* elementos2[7];
-    size_t cantidad2 = arbol_recorrido_preorden(arbol, (void**)elementos, 5);
+    size_t cantidad2 = arbol_recorrido_preorden(arbol, (void**)elementos2, 5);
     contador = aux_recorrido(arbol, elementos, precios_preorden, cantidad2);    
     pa2m_afirmar(cantidad2 == 5,"Pido recorrer menos elementos de los existentes para hacer el recorrido");
     pa2m_afirmar(contador == 5, "Los elementos en el vector tienen el oden esperado");
 
     bicicleta_t* elementos3[7];
-    size_t cantidad3 = arbol_recorrido_preorden(arbol, (void**)elementos, 10);
+    size_t cantidad3 = arbol_recorrido_preorden(arbol, (void**)elementos3, 10);
     contador = aux_recorrido(arbol, elementos, precios_preorden, cantidad3); 
     pa2m_afirmar(cantidad3 == 7,"Pido recorrer mas elementos de los existentes para hacer el recorrido");
     pa2m_afirmar(contador == 7, "Los elementos en el vector tienen el oden esperado");
@@ -284,16 +284,36 @@ void pruebas_recorrido_postorden(abb_t* arbol){
     pa2m_afirmar(contador == 7, "Los elementos en el vector tienen el oden esperado");
     
     bicicleta_t* elementos2[7];
-    size_t cantidad2 = arbol_recorrido_postorden(arbol, (void**)elementos, 5);
+    size_t cantidad2 = arbol_recorrido_postorden(arbol, (void**)elementos2, 5);
     contador = aux_recorrido(arbol, elementos, precios_postorden, cantidad2);    
     pa2m_afirmar(cantidad2 == 5,"Pido recorrer menos elementos de los existentes para hacer el recorrido");
     pa2m_afirmar(contador == 5, "Los elementos en el vector tienen el oden esperado");
 
     bicicleta_t* elementos3[7];
-    size_t cantidad3 = arbol_recorrido_postorden(arbol, (void**)elementos, 10);
+    size_t cantidad3 = arbol_recorrido_postorden(arbol, (void**)elementos3, 10);
     contador = aux_recorrido(arbol, elementos, precios_postorden, cantidad3); 
     pa2m_afirmar(cantidad3 == 7,"Pido recorrer mas elementos de los existentes para hacer el recorrido");
     pa2m_afirmar(contador == 7, "Los elementos en el vector tienen el oden esperado");
+}
+
+bool es_costosa(void* elemento, void* extra){
+    //extra=extra;
+    if(((bicicleta_t*)elemento)->precio > 1000000)
+        return true;
+    return false;
+}
+
+void pruebas_iterador_interno(abb_t* arbol){
+
+    size_t contador = abb_con_cada_elemento(arbol, ABB_RECORRER_INORDEN, es_costosa, NULL);
+    pa2m_afirmar(contador == 7, "El iterador interno devuelve la cantidad de elementos que se esperaba iterar");
+
+    contador = abb_con_cada_elemento(arbol, ABB_RECORRER_POSTORDEN, es_costosa, NULL);
+    pa2m_afirmar(contador == 5, "El iterador interno devuelve la cantidad de elementos que se esperaba iterar");
+
+    contador = abb_con_cada_elemento(arbol, ABB_RECORRER_PREORDEN, es_costosa, NULL);
+    pa2m_afirmar(contador == 7, "El iterador interno devuelve la cantidad de elementos que se esperaba iterar");
+    //printf("\n%li\n", contador);
 }
 
 int main(){
@@ -318,6 +338,7 @@ int main(){
     pa2m_nuevo_grupo("PRUEBAS RECORRIDO POSTORDEN");
     pruebas_recorrido_postorden(arbol_recorrido);
     pa2m_nuevo_grupo("PRUEBAS ITERADOR INTERNO");
+    pruebas_iterador_interno(arbol_recorrido);
 
     arbol_destruir(arbol_recorrido);    
 

@@ -45,7 +45,7 @@ bool mostrar_hasta_5(void* elemento, void* extra){
     extra=extra; //para que no se queje el compilador, gracias -Werror -Wall
     if(elemento){
         printf("%i ", ((cosa*)elemento)->clave);
-        if(((cosa*)elemento)->clave == 5)
+        if(((cosa*)elemento)->clave == 5) 
             return true;
     }
     return false;
