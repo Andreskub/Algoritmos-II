@@ -69,7 +69,7 @@ nodo_abb_t* recorrer_arbol_insertar(nodo_abb_t* nodo_actual, void* elemento, abb
  * OUTPUT: int.
  */
 int arbol_insertar(abb_t* arbol, void* elemento){
-    if (!arbol || !elemento) return ERROR;
+    if (!arbol) return ERROR;
 
     int bandera = OK;
     arbol->nodo_raiz = recorrer_arbol_insertar(arbol->nodo_raiz, elemento, arbol->comparador, &bandera);
@@ -85,7 +85,8 @@ int arbol_insertar(abb_t* arbol, void* elemento){
 void destruir_nodo(nodo_abb_t* nodo, abb_liberar_elemento destructor){
     if(nodo && destructor)
         destructor(nodo->elemento);
-    free(nodo);
+    if(nodo)
+        free(nodo);
 }
 
 /*
@@ -152,8 +153,10 @@ nodo_abb_t* reordenar_arbol(nodo_abb_t* nodo_actual, abb_liberar_elemento destru
  * OUTPUT: struct pointer nodo_abb_t.
  */
 nodo_abb_t* recorrer_arbol_borrar(nodo_abb_t* nodo_actual, void* elemento, abb_comparador comparador, abb_liberar_elemento destructor, int* bandera){
-    if (!nodo_actual) return NULL;
-
+    if (!nodo_actual){
+        (*bandera) = ERROR;
+        return NULL;
+    }
     int devolucion_comparacion = comparador(elemento, nodo_actual->elemento);
 
     if (devolucion_comparacion == 0)
@@ -175,7 +178,7 @@ nodo_abb_t* recorrer_arbol_borrar(nodo_abb_t* nodo_actual, void* elemento, abb_c
  * OUTPUT: int.
  */
 int arbol_borrar(abb_t* arbol, void* elemento){
-    if (!elemento || !arbol || !arbol->comparador) return ERROR;
+    if (!arbol || !arbol->comparador) return ERROR;
 
     int bandera = OK;
     arbol->nodo_raiz = recorrer_arbol_borrar(arbol->nodo_raiz, elemento, arbol->comparador, arbol->destructor, &bandera);
@@ -237,7 +240,6 @@ void* arbol_raiz(abb_t* arbol){
 bool arbol_vacio(abb_t* arbol){
     if(!arbol || !arbol->nodo_raiz)
         return true;
-
     return false;
 }
 
