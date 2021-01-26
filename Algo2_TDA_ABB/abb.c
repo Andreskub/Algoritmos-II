@@ -83,10 +83,9 @@ int arbol_insertar(abb_t* arbol, void* elemento){
  * OUTPUT: None.
  */
 void destruir_nodo(nodo_abb_t* nodo, abb_liberar_elemento destructor){
-    if(nodo && destructor)
+    if(destructor)
         destructor(nodo->elemento);
-    if(nodo)
-        free(nodo);
+    free(nodo);
 }
 
 /*
@@ -190,9 +189,9 @@ int arbol_borrar(abb_t* arbol, void* elemento){
  * Funcion recursiva que dado un elemento, lo busca en el arbol. 
  * Si lo encuentra devuelve el elemento, de caso contrario devuelve NULL..
  * INPUT: struct pointer nodo_abb_t; void pointer; function.
- * OUTPUT: struct pointer nodo_abb_t.
+ * OUTPUT: void pointer.
  */
-nodo_abb_t* recorrer_arbol_buscar(nodo_abb_t* nodo_actual, void* elemento, abb_comparador comparador){
+void* recorrer_arbol_buscar(nodo_abb_t* nodo_actual, void* elemento, abb_comparador comparador){
     if (!nodo_actual) return NULL;
 
     int devolucion_comparacion = comparador(elemento, nodo_actual->elemento);
@@ -215,7 +214,7 @@ nodo_abb_t* recorrer_arbol_buscar(nodo_abb_t* nodo_actual, void* elemento, abb_c
  */
 void* arbol_buscar(abb_t* arbol, void* elemento){
     if (!arbol || !elemento) return NULL;
-
+    
     return recorrer_arbol_buscar(arbol->nodo_raiz, elemento, arbol->comparador);
 }
 
