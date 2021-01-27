@@ -83,9 +83,10 @@ int arbol_insertar(abb_t* arbol, void* elemento){
  * OUTPUT: None.
  */
 void destruir_nodo(nodo_abb_t* nodo, abb_liberar_elemento destructor){
-    if(destructor)
+    if(nodo && destructor)
         destructor(nodo->elemento);
-    free(nodo);
+    if(nodo)
+        free(nodo);
 }
 
 /*
@@ -161,9 +162,9 @@ nodo_abb_t* recorrer_arbol_borrar(nodo_abb_t* nodo_actual, void* elemento, abb_c
     if (devolucion_comparacion == 0)
         return reordenar_arbol(nodo_actual, destructor, bandera); 
     
-    if (comparador(elemento, nodo_actual->elemento) == -1){ //Si el elemento es menor al recorrido
+    if (devolucion_comparacion < 0){ //Si el elemento es menor al recorrido
         nodo_actual->izquierda = recorrer_arbol_borrar(nodo_actual->izquierda, elemento, comparador, destructor, bandera);
-    } else if (comparador(elemento, nodo_actual->elemento) == 1){ //Si el elemento es mayor al recorrido
+    } else if (devolucion_comparacion > 0){ //Si el elemento es mayor al recorrido
         nodo_actual->derecha = recorrer_arbol_borrar(nodo_actual->derecha, elemento, comparador, destructor, bandera);
     }
 
