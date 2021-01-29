@@ -1,6 +1,10 @@
 #ifndef __AVENTURA_POKEMON__
 #define __AVENTURA_POKEMON__
 
+"%100[^;];%i;%i;%50[^\n]\n"
+#define FORMATO_LECTURA_GIMANSIO
+#define FORMATO_LECTURA_ENTRENADOR ";%50[^;];%i;%i;%i\n"
+
 #define MAX_NOMBRE 50
 
 typedef struct pokemon{
