@@ -1,10 +1,4 @@
-
-//2N+1 2N+2
-
-typedef struct heap{
-    gimnasio_t* v_gimnasios;
-    int cantidad;
-}heap_t;
+#include "m_heap.h"
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES AUXILIARES ++++++++++++++++++++++++++++++++++++++++++++++++++ */
 int posicion_padre(int n){
@@ -16,7 +10,7 @@ int posicion_pos_derecho(int n){
 }
 
 int posicion_pos_izquierdo(int n){
-    2*n+1;
+    return 2*n+1;
 }
 
 void swap(int* vector, int i, int j){
