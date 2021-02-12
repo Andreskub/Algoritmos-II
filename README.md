@@ -4,10 +4,12 @@
 ### Autor: Andrés Kübler
 #
 
-|Índice de Trabajos|||
+## Índice de Trabajos
+||Trabajos Integrales|TDA|
 | --- | --- | --- |
-|  [Introducción](#Introducción)  |  [TP1 - Gran Pesca Pokémon](#TP1)  |  [TP2 - Una Aventura Pokémon](#TP2)  |
-|  [TDA - Lista](#TDA_lista)  |  [TDA - ABB](#TDA_ABB)  |  [TDA - Hash](#TDA_Hash)  |
+|  [Introducción](#Introducción)  |  [TP1 - Gran Pesca Pokémon](#TP1)  |  [TDA - ABB](#TDA_ABB)  |
+||  [TP2 - Una Aventura Pokémon](#TP2)  |  [TDA - Lista](#TDA_lista)  |
+|||  [TDA - Hash](#TDA_Hash)  |
 
 #
 
