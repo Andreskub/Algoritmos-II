@@ -5,10 +5,10 @@
 #
 
 ## Índice de Trabajos
-||Trabajos Integrales|TDA|
+|[Introducción](#Introducción)|Trabajos Integradores|Tipo de Dato Abstracto|
 | --- | --- | --- |
-|  [Introducción](#Introducción)  |  [TP1 - Gran Pesca Pokémon](#TP1)  |  [TDA - ABB](#TDA_ABB)  |
-||  [TP2 - Una Aventura Pokémon](#TP2)  |  [TDA - Lista](#TDA_lista)  |
+||  [TP1 - Gran Pesca Pokémon](#TP1)  |  [TDA - Lista](#TDA_lista)  |
+||  [TP2 - Una Aventura Pokémon](#TP2)  |  [TDA - ABB](#TDA_ABB)  |
 |||  [TDA - Hash](#TDA_Hash)  |
 
 #
