@@ -48,6 +48,32 @@ void shift_down(heap_t* heap, int n){
 
 }
 
+void mostrar_arbol(int* buffer, int n){
+    printf("\n");
+    int niveles = 0;
+    for(int restantes = n; restantes > 0; restantes >>= 1){
+        niveles++;
+    }
+
+    int n_nodo = 0;
+    for(int nivel = 0; nivel < niveles; nivel++){
+        int posicion = 1<<(niveles-nivel-1);
+
+        for(int nodo = 0; nodo < (1<<nivel); nodo++){
+            for(int i =0; i < posicion; i++){
+                if(i <= posicion/2-1 || 2*n_nodo+1 >= n || buffer[2*n_nodo+1]==0)
+                    printf("  ");
+                else{
+                    if(i == posicion/2)
+                        printf(" r");
+                    else
+                        printf("---");
+                }
+            }
+        }
+    }
+}
+
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES PRINCIPALES ++++++++++++++++++++++++++++++++++++++++++++++++++ */
 heap_t* crear_heap(){
     heap_t* heap = calloc(1, sizeof(heap_t));
@@ -85,10 +111,14 @@ int extraer_nodo_raiz(heap_t* heap){
     return valor;
 }
 
+//Crea y me devuelve un heap ordenado (ordena el vector)
 heap_t* heapify(gimnasio_t* v_gimnasios, int n){
     heap_t* mi_heap = crear_heap();
     mi_heap->v_gimnasios = v_gimnasios;
     mi_heap->cantidad = n;
+
+    printf("\n\n Arbol antes del heapify:\n");
+    mostrar_arbol(mi_heap->v_gimnasios, mi_heap->cantidad);
 
     int primero = posicion_padre(n-1);
 
@@ -97,6 +127,8 @@ heap_t* heapify(gimnasio_t* v_gimnasios, int n){
         n--;
     }
 
+    printf("\n\n Arbol despues del heapify:\n");
+    mostrar_arbol(mi_heap->v_gimnasios, mi_heap->cantidad);
     return mi_heap;
 }
 

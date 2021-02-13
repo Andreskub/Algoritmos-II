@@ -2,10 +2,11 @@
 #define __AVENTURA_POKEMON__
 
 "%100[^;];%i;%i;%50[^\n]\n"
+#define FORMATO_PRELECTURA 
 #define FORMATO_LECTURA_GIMANSIO
 #define FORMATO_LECTURA_ENTRENADOR ";%50[^;];%i;%i;%i\n"
 
-#define MAX_NOMBRE 50
+#define MAX_NOMBRE 5050
 
 typedef struct pokemon{
     char especie[MAX_NOMBRE];
