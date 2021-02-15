@@ -1,10 +1,7 @@
 #ifndef __AVENTURA_POKEMON__
 #define __AVENTURA_POKEMON__
 
-"%100[^;];%i;%i;%50[^\n]\n"
-#define FORMATO_PRELECTURA 
-#define FORMATO_LECTURA_GIMANSIO
-#define FORMATO_LECTURA_ENTRENADOR ";%50[^;];%i;%i;%i\n"
+
 
 #define MAX_NOMBRE 5050
 
@@ -22,11 +19,10 @@ typedef struct entrenador{
 
 typedef struct gimnasio{
     char nombre[MAX_NOMBRE];
+    int dificultad;
+    int id_puntero_funcion;
     //Algo++
 }gimnasio_t;
 
-gimnasio_t* crear_gimnasio(const char* ruta_archivo);
-
-entrenador_t* crear_entrenador();
 
 #endif /* __AVENTURA_POKEMON__ */
