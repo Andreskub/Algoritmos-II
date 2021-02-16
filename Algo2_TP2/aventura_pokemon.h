@@ -1,9 +1,11 @@
 #ifndef __AVENTURA_POKEMON__
 #define __AVENTURA_POKEMON__
 
+#include <stdbool.h> //printf
+#include <stdlib.h> //calloc
 
 
-#define MAX_NOMBRE 5050
+#define MAX_NOMBRE 50
 
 typedef struct pokemon{
     char especie[MAX_NOMBRE];
@@ -14,6 +16,8 @@ typedef struct pokemon{
 
 typedef struct entrenador{
     char nombre[MAX_NOMBRE];
+    pokemon_t* v_pokemones;
+    int cantidad_pokemones;
     //Algo++
 }entrenador_t;
 
