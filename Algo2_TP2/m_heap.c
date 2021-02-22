@@ -38,7 +38,7 @@ void shift_down(heap_t* heap, heap_comparador comparador, int n){
 
     int pos_mayor = pos_izq;
     if(pos_der < heap->cantidad)
-        if(comprarador(heap->v_gimnasios[pos_der], heap->v_gimnasios[pos_izq]) < 0)
+        if(comparador(heap->v_gimnasios[pos_der], heap->v_gimnasios[pos_izq]) < 0)
             pos_mayor = pos_der;
     
     if(comparador(heap->v_gimnasios[n], heap->v_gimnasios[pos_mayor]) < 0){
