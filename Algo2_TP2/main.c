@@ -18,7 +18,7 @@ void imprimir_mensaje_bienvenida(){
 
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES PRINCIPALES ++++++++++++++++++++++++++++++++++++++++++++++++++ */
-
+/*
 int main(){
     imprimir_mensaje_bienvenida();
 
@@ -27,3 +27,4 @@ int main(){
 
     return 0;
 }
+*/

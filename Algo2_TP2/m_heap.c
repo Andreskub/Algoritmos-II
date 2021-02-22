@@ -83,7 +83,7 @@ heap_t* crear_heap(){
     return heap;
 }
 
-heap_t* insertar_nodo(heap_t* heap, int elemento){
+heap_t* insertar_nodo(heap_t* heap, void* elemento){
     void* aux = realloc(heap->v_gimnasios, sizeof(gimnasio_t)* heap->cantidad);
     if(!aux)
         return NULL;
@@ -132,7 +132,7 @@ heap_t* heapify(gimnasio_t* v_gimnasios, int n){
     return mi_heap;
 }
 
-void heap_sort(gimnasio_t* v_gimnasios, int n){
+void heap_sort(void* v_gimnasios, int n){
     heap_t* heap = heapify(v_gimnasios, n);
 
     while(n > 0){
@@ -144,8 +144,16 @@ void heap_sort(gimnasio_t* v_gimnasios, int n){
     //Mostrar arbol
 }
 
+void heap_destruir_elementos(heap_t* heap){
+    for( int i = 0; i < heap->cantidad; i++){
+        free(heap->v_gimnasios[i]);
+    }
+}
+
+
 void heap_destruir(heap_t* heap){
-    if(heap)
-        free(heap->v_gimnasios);//Corregir borrado de gimnasios
+    if(!heap) return;
+
+    heap_destruir_elementos(heap);
     free(heap);
 }

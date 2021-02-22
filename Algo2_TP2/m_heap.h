@@ -2,15 +2,15 @@
 #define __M_HEAP__
 
 typedef struct heap{
-    gimnasio_t* v_gimnasios;
+    void* v_gimnasios;
     int cantidad;
 }heap_t;
 
 heap_t* crear_heap();
 
-heap_t* insertar_nodo(heap_t* heap, gimnasio_t* gimnasio);
+heap_t* insertar_nodo(heap_t* heap, void* elemento);
 
-void heap_sort(gimnasio_t* v_gimnasio, int n);
+void heap_sort(void* v_gimnasio, int n);
 
 void heap_destruir(heap_t* heap);
 
