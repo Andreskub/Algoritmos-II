@@ -1,9 +1,12 @@
 #ifndef __M_HEAP__
 #define __M_HEAP__
 
+typedef void (*destructor_elemento)(void*);
+
 typedef struct heap{
     void* v_gimnasios;
     int cantidad;
+    destructor_elemento destructor;
 }heap_t;
 
 heap_t* crear_heap();

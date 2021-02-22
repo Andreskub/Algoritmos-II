@@ -48,6 +48,64 @@ void shift_down(heap_t* heap, int n){
 
 }
 
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES PRINCIPALES ++++++++++++++++++++++++++++++++++++++++++++++++++ */
+heap_t* crear_heap(destructor_elemento destructor){
+    if(!destructor) return NULL
+
+    heap_t* heap = calloc(1, sizeof(heap_t));
+    if(!heap) return NULL;
+
+    heap->destructor_elemento = destructor;
+    return heap;
+}
+
+heap_t* insertar_nodo(heap_t* heap, void* elemento){
+    if(!heap || !elemento) return NULL;
+
+    void* aux = realloc(heap->v_gimnasios, sizeof(void*) * heap->cantidad);
+    if(!aux) return NULL;
+
+    heap->v_gimnasios = aux;
+    heap->cantidad++;
+    heap->v_gimnasios[heap->cantidad-1] = elemento;
+
+    shift_up(heap, heap->cantidad-1);
+    return heap;
+}
+
+int extraer_nodo_raiz(heap_t* heap){
+    if(heap->cantidad == 0)
+        return 0;
+    
+    int valor = heap->v_gimnasios[0];
+
+    swap(heap->v_gimnasios, 0, heap->cantidad-1);
+    heap->cantidad--;
+
+    if(heap->cantidad != 0)
+        shift_down(heap, 0);
+
+    return valor;
+}
+
+void heap_destruir_elementos(heap_t* heap){
+    for( int i = 0; i < heap->cantidad; i++){
+        if(heap->v_gimnasios[i] && heap->destructor)
+            destructor(heap->v_gimnasios[i]);
+    }
+
+    if(heap->v_gimnasios)
+        free(heap->v_gimnasios);
+}
+
+void heap_destruir(heap_t* heap){
+    if(!heap) return;
+
+    heap_destruir_elementos(heap);
+    free(heap);
+}
+
+/*
 void mostrar_arbol(int* buffer, int n){
     printf("\n");
     int niveles = 0;
@@ -74,43 +132,9 @@ void mostrar_arbol(int* buffer, int n){
     }
 }
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES PRINCIPALES ++++++++++++++++++++++++++++++++++++++++++++++++++ */
-heap_t* crear_heap(){
-    heap_t* heap = calloc(1, sizeof(heap_t));
-    if(!heap)
-        return NULL;
-    
-    return heap;
-}
+*/
 
-heap_t* insertar_nodo(heap_t* heap, void* elemento){
-    void* aux = realloc(heap->v_gimnasios, sizeof(gimnasio_t)* heap->cantidad);
-    if(!aux)
-        return NULL;
-
-    heap->v_gimnasios = aux;
-    heap->cantidad++;
-    heap->v_gimnasios[heap->cantidad-1] = elemento;
-
-    shift_up(heap, heap->cantidad-1);
-    return heap;
-}
-
-int extraer_nodo_raiz(heap_t* heap){
-    if(heap->cantidad == 0)
-        return 0;
-    
-    int valor = heap->v_gimnasios[0];
-
-    swap(heap->v_gimnasios, 0, heap->cantidad-1);
-    heap->cantidad--;
-
-    if(heap->cantidad != 0)
-        shift_down(heap, 0);
-
-    return valor;
-}
-
+/*
 //Crea y me devuelve un heap ordenado (ordena el vector)
 heap_t* heapify(gimnasio_t* v_gimnasios, int n){
     heap_t* mi_heap = crear_heap();
@@ -143,17 +167,4 @@ void heap_sort(void* v_gimnasios, int n){
     free(heap);
     //Mostrar arbol
 }
-
-void heap_destruir_elementos(heap_t* heap){
-    for( int i = 0; i < heap->cantidad; i++){
-        free(heap->v_gimnasios[i]);
-    }
-}
-
-
-void heap_destruir(heap_t* heap){
-    if(!heap) return;
-
-    heap_destruir_elementos(heap);
-    free(heap);
-}
+*/
