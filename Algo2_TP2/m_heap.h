@@ -13,9 +13,8 @@ heap_t* crear_heap();
 
 heap_t* insertar_nodo(heap_t* heap, void* elemento);
 
-void heap_sort(void* v_gimnasio, int n);
+int extraer_nodo_raiz (heap_t* heap);
 
 void heap_destruir(heap_t* heap);
-
 
 #endif /* __M_HEAP__ */
