@@ -5,11 +5,11 @@ int posicion_padre(int n){
     return (n-1)/2;
 }
 
-int posicion_pos_derecho(int n){
+int posicion_hijo_derecho(int n){
     return 2*n+2;
 }
 
-int posicion_pos_izquierdo(int n){
+int posicion_hijo_izquierdo(int n){
     return 2*n+1;
 }
 
@@ -19,43 +19,44 @@ void swap(int* vector, int i, int j){
     vector[j] = aux;
 }
 
-void shift_up(heap_t* heap, int n){
-    if(n == 0) return;
+void shift_up(heap_t* heap, heap_comparador comparador, int pos_hijo){
+    if(pos_hijo == 0) return;
 
-    int padre = posicion_padre(n);
+    int pos_padre = posicion_padre(pos_hijo);
 
-    if(heap->v_gimnasios[n] > heap->v_gimnasios[padre]){
-        swap(heap->v_gimnasios, n, padre);
-        shift_up(heap, padre);
+    if(comparador(heap->v_gimnasios[pos_hijo], heap->v_gimnasios[pos_padre]) > 0){
+        swap(heap->v_gimnasios, pos_hijo, pos_padre);
+        shift_up(heap, comparador, pos_padre);
     }
 }
 
-void shift_down(heap_t* heap, int n){
-    int pos_der = posicion_pos_derecho(n);
-    int pos_izq = posicion_pos_izquierdo(n);
+void shift_down(heap_t* heap, heap_comparador comparador, int n){
+    int pos_der = posicion_hijo_derecho(n);
+    int pos_izq = posicion_hijo_izquierdo(n);
 
     if(pos_izq >= heap->cantidad) return;
 
     int pos_mayor = pos_izq;
     if(pos_der < heap->cantidad)
-        if(heap->v_gimnasios[pos_der] < heap->v_gimnasios[pos_izq])
+        if(comprarador(heap->v_gimnasios[pos_der], heap->v_gimnasios[pos_izq]) < 0)
             pos_mayor = pos_der;
     
-    if(heap->v_gimnasios[n] < heap->v_gimnasios[pos_mayor]){
+    if(comparador(heap->v_gimnasios[n], heap->v_gimnasios[pos_mayor]) < 0){
         swap(heap->v_gimnasios, n, pos_mayor);
-        shift_down(heap, pos_mayor);
+        shift_down(heap, comparador, pos_mayor);
     }
 
 }
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES PRINCIPALES ++++++++++++++++++++++++++++++++++++++++++++++++++ */
-heap_t* crear_heap(destructor_elemento destructor){
-    if(!destructor) return NULL
+heap_t* crear_heap(heap_comparador comparador, heap_destructor_elemento destructor){
+    if(!comparador || !destructor) return NULL
 
     heap_t* heap = calloc(1, sizeof(heap_t));
     if(!heap) return NULL;
 
-    heap->destructor_elemento = destructor;
+    heap->heap_comparador = comparador;
+    heap->heap_destructor_elemento = destructor;
     return heap;
 }
 
@@ -69,27 +70,26 @@ heap_t* insertar_nodo(heap_t* heap, void* elemento){
     heap->cantidad++;
     heap->v_gimnasios[heap->cantidad-1] = elemento;
 
-    shift_up(heap, heap->cantidad-1);
+    shift_up(heap, heap->comparador, heap->cantidad-1);
     return heap;
 }
 
-int extraer_nodo_raiz(heap_t* heap){
-    if(heap->cantidad == 0)
-        return 0;
+void* extraer_nodo_raiz(heap_t* heap){
+    if(heap->cantidad == 0) return 0;
     
-    int valor = heap->v_gimnasios[0];
+    void* elemento_a_eliminar = heap->v_gimnasios[0];
 
     swap(heap->v_gimnasios, 0, heap->cantidad-1);
     heap->cantidad--;
 
     if(heap->cantidad != 0)
-        shift_down(heap, 0);
+        shift_down(heap, heap->comparador, 0);
 
-    return valor;
+    return elemento_a_eliminar;
 }
 
 void heap_destruir_elementos(heap_t* heap){
-    for( int i = 0; i < heap->cantidad; i++){
+    for(int i = 0; i < heap->cantidad; i++){
         if(heap->v_gimnasios[i] && heap->destructor)
             destructor(heap->v_gimnasios[i]);
     }

@@ -95,27 +95,39 @@ gimnasio_t* crear_gimnasio(FILE* info_gimnasio){
 }
 
 
-void leer_comienzo_linea(FILE* info_gimnasio, gimnasio_t* gimnasio, char expresion, bool* bandera_gimnasio){
+void leer_comienzo_linea(FILE* info_gimnasio, char expresion, gimnasio_t* gimnasio, entrenador_t* entrenador , bool* bandera_gimnasio, bool* bandera_entrenador){
     
     switch (expresion){
         case Gimnasio:
-            if (!(*bandera_gimnasio))
+            if (*bandera_gimnasio)
                 //guardar el gimnasio en el heap
                 (*gimnasio) = NULL;
             
             (*gimnasio) = crear_gimnasio(info_gimnasio);
-
+            (*bandera_gimnasio) = false;
             break;
         case Lider:
-            (*bandera_gimnasio) = false;
-            entrenador_t* entrenador = crear_entrenador(info_gimnasio);
-            //Agregar entrenador al gimnasio
+        if(*bandera_entrenador){
+                cargar_entrenador(gimnasio, entrenador)
+                (*entrenador) = NULL;
+            } 
+            (*bandera_gimnasio) = true;
+            (*entrenador) = crear_entrenador(info_gimnasio);
+            (*bandera_entrenador) = false;
             break;
         case Entrenador:
-            
+            if(*bandera_entrenador){
+                cargar_entrenador(gimnasio, entrenador);
+                (*entrenador) = NULL;
+            } 
+            (*bandera_gimnasio) = true;
+            (*entrenador) = crear_entrenador(info_gimnasio);
+            (*bandera_entrenador) = false;
             break;
         case Pokémon:
-            //cargar_pokemon(gimnasio->v_entrenadores[heap->cantidad])
+            (*bandera_entrenador) = true;
+            pokemon_t* pokemon = crear_pokemon(info_gimnasio);
+            cargar_pokemon(entrenador, pokemon);
             break;
         default:
             break;
@@ -127,7 +139,7 @@ void cargar_archivo(const char* ruta_archio, heap_t* heap){
     FILE* info_gimnasio = fopen(ruta_archivo,"r");
     if(!info_gimnasio) return;
 
-    bool bandera_gimnasio = true;
+    bool bandera_gimnasio = false, bandera_entrenador = false;
     char comienzo_linea;
     int leer_prelinea = fscanf(info_gimnasio, FORMATO_PRELECTURA, comienzo_linea);
 
@@ -137,8 +149,9 @@ void cargar_archivo(const char* ruta_archio, heap_t* heap){
     }
 
     gimnasio_t* gimnasio;
+    entrenador_t* entrenador;
     while (leer_prelinea == 1){
-        leer_comienzo_linea(info_gimnasio, &gimnasio, comienzo_linea, &bandera_gimnasio);
+        leer_comienzo_linea(info_gimnasio, comienzo_linea, &gimnasio, &entrenador, &bandera_gimnasio, &bandera_entrenador);
 
         leer_prelinea = fscanf(info_gimnasio, FORMATO_PRELECTURA, comienzo_linea);
     }
