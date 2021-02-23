@@ -1,4 +1,5 @@
 #include "aventura_pokemon.h"
+#include "m_heap.h"
 
 #define FORMATO_PRELECTURA "%c;"
 #define FORMATO_LECTURA_GIMANSIO "%100[^;];%i;%i\n"
@@ -8,7 +9,7 @@
 #define Gimnasio "G"
 #define Entrenador "E"
 #define Lider "L"
-#define Pokémon "P"
+#define Pokemon "P"
 
 pokemon_t* crear_pokemon(FILE* info_gimnasio){
     if(!info_gimnasio) return NULL;
@@ -25,16 +26,16 @@ pokemon_t* crear_pokemon(FILE* info_gimnasio){
     return pokemon;
 }
 
-entrenador_t* cargar_pokemon_aux(entrenador_t* entrenador, pokemon_t pokemon_recorrido){
+entrenador_t* cargar_pokemon_aux(entrenador_t* entrenador, pokemon_t* pokemon_recorrido){
 	if (entrenador->cantidad_pokemones >= 0){
-		void* aux = realloc(entrenador->v_pokemones, (size_t)(entrenador->cantidad_pokemon + 1) * sizeof(pokemon_t));
+		void* aux = realloc(entrenador->v_pokemones, (size_t)(entrenador->cantidad_pokemones + 1) * sizeof(pokemon_t));
 		if (!aux) return NULL;
 		
 		entrenador->v_pokemones = aux;
 	}
 
-	entrenador->v_pokemones[entrenador->cantidad_pokemon] = pokemon_recorrido;
-	entrenador->cantidad_pokemon++;
+	entrenador->v_pokemones[entrenador->cantidad_pokemones] = pokemon_recorrido;
+	entrenador->cantidad_pokemones++;
 	return entrenador;
 }
 
@@ -59,7 +60,7 @@ entrenador_t* crear_entrenador(FILE* info_gimnasio){
     return entrenador;
 }
 
-entrenador_t* cargar_entrenador_aux (gimnasio_t* gimnasio, entrenador_t entrenador_recorrido){
+gimnasio_t* cargar_entrenador_aux (gimnasio_t* gimnasio, entrenador_t* entrenador_recorrido){
 	if (gimnasio->cont_entrenadores >= 0){
 		void* aux = realloc(gimnasio->v_entrenadores, (size_t)(gimnasio->cont_entrenadores + 1) * sizeof(entrenador_t));
 		if (!aux) return NULL;
@@ -76,7 +77,7 @@ entrenador_t* cargar_entrenador_aux (gimnasio_t* gimnasio, entrenador_t entrenad
 gimnasio_t* cargar_entrenador(gimnasio_t* gimnasio, entrenador_t* entrenador){
     if(!gimnasio || !entrenador) return NULL;
     
-    cargar_entrenador_aux(gimnasio, entrenador);
+    gimnasio = cargar_entrenador_aux(gimnasio, entrenador);
     return gimnasio;
 }
 
@@ -124,7 +125,7 @@ void leer_comienzo_linea(FILE* info_gimnasio, char expresion, gimnasio_t* gimnas
             (*entrenador) = crear_entrenador(info_gimnasio);
             (*bandera_entrenador) = false;
             break;
-        case Pokémon:
+        case Pokemon:
             (*bandera_entrenador) = true;
             pokemon_t* pokemon = crear_pokemon(info_gimnasio);
             cargar_pokemon(entrenador, pokemon);
@@ -134,7 +135,7 @@ void leer_comienzo_linea(FILE* info_gimnasio, char expresion, gimnasio_t* gimnas
     }
 }
 
-void cargar_archivo(const char* ruta_archio, heap_t* heap){
+void cargar_archivo(const char* ruta_archivo, heap_t* heap){
 
     FILE* info_gimnasio = fopen(ruta_archivo,"r");
     if(!info_gimnasio) return;
@@ -145,7 +146,7 @@ void cargar_archivo(const char* ruta_archio, heap_t* heap){
 
     if(leer_prelinea != 1){
         fclose(info_gimnasio);
-        return NULL;
+        return ;
     }
 
     gimnasio_t* gimnasio;

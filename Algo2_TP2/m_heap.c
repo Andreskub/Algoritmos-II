@@ -41,6 +41,8 @@ void shift_down(heap_t* heap, heap_comparador comparador, int n){
         if(comparador(heap->v_gimnasios[pos_der], heap->v_gimnasios[pos_izq]) < 0)
             pos_mayor = pos_der;
     
+    void* hola = heap->v_gimnasios[pos_der]; 
+
     if(comparador(heap->v_gimnasios[n], heap->v_gimnasios[pos_mayor]) < 0){
         swap(heap->v_gimnasios, n, pos_mayor);
         shift_down(heap, comparador, pos_mayor);
@@ -50,13 +52,13 @@ void shift_down(heap_t* heap, heap_comparador comparador, int n){
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES PRINCIPALES ++++++++++++++++++++++++++++++++++++++++++++++++++ */
 heap_t* crear_heap(heap_comparador comparador, heap_destructor_elemento destructor){
-    if(!comparador || !destructor) return NULL
+    if(!comparador || !destructor) return NULL;
 
     heap_t* heap = calloc(1, sizeof(heap_t));
     if(!heap) return NULL;
 
-    heap->heap_comparador = comparador;
-    heap->heap_destructor_elemento = destructor;
+    heap->comparador = comparador;
+    heap->destructor = destructor;
     return heap;
 }
 

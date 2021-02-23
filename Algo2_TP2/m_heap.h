@@ -1,6 +1,9 @@
 #ifndef __M_HEAP__
 #define __M_HEAP__
 
+#include <stddef.h>
+#include <stdlib.h>
+
 /*
  * Comparador de elementos. Recibe dos elementos del heap y devuelve
  * 0 en caso de ser iguales, 1 si el primer elemento es mayor al
