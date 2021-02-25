@@ -1,4 +1,6 @@
+#include "aventura_pokemon.h"
 #include "batallas.h"
+
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES DE IMPRESIÓN ++++++++++++++++++++++++++++++++++++++++++++++++++ */
 void imprimir_mensaje_bienvenida(){
@@ -15,7 +17,6 @@ void imprimir_mensaje_bienvenida(){
     printf("%60s%s\n"," ","        \\_.-'       |__|    `-._ |              '-.|     '-.| |   |");
     printf("%60s%s\n"," ","                                `'                            '-._|");
 }
-
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES PRINCIPALES ++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
