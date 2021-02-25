@@ -13,8 +13,8 @@ int posicion_hijo_izquierdo(int n){
     return 2*n+1;
 }
 
-void swap(int* vector, int i, int j){
-    int aux = vector[i];
+void swap(void** vector, int i, int j){
+    void* aux = vector[i];
     vector[i] = vector[j];
     vector[j] = aux;
 }
@@ -90,7 +90,7 @@ void* extraer_nodo_raiz(heap_t* heap){
     return elemento_a_eliminar;
 }
 
-void heap_destruir_elementos(heap_t* heap){
+void heap_destruir_elementos(heap_t* heap, heap_destructor_elemento destructor){
     for(int i = 0; i < heap->cantidad; i++){
         if(heap->v_gimnasios[i] && heap->destructor)
             destructor(heap->v_gimnasios[i]);
@@ -103,7 +103,7 @@ void heap_destruir_elementos(heap_t* heap){
 void heap_destruir(heap_t* heap){
     if(!heap) return;
 
-    heap_destruir_elementos(heap);
+    heap_destruir_elementos(heap, heap->destructor);
     free(heap);
 }
 

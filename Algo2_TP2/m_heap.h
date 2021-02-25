@@ -19,7 +19,7 @@ typedef int (*heap_comparador)(void*, void*);
 typedef void (*heap_destructor_elemento)(void*);
 
 typedef struct heap{
-    void* v_gimnasios;
+    void** v_gimnasios;
     int cantidad;
     heap_comparador comparador;
     heap_destructor_elemento destructor;
