@@ -1,6 +1,8 @@
 #ifndef __AVENTURA_POKEMON__
 #define __AVENTURA_POKEMON__
 
+#include "m_heap.h"
+
 #include <stdio.h>
 #include <stdbool.h> //printf
 #include <stdlib.h> //calloc
