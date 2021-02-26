@@ -7,15 +7,15 @@
 #include <stdio.h>
 #include <stdbool.h> //printf
 #include <stdlib.h> //calloc
-
+#include <string.h>
 
 #define MAX_NOMBRE 50
 
 typedef struct pokemon{
     char especie[MAX_NOMBRE];
-    int velocidad;
-    int defensa;
     int ataque;
+    int defensa;
+    int velocidad;
 }pokemon_t;
 
 typedef struct entrenador{

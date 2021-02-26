@@ -29,116 +29,92 @@ int leer_comienzo_linea (FILE* info_gimnasio){
     else return ERROR;
 }
 
+pokemon_t leer_pokemon(FILE* info_gimnasio){
+    pokemon_t pokemon;
+    int leer_linea = fscanf(info_gimnasio, FORMATO_LECTURA_POKEMON, pokemon.especie, &(pokemon).velocidad, &(pokemon).defensa, &(pokemon).ataque);
+    if(leer_linea != 4) pokemon.especie = NULL;
+
+    return pokemon;
+}
+
+entrenador_t leer_entrenador(FILE* info_gimnasio){
+
+    entrenador_t entrenador;
+    int leer_linea = fscanf(info_gimnasio, FORMATO_LECTURA_ENTRENADOR, entrenador.nombre);
+    if(leer_linea != 1) entrenador.nombre = NULL;
+
+    return entrenador;
+}
+
+gimnasio_t leer_gimnasio(FILE* info_gimnasio){
+
+    gimnasio_t gimnasio;
+    int leer_linea = fscanf(info_gimnasio, FORMATO_LECTURA_GIMANSIO, gimnasio.nombre, &(gimnasio).dificultad, &(gimnasio).id_puntero_funcion);
+    if(leer_linea != 3) gimnasio.nombre = NULL;
+
+    return gimnasio;
+}
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES DE ESTRUCTURAS ++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
 pokemon_t* crear_pokemon(FILE* info_gimnasio){
-    //if(!info_gimnasio) return NULL;
+    if(!info_gimnasio) return NULL;
+
+    pokemon_t pokemon_leido = leer_pokemon(info_gimnasio);
+    if(!pokemon_leido.especie) return NULL;
 
     pokemon_t* pokemon = calloc(1, sizeof(pokemon_t));
     if(!pokemon) return NULL;
 
-    int leer_linea = fscanf(info_gimnasio, FORMATO_LECTURA_POKEMON, pokemon.especie, &(pokemon).velocidad, &(pokemon).defensa, &(pokemon).ataque);
-    if(leer_linea != 4){
-        free(pokemon);
-        return NULL;
-    }
+    strcpy(pokemon->especie, pokemon_leido.especie);
+    pokemon->ataque = pokemon_leido.ataque;
+    pokemon->defensa = pokemon_leido.defensa;
+    pokemon->velocidad = pokemon_leido.velocidad;
     return pokemon;
 }
-/*
-entrenador_t* cargar_pokemon_aux(entrenador_t* entrenador, pokemon_t pokemon_recorrido){
-	if (entrenador->cantidad_pokemones >= 0){
-		void* aux = realloc(entrenador->v_pokemones, (size_t)(entrenador->cantidad_pokemones + 1) * sizeof(pokemon_t));
-		if (!aux) return NULL;
-		
-		entrenador->v_pokemones = aux;
-	}
 
-	entrenador->v_pokemones[entrenador->cantidad_pokemones] = pokemon_recorrido;
-	entrenador->cantidad_pokemones++;
-	return entrenador;
-}
-
-entrenador_t* cargar_pokemon(entrenador_t* entrenador, pokemon_t pokemon){
-    if(!entrenador || !pokemon.especie) return NULL;
-
-    entrenador = cargar_pokemon_aux(entrenador, pokemon);
-    return entrenador;
-}
-*/
 entrenador_t* crear_entrenador(FILE* info_gimnasio){
+    if(!info_gimnasio) return NULL;
+
+    entrenador_t entrenador_leido = leer_entrenador(info_gimnasio);
+    if(!entrenador_leido.nombre) return NULL;
 
     entrenador_t* entrenador = calloc(1, sizeof(entrenador_t));
     if(!entrenador) return NULL;
 
-    int leer_linea = fscanf(info_gimnasio, FORMATO_LECTURA_ENTRENADOR, entrenador->nombre);
-    if(leer_linea != 1){
-        free(entrenador);
-        return NULL;
-    }
-
+    strcpy(entrenador->nombre, entrenador_leido.nombre);
     return entrenador;
 }
-/*
-gimnasio_t* cargar_entrenador_aux (gimnasio_t* gimnasio, entrenador_t* entrenador_recorrido){
-	if (gimnasio->cont_entrenadores >= 0){
-		void* aux = realloc(gimnasio->v_entrenadores, (size_t)(gimnasio->cont_entrenadores + 1) * sizeof(entrenador_t));
-		if (!aux) return NULL;
-		
-        gimnasio->v_entrenadores = aux;
-	}
 
-    gimnasio->v_entrenadores[gimnasio->cont_entrenadores] = entrenador_recorrido;
-    gimnasio->cont_entrenadores++;
-
-	return gimnasio;
-}
-
-gimnasio_t* cargar_entrenador(gimnasio_t* gimnasio, entrenador_t* entrenador){
-    if(!gimnasio || !entrenador) return NULL;
-    
-    gimnasio = cargar_entrenador_aux(gimnasio, entrenador);
-    return gimnasio;
-}
-*/
 gimnasio_t* crear_gimnasio(FILE* info_gimnasio){
-    
+    if(!info_gimnasio) return NULL;
+
+    gimnasio_t gimnasio_leido = leer_gimnasio(info_gimnasio);
+    if(!gimnasio_leido.nombre) return NULL;
+
     gimnasio_t* gimnasio = calloc(1, sizeof(gimnasio_t));
     if(!gimnasio) return NULL;
 
-    int leer_linea = fscanf(info_gimnasio, FORMATO_LECTURA_GIMANSIO, gimnasio->nombre, gimnasio->dificultad, gimnasio->id_puntero_funcion);
-    if(leer_linea != 3){
-        free(gimnasio);
-        return NULL;
-    }
+    strcpy(gimnasio->nombre, gimnasio_leido.nombre);
+    gimnasio->dificultad = gimnasio_leido.dificultad;
+    gimnasio->id_puntero_funcion = gimnasio_leido.id_puntero_funcion;
+
     return gimnasio;
 }
 
 
-void lectura_cargado_estructuras(FILE* info_gimnasio, int comienzo_linea, gimnasio_t* gimnasio, bool* bandera_gimnasio, bool* bandera_entrenador){
+void lectura_cargado_estructuras(FILE* info_gimnasio, int comienzo_linea, gimnasio_t* gimnasio){
     
     switch (comienzo_linea){
         case Gimnasio:
-            if (*bandera_gimnasio)
-                //guardar el gimnasio en el heap
-                gimnasio = NULL;
-            
             gimnasio = crear_gimnasio(info_gimnasio);
-            (*bandera_gimnasio) = false;
             break;
         case Lider:
-        if(*bandera_entrenador){
-                lista_insertar(gimnasio->v_entrenadores, entrenador);
-                entrenador = NULL;
-            } 
-            (*bandera_gimnasio) = true;
-            entrenador = crear_entrenador(info_gimnasio);
-            (*bandera_entrenador) = false;
+            entrenador_t* entrenador = crear_entrenador(info_gimnasio);
             break;
         case Entrenador:
             //Same Lider
             break;
         case Pokemon:
-            (*bandera_entrenador) = true;
             pokemon_t* pokemon = crear_pokemon(info_gimnasio);
             lista_insertar(gimnasio->v_entrenadores[gimnasio->v_entrenadores->cantidad -1]->v_pokemones, pokemon);
             break;
@@ -152,7 +128,6 @@ void cargar_archivo(const char* ruta_archivo, heap_t* heap){
     FILE* info_gimnasio = fopen(ruta_archivo,"r");
     if(!info_gimnasio) return;
 
-    bool bandera_gimnasio = false, bandera_entrenador = false;
     int prelinea = leer_comienzo_linea(info_gimnasio);
 
     if(prelinea == ERROR){
@@ -162,7 +137,7 @@ void cargar_archivo(const char* ruta_archivo, heap_t* heap){
 
     gimnasio_t* gimnasio;
     while (prelinea != ERROR){
-        lectura_cargado_estructuras(info_gimnasio, prelinea, gimnasio, &bandera_gimnasio, &bandera_entrenador);
+        lectura_cargado_estructuras(info_gimnasio, prelinea, gimnasio);
 
         prelinea = leer_comienzo_linea(info_gimnasio);
     }
