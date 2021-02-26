@@ -2,6 +2,7 @@
 #define __AVENTURA_POKEMON__
 
 #include "m_heap.h"
+#include "m_lista.h"
 
 #include <stdio.h>
 #include <stdbool.h> //printf
@@ -19,7 +20,7 @@ typedef struct pokemon{
 
 typedef struct entrenador{
     char nombre[MAX_NOMBRE];
-    pokemon_t* v_pokemones;
+    lista_t* v_pokemones;
     int cantidad_pokemones;
     int medallas;
     //Algo++
@@ -28,7 +29,7 @@ typedef struct entrenador{
 typedef struct gimnasio{
     char nombre[MAX_NOMBRE];
     int dificultad;
-    entrenador_t* v_entrenadores;
+    lista_t* v_entrenadores;
     int cont_entrenadores;
     int id_puntero_funcion;
     //Algo++
