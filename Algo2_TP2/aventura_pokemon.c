@@ -19,8 +19,8 @@
 
 int leer_comienzo_linea (FILE* info_gimnasio){
     char comienzo_linea;
-    int leer_prelinea = fscanf(info_gimnasio, FORMATO_PRELECTURA, comienzo_linea);
-    if(leer_prelinea != 1) return ERROR;
+    int leer_comienzo_linea = fscanf(info_gimnasio, FORMATO_PRELECTURA, &comienzo_linea);
+    if(leer_comienzo_linea != 1) return ERROR;
 
     if (comienzo_linea == 'G') return Gimnasio;
     else if (comienzo_linea == 'L') return Lider;
@@ -32,8 +32,8 @@ int leer_comienzo_linea (FILE* info_gimnasio){
 pokemon_t leer_pokemon(FILE* info_gimnasio){
     pokemon_t pokemon;
     int leer_linea = fscanf(info_gimnasio, FORMATO_LECTURA_POKEMON, pokemon.especie, &(pokemon).velocidad, &(pokemon).defensa, &(pokemon).ataque);
-    if(leer_linea != 4) pokemon.especie = NULL;
-
+    if(leer_linea != 4) pokemon.especie == NULL;
+    
     return pokemon;
 }
 
@@ -41,7 +41,7 @@ entrenador_t leer_entrenador(FILE* info_gimnasio){
 
     entrenador_t entrenador;
     int leer_linea = fscanf(info_gimnasio, FORMATO_LECTURA_ENTRENADOR, entrenador.nombre);
-    if(leer_linea != 1) entrenador.nombre = NULL;
+    if(leer_linea != 1) entrenador.nombre == NULL;
 
     return entrenador;
 }
@@ -50,7 +50,7 @@ gimnasio_t leer_gimnasio(FILE* info_gimnasio){
 
     gimnasio_t gimnasio;
     int leer_linea = fscanf(info_gimnasio, FORMATO_LECTURA_GIMANSIO, gimnasio.nombre, &(gimnasio).dificultad, &(gimnasio).id_puntero_funcion);
-    if(leer_linea != 3) gimnasio.nombre = NULL;
+    if(leer_linea != 3) gimnasio.nombre == NULL;
 
     return gimnasio;
 }
@@ -102,45 +102,71 @@ gimnasio_t* crear_gimnasio(FILE* info_gimnasio){
 }
 
 
-void lectura_cargado_estructuras(FILE* info_gimnasio, int comienzo_linea, gimnasio_t* gimnasio){
-    
-    switch (comienzo_linea){
-        case Gimnasio:
-            gimnasio = crear_gimnasio(info_gimnasio);
-            break;
-        case Lider:
-            entrenador_t* entrenador = crear_entrenador(info_gimnasio);
-            break;
-        case Entrenador:
-            //Same Lider
-            break;
-        case Pokemon:
-            pokemon_t* pokemon = crear_pokemon(info_gimnasio);
-            lista_insertar(gimnasio->v_entrenadores[gimnasio->v_entrenadores->cantidad -1]->v_pokemones, pokemon);
-            break;
-        default:
-            break;
-    }
-}
+void lectura_cargado_gimnasio(FILE* info_gimnasio, heap_t* heap, int* bandera){
+    bool bandera_gimnasio = false, bandera_lider = false, bandera_entrenador = false, bandera_pokemon = false;
 
-void cargar_archivo(const char* ruta_archivo, heap_t* heap){
-
-    FILE* info_gimnasio = fopen(ruta_archivo,"r");
-    if(!info_gimnasio) return;
-
-    int prelinea = leer_comienzo_linea(info_gimnasio);
-
-    if(prelinea == ERROR){
-        fclose(info_gimnasio);
+    int comienzo_linea = leer_comienzo_linea(info_gimnasio);
+    if(comienzo_linea == ERROR) {
+        (*bandera) = ERROR;
         return ;
     }
 
-    gimnasio_t* gimnasio;
-    while (prelinea != ERROR){
-        lectura_cargado_estructuras(info_gimnasio, prelinea, gimnasio);
+    while(bandera == OK){
+        gimnasio_t* gimnasio;
 
-        prelinea = leer_comienzo_linea(info_gimnasio);
+        while (bandera_gimnasio){
+            
+            entrenador_t* entrenador;
+            pokemon_t* pokemon;
+            
+            switch (comienzo_linea){
+                case Gimnasio:
+                    if(gimnasio){
+                        bandera_gimnasio = false;
+                        break;
+                    }
+                    bandera_gimnasio = true;
+                    gimnasio = crear_gimnasio(info_gimnasio);
+                    break;
+                case Lider:
+                    bandera_lider = true;
+                    entrenador = crear_entrenador(info_gimnasio);
+                    break;
+                case Entrenador:
+                    //Same Lider
+                    break;
+                case Pokemon:
+                    bandera_pokemon = true;
+                    pokemon = crear_pokemon(info_gimnasio);
+                    //lista_insertar(gimnasio->v_entrenadores[gimnasio->v_entrenadores->cantidad -1]->v_pokemones, pokemon);
+                    break;
+                default:
+                    break;
+            }
+
+            if(bandera_gimnasio) comienzo_linea = leer_comienzo_linea(info_gimnasio);
+        }
+
+        if(bandera == OK)
+            insertar_nodo(heap, gimnasio);
+        //else destruir_gimnasio
     }
+    
+}
+
+int cargar_archivo(const char* ruta_archivo, heap_t* heap){
+    int bandera = OK; //creo bandera, retorna 0 si se pudo cargar el gimnasio, -1 si no lo pudo cargar
+
+    FILE* info_gimnasio = fopen(ruta_archivo,"r");
+    if(!info_gimnasio) return bandera = ERROR;
+   
+
+    lectura_cargado_gimnasio(info_gimnasio, &bandera)
+    
+
+    if(gimnasio) insertar_nodo(heap, gimnasio);
+    else bandera = ERROR;
 
     fclose(info_gimnasio);
+    return bandera;
 }

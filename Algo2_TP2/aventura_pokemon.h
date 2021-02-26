@@ -36,6 +36,6 @@ typedef struct gimnasio{
 }gimnasio_t;
 
 
-void cargar_archivo(const char* ruta_archivo, heap_t* heap);
+int cargar_archivo(const char* ruta_archivo, heap_t* heap);
 
 #endif /* __AVENTURA_POKEMON__ */
