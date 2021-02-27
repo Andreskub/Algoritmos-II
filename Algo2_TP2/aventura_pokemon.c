@@ -1,5 +1,6 @@
 #include "aventura_pokemon.h"
 #include "m_heap.h"
+#include "m_lista.h"
 
 #define FORMATO_PRELECTURA "%[^;];"
 #define FORMATO_LECTURA_GIMANSIO "%100[^;];%i;%i\n"
@@ -103,6 +104,29 @@ gimnasio_t* crear_gimnasio(FILE* info_gimnasio){
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES DESTRUCCION DE ESTRUCTURAS ++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
+void destruir_pokemon(pokemon_t* pokemon){
+    if(pokemon) free(pokemon);
+}
+
+void destruir_entrenador(entrenador_t* entrenador){
+    if(entrenador->v_pokemones)
+        lista_destruir(entrenador->v_pokemones);
+    if(entrenador) free(entrenador);
+}
+void destruir_gimnasio(gimnasio_t* gimnasio, heap_destructor_elemento destructor){
+    if(gimnasio) destructor((void*)gimnasio);
+    /*
+    //Libero todos los entrenadores, su lista_t de pokemones y el pokemon en si.
+    for(int i = 0; i < gimnasio->cont_entrenadores; i++){ 
+        entrenador_t* ultimo_entrenador = lista_ultimo(gimnasio->v_entrenadores);
+        destruir_entrenador(ultimo_entrenador);
+        int n = lista_borrar(gimnasio->v_entrenadores);//Hacer algo con el n???
+    }
+
+    if(gimnasio->v_entrenadores) lista_destruir(gimnasio->v_entrenadores); //Libero lista_t de entrenadores
+    if(gimnasio) free(gimnasio);
+    */
+}
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES PRINCIPALES ++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
@@ -111,9 +135,11 @@ void lectura_cargado_archivo(FILE* info_gimnasio, heap_t* heap, gimnasio_t* gimn
     int comienzo_linea = leer_comienzo_linea(info_gimnasio);
     if(comienzo_linea == ERROR) {
         (*bandera) = ERROR;
+        if(gimnasio) destruir_gimnasio(gimnasio, heap->destructor);
         return ;
     }
 
+    int bandera_insercion_lista = -1;
     gimnasio_t* nuevo_gimnasio;
     entrenador_t* nuevo_entrenador;
     pokemon_t* nuevo_pokemon;
@@ -123,7 +149,9 @@ void lectura_cargado_archivo(FILE* info_gimnasio, heap_t* heap, gimnasio_t* gimn
             if(gimnasio && ((entrenador_t*)gimnasio->v_entrenadores->nodo_fin->elemento)->cantidad_pokemones > 0) //Si ya existia un gimnasio y su ultimo entrenador tiene al menos 1 pokemon 
                 heap_insertar_nodo(heap, gimnasio);
             else if(gimnasio && !((entrenador_t*)gimnasio->v_entrenadores->nodo_fin->elemento)->cantidad_pokemones > 0){
-                
+                destruir_gimnasio(gimnasio, heap->destructor);
+                (*bandera) = ERROR;
+                return;
             }
 
             nuevo_gimnasio = crear_gimnasio(info_gimnasio);
@@ -134,14 +162,21 @@ void lectura_cargado_archivo(FILE* info_gimnasio, heap_t* heap, gimnasio_t* gimn
             lectura_cargado_archivo(info_gimnasio, heap, nuevo_gimnasio, NULL, bandera);
             break;
         case Lider:
-            if(gimnasio->v_entrenadores->nodo_inicio)
-                //ERROR
+            if(gimnasio->v_entrenadores->nodo_inicio){
+                (*bandera) = ERROR;
+                return;
+            }
             nuevo_entrenador = crear_entrenador(info_gimnasio);
             if(!nuevo_entrenador){
                 (*bandera) = ERROR;
                 return;
             }
-            lista_insertar(gimnasio->v_entrenadores, nuevo_entrenador);
+            bandera_insercion_lista = lista_insertar(gimnasio->v_entrenadores, nuevo_entrenador);
+            if(bandera_insercion_lista != 0){
+                destruir_entrenador(nuevo_entrenador);
+                (*bandera) = ERROR;
+                return;
+            }
             lectura_cargado_archivo(info_gimnasio, heap, gimnasio, nuevo_entrenador, bandera);
             break;
         case Entrenador:
@@ -154,7 +189,12 @@ void lectura_cargado_archivo(FILE* info_gimnasio, heap_t* heap, gimnasio_t* gimn
                 (*bandera) = ERROR;
                 return;
             }
-            lista_insertar(gimnasio->v_entrenadores, nuevo_entrenador);
+            bandera_insercion_lista = lista_insertar(gimnasio->v_entrenadores, nuevo_entrenador);
+            if(bandera_insercion_lista != 0){
+                destruir_entrenador(nuevo_entrenador);
+                (*bandera) = ERROR;
+                return;
+            }
             lectura_cargado_archivo(info_gimnasio, heap, gimnasio, nuevo_entrenador, bandera);
             break;
         case Pokemon:
@@ -163,10 +203,17 @@ void lectura_cargado_archivo(FILE* info_gimnasio, heap_t* heap, gimnasio_t* gimn
                 return;
             }
             nuevo_pokemon = crear_pokemon(info_gimnasio);
-            //lista_insertar(gimnasio->v_entrenadores[gimnasio->v_entrenadores->cantidad -1]->v_pokemones, pokemon);
+            bandera_insercion_lista = lista_insertar( ((entrenador_t*)gimnasio->v_entrenadores->nodo_fin->elemento)->v_pokemones, nuevo_pokemon);
+            if(bandera_insercion_lista != 0){
+                destruir_pokemon(nuevo_pokemon);
+                (*bandera) = ERROR;
+                return;
+            }
             break;
-        //default:
-        //    break;
+        default:
+            destruir_gimnasio(gimnasio, heap->destructor);
+            (*bandera) = ERROR;
+            return;
     }
     
 }
