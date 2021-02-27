@@ -62,7 +62,7 @@ heap_t* crear_heap(heap_comparador comparador, heap_destructor_elemento destruct
     return heap;
 }
 
-heap_t* insertar_nodo(heap_t* heap, void* elemento){
+heap_t* heap_insertar_nodo(heap_t* heap, void* elemento){
     if(!heap || !elemento) return NULL;
 
     void* aux = realloc(heap->v_gimnasios, sizeof(void*) * heap->cantidad);

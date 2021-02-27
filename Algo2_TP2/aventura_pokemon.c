@@ -54,7 +54,7 @@ gimnasio_t leer_gimnasio(FILE* info_gimnasio){
 
     return gimnasio;
 }
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES DE ESTRUCTURAS ++++++++++++++++++++++++++++++++++++++++++++++++++ */
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES CREACION DE ESTRUCTURAS ++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
 pokemon_t* crear_pokemon(FILE* info_gimnasio){
     if(!info_gimnasio) return NULL;
@@ -101,9 +101,12 @@ gimnasio_t* crear_gimnasio(FILE* info_gimnasio){
     return gimnasio;
 }
 
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES DESTRUCCION DE ESTRUCTURAS ++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
-void lectura_cargado_gimnasio(FILE* info_gimnasio, heap_t* heap, int* bandera){
-    bool bandera_gimnasio = false, bandera_lider = false, bandera_entrenador = false, bandera_pokemon = false;
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES PRINCIPALES ++++++++++++++++++++++++++++++++++++++++++++++++++ */
+
+void lectura_cargado_gimnasio(FILE* info_gimnasio, heap_t* heap, gimnasio_t* gimnasio, entrenador_t* entrenador, int* bandera){
 
     int comienzo_linea = leer_comienzo_linea(info_gimnasio);
     if(comienzo_linea == ERROR) {
@@ -111,38 +114,58 @@ void lectura_cargado_gimnasio(FILE* info_gimnasio, heap_t* heap, int* bandera){
         return ;
     }
 
-    while(bandera == OK){
+    if(!gimnasio) gimnasio_t* nuevo_gimnasio;
+    if(!entrenador) entrenador_t* nuevo_entrenador;
+    pokemon_t* nuevo_pokemon;
+
+    switch (comienzo_linea){
+        case Gimnasio:
+            if(gimnasio){
+                heap_insertar_nodo(heap, gimnasio);
+                break;
+            }
+            nuevo_gimnasio = crear_gimnasio(info_gimnasio);
+            //si no hay gimnasio
+            lectura_cargado_gimnasio(info_gimnasio, heap, nuevo_gimnasio, NULL, bandera);
+            break;
+        case Lider:
+            if(gimnasio->v_entrenadores->nodo_inicio)
+                //ERROR
+            nuevo_entrenador = crear_entrenador(info_gimnasio);
+            lista_insertar(gimnasio->v_entrenadores, nuevo_entrenador);
+            lectura_cargado_gimnasio(info_gimnasio, heap, gimnasio, nuevo_pokemon, bandera);
+            break;
+        case Entrenador:
+            if(!gimnasio->v_entrenadores->nodo_inicio)
+                //ERROR
+            nuevo_entrenador = crear_entrenador(info_gimnasio);
+            lista_insertar(gimnasio->v_entrenadores, nuevo_entrenador);
+            lectura_cargado_gimnasio(info_gimnasio, heap, gimnasio, nuevo_entrenador, bandera);
+            break;
+        case Pokemon:
+            //Si no hay entrenador/lider ERROR
+            pokemon = crear_pokemon(info_gimnasio);
+            //lista_insertar(gimnasio->v_entrenadores[gimnasio->v_entrenadores->cantidad -1]->v_pokemones, pokemon);
+            break;
+        //default:
+        //    break;
+    }
+
+    bool bandera_gimnasio = false, bandera_lider = false, bandera_entrenador = false, bandera_pokemon = false;
+
+    
+
+
+
+    while(bandera == OK)
+    {
         gimnasio_t* gimnasio;
 
-        while (bandera_gimnasio){
-            
-            entrenador_t* entrenador;
+        while (bandera_gimnasio)
+        {
+            entrenador_t* entrenador;  
             pokemon_t* pokemon;
             
-            switch (comienzo_linea){
-                case Gimnasio:
-                    if(gimnasio){
-                        bandera_gimnasio = false;
-                        break;
-                    }
-                    bandera_gimnasio = true;
-                    gimnasio = crear_gimnasio(info_gimnasio);
-                    break;
-                case Lider:
-                    bandera_lider = true;
-                    entrenador = crear_entrenador(info_gimnasio);
-                    break;
-                case Entrenador:
-                    //Same Lider
-                    break;
-                case Pokemon:
-                    bandera_pokemon = true;
-                    pokemon = crear_pokemon(info_gimnasio);
-                    //lista_insertar(gimnasio->v_entrenadores[gimnasio->v_entrenadores->cantidad -1]->v_pokemones, pokemon);
-                    break;
-                default:
-                    break;
-            }
 
             if(bandera_gimnasio) comienzo_linea = leer_comienzo_linea(info_gimnasio);
         }

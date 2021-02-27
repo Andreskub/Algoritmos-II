@@ -27,7 +27,7 @@ typedef struct heap{
 
 heap_t* crear_heap();
 
-heap_t* insertar_nodo(heap_t* heap, void* elemento);
+heap_t* heap_insertar_nodo(heap_t* heap, void* elemento);
 
 void* extraer_nodo_raiz (heap_t* heap);
 
