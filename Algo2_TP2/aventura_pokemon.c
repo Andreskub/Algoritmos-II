@@ -106,7 +106,7 @@ gimnasio_t* crear_gimnasio(FILE* info_gimnasio){
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES PRINCIPALES ++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
-void lectura_cargado_gimnasio(FILE* info_gimnasio, heap_t* heap, gimnasio_t* gimnasio, entrenador_t* entrenador, int* bandera){
+void lectura_cargado_archivo(FILE* info_gimnasio, heap_t* heap, gimnasio_t* gimnasio, entrenador_t* entrenador, int* bandera){
 
     int comienzo_linea = leer_comienzo_linea(info_gimnasio);
     if(comienzo_linea == ERROR) {
@@ -114,81 +114,72 @@ void lectura_cargado_gimnasio(FILE* info_gimnasio, heap_t* heap, gimnasio_t* gim
         return ;
     }
 
-    if(!gimnasio) gimnasio_t* nuevo_gimnasio;
-    if(!entrenador) entrenador_t* nuevo_entrenador;
+    gimnasio_t* nuevo_gimnasio;
+    entrenador_t* nuevo_entrenador;
     pokemon_t* nuevo_pokemon;
 
     switch (comienzo_linea){
         case Gimnasio:
-            if(gimnasio){
+            if(gimnasio && ((entrenador_t*)gimnasio->v_entrenadores->nodo_fin->elemento)->cantidad_pokemones > 0) //Si ya existia un gimnasio y su ultimo entrenador tiene al menos 1 pokemon 
                 heap_insertar_nodo(heap, gimnasio);
-                break;
+            else if(gimnasio && !((entrenador_t*)gimnasio->v_entrenadores->nodo_fin->elemento)->cantidad_pokemones > 0){
+                
             }
+
             nuevo_gimnasio = crear_gimnasio(info_gimnasio);
-            //si no hay gimnasio
-            lectura_cargado_gimnasio(info_gimnasio, heap, nuevo_gimnasio, NULL, bandera);
+            if(!nuevo_gimnasio){
+                (*bandera) = ERROR;
+                return;
+            }
+            lectura_cargado_archivo(info_gimnasio, heap, nuevo_gimnasio, NULL, bandera);
             break;
         case Lider:
             if(gimnasio->v_entrenadores->nodo_inicio)
                 //ERROR
             nuevo_entrenador = crear_entrenador(info_gimnasio);
+            if(!nuevo_entrenador){
+                (*bandera) = ERROR;
+                return;
+            }
             lista_insertar(gimnasio->v_entrenadores, nuevo_entrenador);
-            lectura_cargado_gimnasio(info_gimnasio, heap, gimnasio, nuevo_pokemon, bandera);
+            lectura_cargado_archivo(info_gimnasio, heap, gimnasio, nuevo_entrenador, bandera);
             break;
         case Entrenador:
-            if(!gimnasio->v_entrenadores->nodo_inicio)
-                //ERROR
+            if(!gimnasio->v_entrenadores->nodo_inicio){ //Si no hay Lider y/o entrenadores previos
+                (*bandera) = ERROR;
+                return;
+            }
             nuevo_entrenador = crear_entrenador(info_gimnasio);
+            if(!nuevo_entrenador){
+                (*bandera) = ERROR;
+                return;
+            }
             lista_insertar(gimnasio->v_entrenadores, nuevo_entrenador);
-            lectura_cargado_gimnasio(info_gimnasio, heap, gimnasio, nuevo_entrenador, bandera);
+            lectura_cargado_archivo(info_gimnasio, heap, gimnasio, nuevo_entrenador, bandera);
             break;
         case Pokemon:
-            //Si no hay entrenador/lider ERROR
-            pokemon = crear_pokemon(info_gimnasio);
+            if(!entrenador){
+                (*bandera) = ERROR;
+                return;
+            }
+            nuevo_pokemon = crear_pokemon(info_gimnasio);
             //lista_insertar(gimnasio->v_entrenadores[gimnasio->v_entrenadores->cantidad -1]->v_pokemones, pokemon);
             break;
         //default:
         //    break;
     }
-
-    bool bandera_gimnasio = false, bandera_lider = false, bandera_entrenador = false, bandera_pokemon = false;
-
-    
-
-
-
-    while(bandera == OK)
-    {
-        gimnasio_t* gimnasio;
-
-        while (bandera_gimnasio)
-        {
-            entrenador_t* entrenador;  
-            pokemon_t* pokemon;
-            
-
-            if(bandera_gimnasio) comienzo_linea = leer_comienzo_linea(info_gimnasio);
-        }
-
-        if(bandera == OK)
-            insertar_nodo(heap, gimnasio);
-        //else destruir_gimnasio
-    }
     
 }
 
 int cargar_archivo(const char* ruta_archivo, heap_t* heap){
+    if(!ruta_archivo || !heap) return ERROR;
     int bandera = OK; //creo bandera, retorna 0 si se pudo cargar el gimnasio, -1 si no lo pudo cargar
 
     FILE* info_gimnasio = fopen(ruta_archivo,"r");
     if(!info_gimnasio) return bandera = ERROR;
    
 
-    lectura_cargado_gimnasio(info_gimnasio, &bandera)
-    
-
-    if(gimnasio) insertar_nodo(heap, gimnasio);
-    else bandera = ERROR;
+    lectura_cargado_archivo(info_gimnasio, heap, NULL, NULL, &bandera);
 
     fclose(info_gimnasio);
     return bandera;
