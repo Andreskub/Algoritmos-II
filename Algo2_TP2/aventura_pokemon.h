@@ -9,6 +9,9 @@
 #include <stdlib.h> //calloc
 #include <string.h>
 
+#define OK 0
+#define ERROR -1
+
 #define MAX_NOMBRE 50
 
 typedef struct pokemon{
@@ -34,8 +37,5 @@ typedef struct gimnasio{
     int id_puntero_funcion;
     //Algo++
 }gimnasio_t;
-
-
-int cargar_archivo(const char* ruta_archivo, heap_t* heap);
 
 #endif /* __AVENTURA_POKEMON__ */
