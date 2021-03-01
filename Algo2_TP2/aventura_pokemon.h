@@ -38,4 +38,16 @@ typedef struct gimnasio{
     //Algo++
 }gimnasio_t;
 
+typdef struct personaje{
+    char* nombre[MAX_NOMBRE];
+    lista_t* party;
+    lista_t* caja;
+}personaje_t;
+
+void destruir_pokemon(pokemon_t* pokemon);
+
+void destruir_entrenador(entrenador_t* entrenador);
+
+void destruir_gimnasio(gimnasio_t* gimnasio, heap_destructor_elemento destructor);
+
 #endif /* __AVENTURA_POKEMON__ */

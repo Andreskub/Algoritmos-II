@@ -89,19 +89,18 @@ gimnasio_t* crear_gimnasio(FILE* info_gimnasio){
     return gimnasio;
 }
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES DESTRUCCION DE ESTRUCTURAS ++++++++++++++++++++++++++++++++++++++++++++++++++ */
+personaje_t* crear_personaje(FILE* info_personaje){
+    if(!info_personaje) return NULL;
 
-void destruir_pokemon(pokemon_t* pokemon){
-    if(pokemon) free(pokemon);
-}
+    personaje_t personaje_leido = leer_personaje(info_personaje);
+    if(!personaje_leido) return NULL;
 
-void destruir_entrenador(entrenador_t* entrenador){
-    if(entrenador->v_pokemones)
-        lista_destruir(entrenador->v_pokemones);
-    if(entrenador) free(entrenador);
-}
-void destruir_gimnasio(gimnasio_t* gimnasio, heap_destructor_elemento destructor){
-    if(gimnasio) destructor((void*)gimnasio);
+    personaje_t* personaje = calloc(1, sizeof(personaje_t));
+    if(!personaje) return NULL;
+
+    //Completar
+
+    return personaje;
 }
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES PRINCIPALES ++++++++++++++++++++++++++++++++++++++++++++++++++ */
@@ -194,7 +193,7 @@ void lectura_cargado_archivo(FILE* info_gimnasio, heap_t* heap, gimnasio_t* gimn
     
 }
 
-int cargar_archivo(const char* ruta_archivo, heap_t* heap){
+int cargar_archivo_gimnasio(const char* ruta_archivo, heap_t* heap){
     if(!ruta_archivo || !heap) return ERROR;
     int bandera = OK; //creo bandera, retorna 0 si se pudo cargar el gimnasio, -1 si no lo pudo cargar
 
@@ -207,4 +206,14 @@ int cargar_archivo(const char* ruta_archivo, heap_t* heap){
 
     fclose(info_gimnasio);
     return bandera;
+}
+
+
+int cargar_archivo_personaje(const char* ruta_archivo, personaje_t* personaje){
+    if(!ruta_archivo) return ERROR;
+
+    FILE* info_personaje = fopen(info_personaje, "r");
+    if(!info_personaje) return ERROR;
+
+    crear_personaje(info_personaje);
 }
