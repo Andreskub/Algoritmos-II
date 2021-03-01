@@ -32,16 +32,17 @@ typedef struct entrenador{
 typedef struct gimnasio{
     char nombre[MAX_NOMBRE];
     int dificultad;
-    lista_t* v_entrenadores;
+    lista_t* v_entrenadores; //Pila
     int cont_entrenadores;
     int id_puntero_funcion;
     //Algo++
 }gimnasio_t;
 
-typdef struct personaje{
-    char* nombre[MAX_NOMBRE];
-    lista_t* party;
-    lista_t* caja;
+typedef struct personaje{
+    char nombre[MAX_NOMBRE];
+    lista_t* party; //Vector que apunte a los elementos de la cola
+    lista_t* caja; //Cola
+    int cantidad_pokemones;
 }personaje_t;
 
 void destruir_pokemon(pokemon_t* pokemon);
@@ -49,5 +50,7 @@ void destruir_pokemon(pokemon_t* pokemon);
 void destruir_entrenador(entrenador_t* entrenador);
 
 void destruir_gimnasio(gimnasio_t* gimnasio, heap_destructor_elemento destructor);
+
+void destruir_personaje(personaje_t* personaje);
 
 #endif /* __AVENTURA_POKEMON__ */

@@ -42,6 +42,14 @@ gimnasio_t leer_gimnasio(FILE* info_gimnasio){
 
     return gimnasio;
 }
+
+personaje_t leer_personaje(FILE* info_personaje){
+    personaje_t personaje;
+    int leer_linea = fscanf(info_personaje, FORMATO_LECTURA_ENTRENADOR, personaje.nombre);
+    if(leer_linea != 1) personaje.nombre == NULL;
+
+    return personaje;
+}
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES CREACION DE ESTRUCTURAS ++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
 pokemon_t* crear_pokemon(FILE* info_gimnasio){
@@ -93,19 +101,19 @@ personaje_t* crear_personaje(FILE* info_personaje){
     if(!info_personaje) return NULL;
 
     personaje_t personaje_leido = leer_personaje(info_personaje);
-    if(!personaje_leido) return NULL;
+    if(!personaje_leido.nombre) return NULL;
 
     personaje_t* personaje = calloc(1, sizeof(personaje_t));
     if(!personaje) return NULL;
 
-    //Completar
+    strcpy(personaje->nombre, personaje_leido.nombre);
 
     return personaje;
 }
 
-/* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES PRINCIPALES ++++++++++++++++++++++++++++++++++++++++++++++++++ */
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES GENERALES LECTURA GIMNASIO ++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
-void lectura_cargado_archivo(FILE* info_gimnasio, heap_t* heap, gimnasio_t* gimnasio, entrenador_t* entrenador, int* bandera){
+void lectura_cargado_archivo_gimnasio(FILE* info_gimnasio, heap_t* heap, gimnasio_t* gimnasio, entrenador_t* entrenador, int* bandera){
 
     int comienzo_linea = leer_comienzo_linea(info_gimnasio);
     if(comienzo_linea == ERROR) {
@@ -114,7 +122,7 @@ void lectura_cargado_archivo(FILE* info_gimnasio, heap_t* heap, gimnasio_t* gimn
         return ;
     }
 
-    int bandera_insercion_lista = -1;
+    int bandera_insercion_lista = ERROR;;
     gimnasio_t* nuevo_gimnasio;
     entrenador_t* nuevo_entrenador;
     pokemon_t* nuevo_pokemon;
@@ -134,7 +142,7 @@ void lectura_cargado_archivo(FILE* info_gimnasio, heap_t* heap, gimnasio_t* gimn
                 (*bandera) = ERROR;
                 return;
             }
-            lectura_cargado_archivo(info_gimnasio, heap, nuevo_gimnasio, NULL, bandera);
+            lectura_cargado_archivo_gimnasio(info_gimnasio, heap, nuevo_gimnasio, NULL, bandera);
             break;
         case Lider:
             if(gimnasio->v_entrenadores->nodo_inicio){
@@ -152,7 +160,7 @@ void lectura_cargado_archivo(FILE* info_gimnasio, heap_t* heap, gimnasio_t* gimn
                 (*bandera) = ERROR;
                 return;
             }
-            lectura_cargado_archivo(info_gimnasio, heap, gimnasio, nuevo_entrenador, bandera);
+            lectura_cargado_archivo_gimnasio(info_gimnasio, heap, gimnasio, nuevo_entrenador, bandera);
             break;
         case Entrenador:
             if(!gimnasio->v_entrenadores->nodo_inicio){ //Si no hay Lider y/o entrenadores previos
@@ -170,7 +178,7 @@ void lectura_cargado_archivo(FILE* info_gimnasio, heap_t* heap, gimnasio_t* gimn
                 (*bandera) = ERROR;
                 return;
             }
-            lectura_cargado_archivo(info_gimnasio, heap, gimnasio, nuevo_entrenador, bandera);
+            lectura_cargado_archivo_gimnasio(info_gimnasio, heap, gimnasio, nuevo_entrenador, bandera);
             break;
         case Pokemon:
             if(!entrenador){
@@ -201,19 +209,65 @@ int cargar_archivo_gimnasio(const char* ruta_archivo, heap_t* heap){
     if(!info_gimnasio) return bandera = ERROR;
    
 
-    lectura_cargado_archivo(info_gimnasio, heap, NULL, NULL, &bandera);
+    lectura_cargado_archivo_gimnasio(info_gimnasio, heap, NULL, NULL, &bandera);
 
 
     fclose(info_gimnasio);
     return bandera;
 }
 
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES GENERALES LECTURA PERSONAJE ++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
-int cargar_archivo_personaje(const char* ruta_archivo, personaje_t* personaje){
-    if(!ruta_archivo) return ERROR;
+personaje_t* obtener_datos_personaje(FILE* info_personaje, personaje_t* personaje, int bandera){
 
-    FILE* info_personaje = fopen(info_personaje, "r");
-    if(!info_personaje) return ERROR;
+    int comienzo_linea = leer_comienzo_linea(info_personaje);
+    //if(!comienzo_linea)
 
-    crear_personaje(info_personaje);
+    pokemon_t* nuevo_pokemon;
+    int bandera_insercion_lista = ERROR;
+
+    switch(comienzo_linea){
+        case Entrenador:
+            if(personaje) bandera = ERROR;
+            else personaje = crear_personaje(info_personaje);
+
+            if(!personaje) bandera = ERROR;
+            else obtener_datos_personaje(info_personaje, personaje, bandera);
+            break;
+        case Pokemon:
+            if(!personaje) bandera = ERROR;
+            else nuevo_pokemon = crear_pokemon(info_personaje);
+
+            if(!nuevo_pokemon) bandera = ERROR;
+            else bandera_insercion_lista = lista_encolar( personaje->caja, (void*)nuevo_pokemon);
+            
+            if(bandera_insercion_lista == ERROR){
+                destruir_pokemon(nuevo_pokemon);
+                bandera = ERROR;
+            } else obtener_datos_personaje(info_personaje, personaje, bandera);
+    
+            
+
+            break;
+        default:
+            bandera = ERROR;
+            break;
+    }
+
+    if(bandera == ERROR) destruir_personaje(personaje);
+        
+    return personaje?personaje:NULL;
+}
+
+personaje_t* lectura_y_creacion_personaje(const char* ruta_archivo){
+    if(!ruta_archivo) return NULL;
+    
+
+    FILE* info_personaje = fopen(ruta_archivo, "r");
+    if(!info_personaje) return NULL;
+
+    personaje_t* personaje = obtener_datos_personaje(info_personaje, NULL, OK);
+
+    fclose(info_personaje);
+    return personaje;
 }
