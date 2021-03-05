@@ -208,7 +208,6 @@ int cargar_archivo_gimnasio(const char* ruta_archivo, heap_t* heap){
     FILE* info_gimnasio = fopen(ruta_archivo,"r");
     if(!info_gimnasio) return bandera = ERROR;
    
-
     lectura_cargado_archivo_gimnasio(info_gimnasio, heap, NULL, NULL, &bandera);
 
 
@@ -218,55 +217,55 @@ int cargar_archivo_gimnasio(const char* ruta_archivo, heap_t* heap){
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES GENERALES LECTURA PERSONAJE ++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
-personaje_t* obtener_datos_personaje(FILE* info_personaje, personaje_t* personaje, int bandera){
-
+personaje_t* obtener_datos_personaje(FILE* info_personaje, personaje_t* personaje, bool bandera){
     int comienzo_linea = leer_comienzo_linea(info_personaje);
-    //if(!comienzo_linea)
 
     pokemon_t* nuevo_pokemon;
     int bandera_insercion_lista = ERROR;
 
     switch(comienzo_linea){
+        case ERROR:
+            //Algo
+            break;
         case Entrenador:
-            if(personaje) bandera = ERROR;
-            else personaje = crear_personaje(info_personaje);
-
-            if(!personaje) bandera = ERROR;
-            else obtener_datos_personaje(info_personaje, personaje, bandera);
+            if(personaje) bandera = false;
+            else {
+                personaje = crear_personaje(info_personaje);
+                if(!personaje) bandera = false;
+            }
+            
+            if(personaje && bandera) obtener_datos_personaje(info_personaje, personaje, bandera);
             break;
         case Pokemon:
-            if(!personaje) bandera = ERROR;
+            if(!personaje) bandera = false;
             else nuevo_pokemon = crear_pokemon(info_personaje);
 
-            if(!nuevo_pokemon) bandera = ERROR;
+            if(!nuevo_pokemon) bandera = false;
             else bandera_insercion_lista = lista_encolar( personaje->caja, (void*)nuevo_pokemon);
             
-            if(bandera_insercion_lista == ERROR){
+            if(nuevo_pokemon && bandera_insercion_lista == ERROR){
                 destruir_pokemon(nuevo_pokemon);
-                bandera = ERROR;
+                bandera = false;
             } else obtener_datos_personaje(info_personaje, personaje, bandera);
     
-            
-
             break;
         default:
-            bandera = ERROR;
+            bandera = false;
             break;
     }
 
-    if(bandera == ERROR) destruir_personaje(personaje);
+    if(!bandera) destruir_personaje(personaje);
         
     return personaje?personaje:NULL;
 }
 
 personaje_t* lectura_y_creacion_personaje(const char* ruta_archivo){
     if(!ruta_archivo) return NULL;
-    
 
     FILE* info_personaje = fopen(ruta_archivo, "r");
     if(!info_personaje) return NULL;
 
-    personaje_t* personaje = obtener_datos_personaje(info_personaje, NULL, OK);
+    personaje_t* personaje = obtener_datos_personaje(info_personaje, NULL, true);
 
     fclose(info_personaje);
     return personaje;

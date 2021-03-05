@@ -19,4 +19,6 @@
 
 int cargar_archivo_gimnasio(const char* ruta_archivo, heap_t* heap);
 
+personaje_t* lectura_y_creacion_personaje(const char* ruta_archivo);
+
 #endif /* __OBTENER_DATOS_ARCHIVO__ */
