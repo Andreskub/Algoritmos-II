@@ -27,19 +27,17 @@ lista_t* lista_crear(){
  * Devuelve 0 si pudo insertar o -1 si no pudo.
  */
 int lista_insertar(lista_t* lista, void* elemento){
-
-	if (!lista)
-		return -1;
+	if (!lista) return -1;
 
 	//Pido memoria para un nuevo nodo
 	nodo_t* nodo_insertar = malloc(sizeof(nodo_t));
 	if(!nodo_insertar)
 		return -1;
-
+	
 	//Asigno valores del nodo a insertar
 	nodo_insertar->elemento = elemento;
 	nodo_insertar->siguiente = NULL;
-
+	
 	//Si la lista existe y esta vacia
 	if(lista->cantidad == 0){
 		lista->nodo_inicio = nodo_insertar;
@@ -49,7 +47,7 @@ int lista_insertar(lista_t* lista, void* elemento){
 		lista->nodo_fin->siguiente = nodo_insertar;
 		lista->nodo_fin = nodo_insertar;
 	}
-
+	;
 	lista->cantidad++;
 	return 0;
 }
@@ -153,12 +151,10 @@ int lista_borrar(lista_t* lista){
  * Devuelve 0 si pudo eliminar o -1 si no pudo.
  */
 int lista_borrar_de_posicion(lista_t* lista, size_t posicion){
-	if(!lista)
-		return -1;
+	if(!lista) return -1;
 
 	//Si la lista existe pero esta vacia
-	if(lista && lista->cantidad == 0)
-		return -1;
+	if(lista && lista->cantidad == 0) return -1;
 
 	//Si es el ultimo o la posicion supera la cantidad total
 	if(posicion > (lista->cantidad -1)){

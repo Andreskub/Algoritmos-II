@@ -21,12 +21,13 @@ void destruir_gimnasio(gimnasio_t* gimnasio, heap_destructor_elemento destructor
 
 void destruir_personaje(personaje_t* personaje){
     if(!personaje) return;
-
+    
     for (int i = 0; i < personaje->cantidad_pokemones; i++){
-        destruir_pokemon(personaje->caja->nodo_inicio->elemento);
+        destruir_pokemon((pokemon_t*)personaje->caja->nodo_inicio->elemento);
         lista_desencolar(personaje->caja);
     }
 
+    if(personaje->caja) lista_destruir(personaje->caja);
     if(personaje->party) free(personaje->party);
     if(personaje) free(personaje);
 }

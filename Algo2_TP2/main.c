@@ -24,9 +24,9 @@ void imprimir_mensaje_bienvenida(){
 int main(){
     imprimir_mensaje_bienvenida();
 
-    
     personaje_t* personaje = lectura_y_creacion_personaje("personaje.txt");
-    if(!personaje) printf("NO!\n");
+    if(!personaje) printf("FALLO EL PERSONAJE! (main)\n");
+
 
     printf("%i", personaje->cantidad_pokemones);
     if(personaje) destruir_personaje(personaje);

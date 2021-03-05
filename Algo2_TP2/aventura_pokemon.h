@@ -40,7 +40,7 @@ typedef struct gimnasio{
 
 typedef struct personaje{
     char nombre[MAX_NOMBRE];
-    lista_t* party; //Vector que apunte a los elementos de la cola
+    pokemon_t** party; //Vector que apunte a los elementos de la cola
     lista_t* caja; //Cola
     int cantidad_pokemones;
 }personaje_t;

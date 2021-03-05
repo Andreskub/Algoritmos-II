@@ -13,8 +13,8 @@
 
 #define FORMATO_PRELECTURA "%[^;];"
 #define FORMATO_LECTURA_GIMANSIO "%100[^;];%i;%i\n"
-#define FORMATO_LECTURA_ENTRENADOR "%50[^\n]\n"
-#define FORMATO_LECTURA_POKEMON "%100[^;];%i;%i;%i\n"
+#define FORMATO_LECTURA_ENTRENADOR "%[^\n]\n"
+#define FORMATO_LECTURA_POKEMON "%99[^;];%i;%i;%i\n"
 
 
 int cargar_archivo_gimnasio(const char* ruta_archivo, heap_t* heap);
