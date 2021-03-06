@@ -204,12 +204,11 @@ gimnasio_t*  lectura_cargado_archivo_gimnasio(FILE* info_gimnasio, gimnasio_t* g
     return gimnasio;
 }
 
-int cargar_archivo_gimnasio(const char* ruta_archivo, heap_t* heap){
-    if(!ruta_archivo || !heap) return ERROR;
-    int bandera = OK; //creo bandera, retorna 0 si se pudo cargar el gimnasio, -1 si no lo pudo cargar
+heap_t* cargar_archivo_gimnasio(const char* ruta_archivo, heap_t* heap){
+    if(!ruta_archivo || !heap) return NULL;;
 
     FILE* info_gimnasio = fopen(ruta_archivo,"r");
-    if(!info_gimnasio) return bandera = ERROR;
+    if(!info_gimnasio) return NULL;;
 
     bool bandera_archivo = true; //Si hay fallas en la lectura 
     bool bandera_gimnasio = true; //Si hay que cargar otro nuevo gimnasio
@@ -235,7 +234,7 @@ int cargar_archivo_gimnasio(const char* ruta_archivo, heap_t* heap){
     }
 
     fclose(info_gimnasio);
-    return bandera;
+    return heap;
 }
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES GENERALES LECTURA PERSONAJE ++++++++++++++++++++++++++++++++++++++++++++++++++ */

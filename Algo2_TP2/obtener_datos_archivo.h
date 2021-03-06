@@ -17,7 +17,7 @@
 #define FORMATO_LECTURA_POKEMON "%99[^;];%i;%i;%i\n"
 
 
-int cargar_archivo_gimnasio(const char* ruta_archivo, heap_t* heap);
+heap_t* cargar_archivo_gimnasio(const char* ruta_archivo, heap_t* heap);
 
 personaje_t* lectura_y_creacion_personaje(const char* ruta_archivo);
 
