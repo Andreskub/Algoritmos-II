@@ -1,4 +1,4 @@
-G;FMS Argentina; dificultad; id_puntero_funcion
+G;FMS Argentina;4;2
 L;WOS
 E;MKS
 P;Pikachu;70;30;30

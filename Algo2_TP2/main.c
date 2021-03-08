@@ -23,13 +23,16 @@ void imprimir_mensaje_bienvenida(){
 
 int main(){
     imprimir_mensaje_bienvenida();
-
+    /*
     personaje_t* personaje = lectura_y_creacion_personaje("personaje.txt");
     if(!personaje) printf("FALLO EL PERSONAJE! (main)\n");
 
-
-    printf("%i", personaje->cantidad_pokemones);
     if(personaje) destruir_personaje(personaje);
+    */
+
+    heap_t* heap = crear_heap(comparar_gimnasios, destruir_gimnasio);
+    cargar_archivo_gimnasio("gimnasio1.txt", heap);
+    heap_destruir(heap);
 
     return 0;
 }

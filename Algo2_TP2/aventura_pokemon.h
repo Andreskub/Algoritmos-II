@@ -23,7 +23,7 @@ typedef struct pokemon{
 
 typedef struct entrenador{
     char nombre[MAX_NOMBRE];
-    lista_t* v_pokemones;
+    lista_t* v_pokemones; //cola
     int cantidad_pokemones;
     int medallas;
     //Algo++
@@ -45,11 +45,13 @@ typedef struct personaje{
     int cantidad_pokemones;
 }personaje_t;
 
+int comparar_gimnasios(void* gimnasio1, void* gimnasio2);
+
 void destruir_pokemon(pokemon_t* pokemon);
 
 void destruir_entrenador(entrenador_t* entrenador);
 
-void destruir_gimnasio(gimnasio_t* gimnasio, heap_destructor_elemento destructor);
+void destruir_gimnasio(void* gimnasio);
 
 void destruir_personaje(personaje_t* personaje);
 

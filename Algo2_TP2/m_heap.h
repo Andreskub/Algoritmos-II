@@ -25,7 +25,7 @@ typedef struct heap{
     heap_destructor_elemento destructor;
 }heap_t;
 
-heap_t* crear_heap();
+heap_t* crear_heap(heap_comparador comparador, heap_destructor_elemento destructor);
 
 heap_t* heap_insertar_nodo(heap_t* heap, void* elemento);
 
