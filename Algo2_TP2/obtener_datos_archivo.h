@@ -5,11 +5,10 @@
 #include "m_heap.h"
 #include "m_lista.h"
 
-
-#define Gimnasio 1
-#define Lider 2
-#define Entrenador 3
-#define Pokemon 4
+#define Gimnasio 5
+#define Lider 6
+#define Entrenador 7
+#define Pokemon 8
 
 #define FORMATO_PRELECTURA "%[^;];"
 #define FORMATO_LECTURA_GIMANSIO "%100[^;];%i;%i\n"
