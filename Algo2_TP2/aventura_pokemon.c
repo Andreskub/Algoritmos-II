@@ -51,11 +51,11 @@ void destruir_personaje(personaje_t* personaje){
     if(!personaje) return;
     
     for (int i = 0; i < personaje->cantidad_pokemones; i++){
-        destruir_pokemon((pokemon_t*)personaje->caja->nodo_inicio->elemento);
-        lista_desencolar(personaje->caja);
+        destruir_pokemon((pokemon_t*)personaje->pokemon_obtenidos->nodo_inicio->elemento);
+        lista_desencolar(personaje->pokemon_obtenidos);
     }
 
-    if(personaje->caja) lista_destruir(personaje->caja);
-    if(personaje->party) free(personaje->party);
+    if(personaje->pokemon_obtenidos) lista_destruir(personaje->pokemon_obtenidos);
+    if(personaje->pokemon_para_combatir) free(personaje->pokemon_para_combatir);
     if(personaje) free(personaje);
 }
