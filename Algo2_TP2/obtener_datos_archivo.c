@@ -113,8 +113,8 @@ personaje_t* crear_personaje(FILE* info_personaje){
     if(!personaje) return NULL;
 
     strcpy(personaje->nombre, personaje_leido.nombre);
-    personaje->caja = lista_crear();
-    if(!personaje->caja) destruir_personaje(personaje);
+    personaje->pokemon_obtenidos = lista_crear();
+    if(!personaje->pokemon_obtenidos) destruir_personaje(personaje);
 
     return personaje;
 }
@@ -245,13 +245,11 @@ heap_t* cargar_archivo_gimnasio(const char* ruta_archivo, heap_t* heap){
         if(bandera_archivo && bandera_gimnasio == false && comienzo_linea != ERROR){
             heap = heap_insertar_nodo(heap, (void*)nuevo_gimnasio);
             if(!heap) bandera_archivo = false;
-            heap->cantidad++;
             bandera_gimnasio = true;
         }
         //Si se leyo bien y termino
         if(bandera_archivo && comienzo_linea == ERROR){
             heap = heap_insertar_nodo(heap, (void*)nuevo_gimnasio);
-            heap->cantidad++;
             bandera_archivo = false;
         }
 
@@ -263,17 +261,17 @@ heap_t* cargar_archivo_gimnasio(const char* ruta_archivo, heap_t* heap){
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES GENERALES LECTURA PERSONAJE ++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
-personaje_t* agregar_pokemon_al_party(personaje_t* personaje, pokemon_t* pokemon){
+personaje_t* agregar_pokemon_al_pokemon_para_combatir(personaje_t* personaje, pokemon_t* pokemon){
     if(!personaje) return NULL;
 
     if (personaje->cantidad_pokemones >= 0){
-		void* aux = realloc(personaje->party, (size_t)(personaje->cantidad_pokemones + 1) * sizeof(pokemon_t*)); //Extiende el espacio de memoria
+		void* aux = realloc(personaje->pokemon_para_combatir, (size_t)(personaje->cantidad_pokemones + 1) * sizeof(pokemon_t*)); //Extiende el espacio de memoria
 		if (!aux) return NULL;
 		
-		personaje->party = aux;
+		personaje->pokemon_para_combatir = aux;
 	}
 
-    personaje->party[personaje->cantidad_pokemones] = pokemon;
+    personaje->pokemon_para_combatir[personaje->cantidad_pokemones] = pokemon;
     return personaje;
 }
 
@@ -294,14 +292,14 @@ personaje_t* obtener_datos_personaje(FILE* info_personaje, personaje_t* personaj
             else nuevo_pokemon = crear_pokemon(info_personaje);
 
             if(!nuevo_pokemon) (*bandera) = false;
-            else bandera_insercion_lista = lista_encolar( personaje->caja, (void*)nuevo_pokemon);
+            else bandera_insercion_lista = lista_encolar(personaje->pokemon_obtenidos, (void*)nuevo_pokemon);
 
             if(nuevo_pokemon && bandera_insercion_lista == ERROR){
                 destruir_pokemon(nuevo_pokemon);
                 (*bandera) = false;
             } else{
                 personaje->cantidad_pokemones++;
-                if(personaje->cantidad_pokemones <= 6) personaje = agregar_pokemon_al_party(personaje, nuevo_pokemon);
+                if(personaje->cantidad_pokemones <= 6) personaje = agregar_pokemon_al_pokemon_para_combatir(personaje, nuevo_pokemon);
             }
             break;
         default:
