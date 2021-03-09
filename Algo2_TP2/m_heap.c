@@ -92,7 +92,6 @@ void* extraer_nodo_raiz(heap_t* heap){
 
 void heap_destruir_elementos(heap_t* heap, heap_destructor_elemento destructor){
     for(int i = 0; i < heap->cantidad; i++){
-        printf("Hola\n");
         if(destructor) destructor(heap->v_gimnasios[i]);
     }
 
