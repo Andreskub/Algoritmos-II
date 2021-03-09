@@ -1,5 +1,5 @@
 #include "m_heap.h"
-
+#include <stdio.h>
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES AUXILIARES ++++++++++++++++++++++++++++++++++++++++++++++++++ */
 int posicion_padre(int n){
     return (n-1)/2;
@@ -65,14 +65,14 @@ heap_t* crear_heap(heap_comparador comparador, heap_destructor_elemento destruct
 heap_t* heap_insertar_nodo(heap_t* heap, void* elemento){
     if(!heap || !elemento) return NULL;
 
-    void* aux = realloc(heap->v_gimnasios, sizeof(void*) * heap->cantidad);
+    void* aux = realloc(heap->v_gimnasios, sizeof(void*) * (heap->cantidad+1));
     if(!aux) return NULL;
 
     heap->v_gimnasios = aux;
     heap->cantidad++;
     heap->v_gimnasios[heap->cantidad-1] = elemento;
-
     shift_up(heap, heap->comparador, heap->cantidad-1);
+
     return heap;
 }
 
@@ -92,19 +92,18 @@ void* extraer_nodo_raiz(heap_t* heap){
 
 void heap_destruir_elementos(heap_t* heap, heap_destructor_elemento destructor){
     for(int i = 0; i < heap->cantidad; i++){
-        if(heap->v_gimnasios[i] && heap->destructor)
-            destructor(heap->v_gimnasios[i]);
+        printf("Hola\n");
+        if(destructor) destructor(heap->v_gimnasios[i]);
     }
 
-    if(heap->v_gimnasios)
-        free(heap->v_gimnasios);
 }
 
 void heap_destruir(heap_t* heap){
     if(!heap) return;
 
     heap_destruir_elementos(heap, heap->destructor);
-    free(heap);
+    if(heap->v_gimnasios) free(heap->v_gimnasios);
+    if(heap) free(heap);
 }
 
 /*
