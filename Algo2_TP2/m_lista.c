@@ -33,7 +33,7 @@ int lista_insertar(lista_t* lista, void* elemento){
 	nodo_t* nodo_insertar = malloc(sizeof(nodo_t));
 	if(!nodo_insertar)
 		return -1;
-	
+
 	//Asigno valores del nodo a insertar
 	nodo_insertar->elemento = elemento;
 	nodo_insertar->siguiente = NULL;
@@ -47,7 +47,7 @@ int lista_insertar(lista_t* lista, void* elemento){
 		lista->nodo_fin->siguiente = nodo_insertar;
 		lista->nodo_fin = nodo_insertar;
 	}
-	;
+	
 	lista->cantidad++;
 	return 0;
 }
