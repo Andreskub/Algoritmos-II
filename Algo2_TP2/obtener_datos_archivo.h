@@ -5,18 +5,17 @@
 #include "m_heap.h"
 #include "m_lista.h"
 
-#define Gimnasio 5
-#define Lider 6
-#define Entrenador 7
-#define Pokemon 8
+#define Gimnasio 1
+#define Lider 2
+#define Entrenador 3
+#define Pokemon 4
 
 #define FORMATO_PRELECTURA "%[^;];"
 #define FORMATO_LECTURA_GIMANSIO "%100[^;];%i;%i\n"
 #define FORMATO_LECTURA_ENTRENADOR "%[^\n]\n"
 #define FORMATO_LECTURA_POKEMON "%99[^;];%i;%i;%i\n"
 
-
-heap_t* cargar_archivo_gimnasio(const char* ruta_archivo, heap_t* heap);
+heap_t* leer_y_cargar_gimnasio(const char* ruta_archivo, heap_t* heap);
 
 personaje_t* lectura_y_creacion_personaje(const char* ruta_archivo);
 

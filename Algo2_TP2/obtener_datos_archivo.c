@@ -50,6 +50,7 @@ personaje_t leer_personaje(FILE* info_personaje){
     
     return personaje;
 }
+
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES CREACION DE ESTRUCTURAS ++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
 pokemon_t* crear_pokemon(FILE* info_gimnasio){
@@ -89,7 +90,7 @@ gimnasio_t* crear_gimnasio(FILE* info_gimnasio){
     if(!info_gimnasio) return NULL;
 
     gimnasio_t gimnasio_leido = leer_gimnasio(info_gimnasio);
-    if(!gimnasio_leido.nombre) return NULL;
+    if(!gimnasio_leido.nombre || gimnasio_leido.dificultad < 0) return NULL;
 
     gimnasio_t* gimnasio = calloc(1, sizeof(gimnasio_t));
     if(!gimnasio) return NULL;
@@ -121,7 +122,7 @@ personaje_t* crear_personaje(FILE* info_personaje){
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES GENERALES LECTURA GIMNASIO ++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
-gimnasio_t*  lectura_cargado_archivo_gimnasio(FILE* info_gimnasio, gimnasio_t* gimnasio, int comienzo_linea, bool* bandera_archivo, bool* bandera_gimnasio, bool* bandera_entrenador){
+gimnasio_t* lectura_cargado_archivo_gimnasio(FILE* info_gimnasio, gimnasio_t* gimnasio, int comienzo_linea, bool* bandera_archivo, bool* bandera_gimnasio, bool* bandera_entrenador){
 
     entrenador_t* nuevo_entrenador = NULL;
     pokemon_t* nuevo_pokemon = NULL;
@@ -217,7 +218,7 @@ gimnasio_t*  lectura_cargado_archivo_gimnasio(FILE* info_gimnasio, gimnasio_t* g
     return gimnasio;
 }
 
-heap_t* cargar_archivo_gimnasio(const char* ruta_archivo, heap_t* heap){
+heap_t* leer_y_cargar_gimnasio(const char* ruta_archivo, heap_t* heap){
     if(!ruta_archivo || !heap) return NULL;;
 
     FILE* info_gimnasio = fopen(ruta_archivo,"r");
