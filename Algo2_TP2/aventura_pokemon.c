@@ -18,22 +18,27 @@ void destruir_pokemon(pokemon_t* pokemon){
 }
 
 void destruir_entrenador(entrenador_t* entrenador){
-    if(entrenador && entrenador->v_pokemones)
-        lista_destruir(entrenador->v_pokemones);
+    if(entrenador && entrenador->v_pokemones){
+        for(int i = 0; i < entrenador->cantidad_pokemones; i++){
+            destruir_pokemon((pokemon_t*)lista_primero(entrenador->v_pokemones));
+            lista_desencolar(entrenador->v_pokemones);
+        }
+    }
+    if(entrenador->v_pokemones) free(entrenador->v_pokemones);
     if(entrenador) free(entrenador);
 }
 
+
+
 void aux_destruir_gimnasio(gimnasio_t* gimnasio){
+
     for(int i = 0; i < gimnasio->cont_entrenadores; i++){
+
         entrenador_t* ultimo_entrenador = (entrenador_t*)lista_tope(gimnasio->v_entrenadores); //Ultimo entrenador porque es una PILA
-        for(int j = 0; j < ultimo_entrenador->cantidad_pokemones; j++){
-            pokemon_t* primer_pokemon = (pokemon_t*)lista_primero(ultimo_entrenador->v_pokemones); //primer pokemon porque es una COLA
-            if(primer_pokemon) destruir_pokemon(primer_pokemon);
-            lista_desencolar(ultimo_entrenador->v_pokemones);
-        }
         destruir_entrenador(ultimo_entrenador);
         lista_desapilar(gimnasio->v_entrenadores);
     }
+    if(gimnasio->v_entrenadores) free(gimnasio->v_entrenadores);
     if(gimnasio) free(gimnasio);
 }
 
