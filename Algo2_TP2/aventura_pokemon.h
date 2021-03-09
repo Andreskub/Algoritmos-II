@@ -14,11 +14,18 @@
 
 #define MAX_NOMBRE 50
 
+#define BATALLA_1 1
+#define BATALLA_2 2
+#define BATALLA_3 3
+#define BATALLA_4 4
+#define BATALLA_5 5
+
 typedef struct pokemon{
     char especie[MAX_NOMBRE];
     int ataque;
     int defensa;
     int velocidad;
+    int cantidad_victorias;
 }pokemon_t;
 
 typedef struct entrenador{
@@ -26,7 +33,6 @@ typedef struct entrenador{
     lista_t* v_pokemones; //cola
     int cantidad_pokemones;
     int medallas;
-    //Algo++
 }entrenador_t;
 
 typedef struct gimnasio{
@@ -35,7 +41,6 @@ typedef struct gimnasio{
     lista_t* v_entrenadores; //Pila
     int cont_entrenadores;
     int id_puntero_funcion;
-    //Algo++
 }gimnasio_t;
 
 typedef struct personaje{
@@ -44,6 +49,11 @@ typedef struct personaje{
     lista_t* pokemon_obtenidos; //CAJA //Cola
     int cantidad_pokemones;
 }personaje_t;
+
+typedef struct juego{
+    heap_t* heap;
+    personaje_t* personaje;
+}juego_t;
 
 int comparar_gimnasios(void* gimnasio1, void* gimnasio2);
 
@@ -54,5 +64,9 @@ void destruir_entrenador(entrenador_t* entrenador);
 void destruir_gimnasio(void* gimnasio);
 
 void destruir_personaje(personaje_t* personaje);
+
+void destruir_juego(juego_t* juego);
+
+juego_t* crear_juego();
 
 #endif /* __AVENTURA_POKEMON__ */

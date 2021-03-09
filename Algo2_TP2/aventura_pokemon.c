@@ -2,6 +2,7 @@
 #include "m_heap.h"
 #include "m_lista.h"
 
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES COMPARADOR ++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
 int comparar_gimnasios(void* gimnasio1, void* gimnasio2){
     if(!gimnasio1 || !gimnasio2) return 0;
@@ -27,8 +28,6 @@ void destruir_entrenador(entrenador_t* entrenador){
     if(entrenador->v_pokemones) free(entrenador->v_pokemones);
     if(entrenador) free(entrenador);
 }
-
-
 
 void aux_destruir_gimnasio(gimnasio_t* gimnasio){
 
@@ -58,4 +57,25 @@ void destruir_personaje(personaje_t* personaje){
     if(personaje->pokemon_obtenidos) lista_destruir(personaje->pokemon_obtenidos);
     if(personaje->pokemon_para_combatir) free(personaje->pokemon_para_combatir);
     if(personaje) free(personaje);
+}
+
+void destruir_juego(juego_t* juego){
+    if(!juego) return;
+
+    if(juego->heap) heap_destruir(juego->heap);
+    if(juego->personaje) destruir_personaje(juego->personaje);
+    if(juego) free(juego);
+}
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES CREACION DE ESTRUCTURAS ++++++++++++++++++++++++++++++++++++++++++++++++++ */
+
+juego_t* crear_juego(){
+    juego_t* juego = calloc(1, sizeof(juego_t));
+    if(!juego) return NULL;
+
+    juego->heap = crear_heap(comparar_gimnasios, destruir_gimnasio);
+    if(!juego->heap){
+        free(juego);
+        return NULL;
+    } else return juego;
 }
