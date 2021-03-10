@@ -84,6 +84,10 @@ void* extraer_nodo_raiz(heap_t* heap){
     swap(heap->v_gimnasios, 0, heap->cantidad-1);
     heap->cantidad--;
 
+    void* aux = realloc(heap->v_gimnasios, sizeof(void*) * (heap->cantidad));
+    //if(!aux) 
+    heap->v_gimnasios = aux;
+
     if(heap->cantidad != 0)
         shift_down(heap, heap->comparador, 0);
 
