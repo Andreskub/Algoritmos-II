@@ -53,6 +53,7 @@ typedef struct personaje{
 typedef struct juego{
     heap_t* heap;
     personaje_t* personaje;
+    void* gimnasio_actual;
 }juego_t;
 
 int comparar_gimnasios(void* gimnasio1, void* gimnasio2);
