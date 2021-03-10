@@ -262,7 +262,7 @@ heap_t* leer_y_cargar_gimnasio(const char* ruta_archivo, heap_t* heap){
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES GENERALES LECTURA PERSONAJE ++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
-personaje_t* agregar_pokemon_al_pokemon_para_combatir(personaje_t* personaje, pokemon_t* pokemon){
+personaje_t* agregar_pokemon_para_combatir(personaje_t* personaje, pokemon_t* pokemon){
     if(!personaje) return NULL;
 
     if (personaje->cantidad_pokemones >= 0){
@@ -300,7 +300,7 @@ personaje_t* obtener_datos_personaje(FILE* info_personaje, personaje_t* personaj
                 (*bandera) = false;
             } else{
                 personaje->cantidad_pokemones++;
-                if(personaje->cantidad_pokemones <= 6) personaje = agregar_pokemon_al_pokemon_para_combatir(personaje, nuevo_pokemon);
+                if(personaje->cantidad_pokemones <= 6) personaje = agregar_pokemon_para_combatir(personaje, nuevo_pokemon);
             }
             break;
         default:
