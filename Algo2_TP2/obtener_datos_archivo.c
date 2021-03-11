@@ -299,8 +299,8 @@ personaje_t* obtener_datos_personaje(FILE* info_personaje, personaje_t* personaj
                 destruir_pokemon(nuevo_pokemon);
                 (*bandera) = false;
             } else{
-                personaje->cantidad_pokemones++;
                 if(personaje->cantidad_pokemones <= 6) personaje = agregar_pokemon_para_combatir(personaje, nuevo_pokemon);
+                personaje->cantidad_pokemones++;
             }
             break;
         default:

@@ -1,5 +1,6 @@
 #include "aventura_pokemon.h"
 #include "obtener_datos_archivo.h"
+#include "logica_batallas.h"
 #include "batallas.h"
 #include "funciones_imprenta.h"
 
@@ -43,6 +44,9 @@ juego_t* menu_inicio(juego_t* juego, bool* bandera_juego){
             else printf("\n¡ERROR: NO EXISTE EL HEAP!\n");
             break;
         case I:
+            if(juego->personaje && juego->heap->v_gimnasios) {
+                juego = logica_partida(juego);
+            }else printf("\n¡ERROR: NO SE ENCONTRO UN PERSONAJE Y/O GIMNASIO EXISTENTE!\n\n");
             break;
         case S:
             break;

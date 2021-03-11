@@ -32,13 +32,13 @@ void imprimir_pokemon_caracteristicas_aux(){
 }
 */
 void imprimir_pokemon_caracteristicas(pokemon_t* pokemon){
-    printf("|%-100s |%5i km/h  | %5i | %5i |%5i |\n", pokemon->especie, pokemon->velocidad, pokemon->ataque, pokemon->defensa, pokemon->cantidad_victorias);
+    printf("|%-50s |%5i km/h  | %5i | %5i |%5i |\n", pokemon->especie, pokemon->velocidad, pokemon->ataque, pokemon->defensa, pokemon->cantidad_victorias);
 }
 
 void imprimir_entrenador_completo(entrenador_t* entrenador){
     if(!entrenador) return;
     //imprimir_pokemon_caracteristicas_aux();
-    for(int i = 0; i < entrenador->cantidad_pokemones; i++){
+    for(int i = 0; i < entrenador->v_pokemones->cantidad; i++){
         pokemon_t* pokemon_actual = (pokemon_t*)lista_elemento_en_posicion(entrenador->v_pokemones, i);
         imprimir_pokemon_caracteristicas(pokemon_actual);
     }
