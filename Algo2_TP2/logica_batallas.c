@@ -1,4 +1,6 @@
+#include "aventura_pokemon.h"
 #include "logica_batallas.h"
+#include "funciones_imprenta.h"
 #include "batallas.h"
 
 
@@ -11,21 +13,21 @@ int seleccionar_batalla(void* pkm_1, void* pkm_2, int id_puntero_funcion){
     else return -5;
 }
 
-pokemon_t* mejorar_pokemon(pokemon_t* pokemon){
+void* mejorar_pokemon(pokemon_t* pokemon){
     if(pokemon->cantidad_victorias >= 63) return pokemon;
 
     pokemon->ataque++;
     pokemon->defensa++;
     pokemon->velocidad++;
     pokemon->cantidad_victorias++;
-    return pokemon;
+    return (void*)pokemon;
 }
-
+//FALTA CORREGIR ESTA FUNCIOOOOOOOON Y HACER UNA BANDERA_VICTORIA
 personaje_t* tomar_pokemon_prestado(personaje_t* personaje, entrenador_t* entrenador){
     //Imprimir pokemones de personaje y entrenador
-    int posicion;
-    //pedir cual quiere
-    void* pokemon_prestado = lista_elemento_en_posicion(entrenador->v_pokemones, *posicion*);
+    size_t posicion ;
+    while(posicion < 0 && posicion > entrenador->cantidad_pokemones) posicion = pedir_posicion_pokemon(&posicion); //pedir cual quiere
+    void* pokemon_prestado = lista_elemento_en_posicion(entrenador->v_pokemones, posicion);
     for(int i = 0; i < entrenador->cantidad_pokemones; i++){
         if(lista_primero(entrenador->v_pokemones) == pokemon_prestado){
             lista_desencolar(entrenador->v_pokemones);
@@ -35,41 +37,43 @@ personaje_t* tomar_pokemon_prestado(personaje_t* personaje, entrenador_t* entren
         }
     }
 
-    //ME FALTA HACER CALLOC DE V_POKEMONES Y AGREGARLO 
+    if(pokemon_prestado) lista_encolar(personaje->pokemon_obtenidos, pokemon_prestado);
+    return personaje;
 }
 
-bool logica_partida_en_batalla(personaje_t* personaje, entrenador_t* entrenador, int id_puntero_funcion){
-    bool bandera_victoria = true;
+personaje_t* logica_partida_en_batalla(personaje_t* personaje, entrenador_t* entrenador, int id_puntero_funcion, bool* bandera_derrota){
     int pkm_entrenador1 = 0, pkm_entrenador2 = 0;
-    //int max_pokemones = max_cantidad_pokemones(personaje, entrenador, &i);
     
-    while (bandera && (pkm_entrenador1 <= personaje->cantidad_pokemones) && (pkm_entrenador2 <= entrenador->cantidad_pokemones)){
-        int ganador = seleccionar_batalla(personaje->pokemon_para_combatir[pkm_entrenador1], lista_elemento_en_posicion(entrenador->v_pokemones, pkm_entrenador2), id_puntero_funcion);
-        //if(ganador == -5) bandera = false;
+    while(!(*bandera_derrota) && pkm_entrenador2 <= entrenador->cantidad_pokemones){
+        void* pkm_1 = personaje->pokemon_para_combatir[pkm_entrenador1];
+        void* pkm_2 = lista_elemento_en_posicion(entrenador->v_pokemones, pkm_entrenador2);
+        int ganador = seleccionar_batalla(pkm_1, pkm_2, id_puntero_funcion);
 
-        if(ganador == GANO_PRIMERO) {
-            mejorar_pokemon(personaje->pokemon_para_combatir[pkm_entrenador1]);
+        if(ganador == GANO_PRIMERO){
+            personaje->pokemon_para_combatir[pkm_entrenador1] = mejorar_pokemon((pokemon_t*)pkm_1);
             pkm_entrenador2++;
         }else if(ganador == GANO_SEGUNDO) pkm_entrenador1++;
-
+        
+        if(pkm_entrenador1 > personaje->cantidad_pokemones) (*bandera_derrota) = true;
     }
 
-    return bandera_victoria;
+    return personaje;
 }
 
-void logica_partida_en_gimnasio(personaje_t* personaje, gimnasio_t* gimnasio){
+personaje_t* logica_partida_en_gimnasio(personaje_t* personaje, gimnasio_t* gimnasio){
+    bool bandera_derrota = false;
 
+    int i = 0;
+    while(!bandera_derrota && i < gimnasio->cont_entrenadores){
+        entrenador_t* entrenador_actual = (entrenador_t*)lista_elemento_en_posicion(gimnasio->v_entrenadores, gimnasio->cont_entrenadores -i);
+        personaje = logica_partida_en_batalla(personaje, entrenador_actual, gimnasio->id_puntero_funcion, &bandera_derrota);
 
-    while(bandera_derrota && gimnasio->cont_entrenadores > 0){
-        entrenador_t* ultimo_entrenador = (entrenador_t*)lista_ultimo(gimnasio->v_entrenadores);
-        if(logica_partida_en_batalla(personaje, ultimo_entrenador, gimnasio->id_puntero_funcion)){
-            if(gimnasio->cont_entrenadores == 1){
-                //Preguntar si quiere guardarse uno de sus pokemones
-            } else if(ultimo_entrenador) destruir_entrenador(ultimo_entrenador);
-
-            lista_desapilar(gimnasio->v_entrenadores);
-        } else bandera_derrota = true;
+        if(!bandera_derrota && gimnasio->cont_entrenadores == 1)
+            personaje = tomar_pokemon_prestado(personaje, entrenador_actual); //Preguntar si quiere guardarse uno de sus pokemones
+        i++;
     }
+
+    return personaje;
 }
 
 
