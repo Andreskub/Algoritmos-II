@@ -38,4 +38,6 @@ int pedir_letra();
 
 char* pedir_nombre_archivo(char array[]);
 
+size_t pedir_posicion_pokemon(size_t* posicion);
+
 #endif /* __FUNCIONES_IMPRENTA__ */

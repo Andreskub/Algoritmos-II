@@ -96,3 +96,9 @@ char* pedir_nombre_archivo(char array[]){
     scanf("%s", array);
     return array;
 }
+
+size_t pedir_posicion_pokemon(size_t* posicion){
+    printf("Ingrese el numero de pokemon deseado: ");
+    scanf("%li", posicion);
+    return *posicion;
+}
