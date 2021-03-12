@@ -39,8 +39,6 @@ int longitud_string(char* string){
     return strlen(string);
 }
 
-
-
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++ IMPRESIÓN DE ELECCION ++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
 int pedir_letra_menu_derrota(){
@@ -113,8 +111,6 @@ size_t pedir_posicion_pokemon(size_t* posicion){
 }
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++ IMPRESIÓN DE ESTRUCTURAS ++++++++++++++++++++++++++++++++++++++++++++++++++ */
-
-
 void imprimir_pokemon_caracteristicas_aux_1(entrenador_t* entrenador){
     printf("\n");
     imprimir_linea("-", 120);
@@ -139,7 +135,6 @@ void imprimir_entrenador_completo(entrenador_t* entrenador){
     imprimir_linea("-", 120);
     printf("\n");
 }
-
 
 void imprimir_pokemon_caracteristicas_aux_2(personaje_t* personaje){
     printf("\n");
@@ -196,7 +191,6 @@ void imprimir_batalla_y_resultado(pokemon_t* pkm_1, pokemon_t* pkm_2, int ganado
 }
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++ IMPRESIÓN DE MENUS ++++++++++++++++++++++++++++++++++++++++++++++++++ */
-
 void imprimir_menu_inicio(){
     printf("\n%48s", " ");
     imprimir_linea("=", 18);
@@ -246,8 +240,6 @@ void imprimir_menu_derrota(){
     imprimir_linea("=", 52);
     printf("\n");
 }
-
-
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++ IMPRESIÓN DE ERRORES ++++++++++++++++++++++++++++++++++++++++++++++++++ */
 void imprimir_error_general(){

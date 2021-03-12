@@ -18,12 +18,12 @@
 #define S 10
 #define T 11
 
-//IMPRESIÓN GENERAL
+/* ++++++++++++++++++++++++++++++++++++ GENERALES ++++++++++++++++++++++++++++++++++++ */
 void imprimir_mensaje_bienvenida();
 
 void imprimir_linea(char* caracter, int multiplicador);
 
-//IMPRESIÓN DE ELECCION
+/* +++++++++++++++++++++++++++++++++++ DE ELECCION +++++++++++++++++++++++++++++++++++ */
 int pedir_letra_menu_derrota();
 
 int pedir_letra_menu_victoria();
@@ -34,11 +34,21 @@ int pedir_letra_menu_gimnasio();
 
 int pedir_letra_menu_inicio();
 
+/*
+ * Funcion que pide al usuario un string y lo devuelve
+ * INPUT: char.
+ * OUTPUT: char pointer.
+ */
 char* pedir_nombre_archivo(char array[]);
 
+/*
+ * funcion que pide una posicion y la devuelve.
+ * INPUT: size_t pointer.
+ * OUTPUT: size_t.
+ */
 size_t pedir_posicion_pokemon(size_t* posicion);
 
-//IMPRESIÓN DE ESTRUCTURAS
+/* +++++++++++++++++++++++++++++++++++ DE ESTRUCTURAS +++++++++++++++++++++++++++++++++++ */
 void imprimir_pokemon_caracteristicas(pokemon_t* pokemon);
 
 void imprimir_entrenador_completo(entrenador_t* entrenador);
@@ -47,9 +57,14 @@ void imprimir_personaje_completo(personaje_t* personaje);
 
 void imprimir_gimnasio_completo(gimnasio_t* gimnasio);
 
+/*
+ * Funcion que imprime el resultado de una batalla pokemon.
+ * INPUT: struct pokemon_t pointer, struct pokemon_t pointer, int.
+ * OUTPUT: void.
+ */
 void imprimir_batalla_y_resultado(pokemon_t* pkm_1, pokemon_t* pkm_2, int ganador);
 
-//IMPRESIÓN DE MENUS
+//DE MENUS
 void imprimir_menu_inicio();
 
 void imprimir_menu_gimnasio();
@@ -60,7 +75,7 @@ void imprimir_menu_victoria();
 
 void imprimir_menu_derrota();
 
-//IMPRESIÓN DE ERRORES
+//DE ERRORES
 void imprimir_error_general();
 
 void imprimir_error_input();
