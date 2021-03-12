@@ -3,6 +3,7 @@
 
 #include "aventura_pokemon.h"
 #include "logica_batallas.h"
+#include "m_lista.h"
 
 #define None 0
 #define A 1
@@ -44,6 +45,8 @@ void imprimir_entrenador_completo(entrenador_t* entrenador);
 
 void imprimir_personaje_completo(personaje_t* personaje);
 
+void imprimir_gimnasio_completo(gimnasio_t* gimnasio);
+
 void imprimir_batalla_y_resultado(pokemon_t* pkm_1, pokemon_t* pkm_2, int ganador);
 
 //IMPRESIÓN DE MENUS
@@ -61,6 +64,10 @@ void imprimir_menu_derrota();
 void imprimir_error_general();
 
 void imprimir_error_input();
+
+void imprimir_error_doble_seleccionado();
+
+void imprimir_error_archivo_erroneo();
 
 void imprimir_error_inexistencia_personaje();
 

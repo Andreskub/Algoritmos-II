@@ -13,6 +13,7 @@
 #define ERROR -1
 
 #define MAX_NOMBRE 50
+#define MAX_POKEMONES_PARTY 6
 
 #define BATALLA_1 1
 #define BATALLA_2 2

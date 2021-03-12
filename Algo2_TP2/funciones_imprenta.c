@@ -1,5 +1,6 @@
 #include "funciones_imprenta.h"
 #include "logica_batallas.h"
+#include "m_lista.h"
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES DE IMPRESIÓN ++++++++++++++++++++++++++++++++++++++++++++++++++ */
 /*
@@ -114,10 +115,10 @@ size_t pedir_posicion_pokemon(size_t* posicion){
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++ IMPRESIÓN DE ESTRUCTURAS ++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
 
-void imprimir_pokemon_caracteristicas_aux_1(){
+void imprimir_pokemon_caracteristicas_aux_1(entrenador_t* entrenador){
     printf("\n");
     imprimir_linea("-", 120);
-    printf("\n| %73s %44s\n", "TABLA DE POKEMONES DEL ENTRENADOR", "|");
+    printf("\n| %s%-82s|\n", "TABLA DE POKEMONES DEL ENTRENADOR: ", entrenador->nombre);
     imprimir_linea("-", 120);
     printf("\n| %-49s | %s  | %s  | %s  |%-28s|\n", "Especie:", "Velocidad:", "Atatque:", "Defensa:", "Victorias:");
     imprimir_linea("-", 120);
@@ -130,8 +131,7 @@ void imprimir_pokemon_caracteristicas_1(pokemon_t* pokemon){
 
 void imprimir_entrenador_completo(entrenador_t* entrenador){
     if(!entrenador) return;
-    printf("\nNombre del entrenador: %s", entrenador->nombre);
-    imprimir_pokemon_caracteristicas_aux_1();
+    imprimir_pokemon_caracteristicas_aux_1(entrenador);
     for(int i = 0; i < entrenador->v_pokemones->cantidad; i++){
         pokemon_t* pokemon_actual = (pokemon_t*)lista_elemento_en_posicion(entrenador->v_pokemones, i);
         imprimir_pokemon_caracteristicas_1(pokemon_actual);
@@ -141,10 +141,10 @@ void imprimir_entrenador_completo(entrenador_t* entrenador){
 }
 
 
-void imprimir_pokemon_caracteristicas_aux_2(){
+void imprimir_pokemon_caracteristicas_aux_2(personaje_t* personaje){
     printf("\n");
     imprimir_linea("-", 120);
-    printf("\n| %73s %44s\n", "TABLA DE POKEMONES DEL PERSONAJE", "|");
+    printf("\n| %s%-83s|\n", "TABLA DE POKEMONES DEL PERSONAJE: ", personaje->nombre);
     imprimir_linea("-", 120);
     printf("\n| %-40s | %s | %s | %s | %s | %-25s |\n", "Especie:", "Velocidad:", "Atatque:", "Defensa:", "Victorias:", "Esta en el Party:");
     imprimir_linea("-", 120);
@@ -156,8 +156,7 @@ void imprimir_pokemon_caracteristicas_2(pokemon_t* pokemon, int i, char* afirmac
 }
 
 void imprimir_personaje_completo(personaje_t* personaje){
-    printf("\nNombre del personaje: %s", personaje->nombre);
-    imprimir_pokemon_caracteristicas_aux_2();
+    imprimir_pokemon_caracteristicas_aux_2(personaje);
     for(int i = 0; i < personaje->cantidad_pokemones; i++){
         void* pokemon = lista_elemento_en_posicion(personaje->pokemon_obtenidos, i);
         bool afirmacion = pokemon_esta_en_pokemones_para_combatir(personaje, 6, pokemon);
@@ -166,6 +165,13 @@ void imprimir_personaje_completo(personaje_t* personaje){
     }
     imprimir_linea("-", 120);
     printf("\n");
+}
+
+void imprimir_gimnasio_completo(gimnasio_t* gimnasio){
+    printf("\nInformacion del gimnasio %s\n", gimnasio->nombre);
+    for(int i = 0; i < gimnasio->v_entrenadores->cantidad; i++){
+        imprimir_entrenador_completo((entrenador_t*)lista_elemento_en_posicion(gimnasio->v_entrenadores, i));
+    }
 }
 
 void imprimir_batalla_y_resultado(pokemon_t* pkm_1, pokemon_t* pkm_2, int ganador){
@@ -192,64 +198,82 @@ void imprimir_batalla_y_resultado(pokemon_t* pkm_1, pokemon_t* pkm_2, int ganado
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++ IMPRESIÓN DE MENUS ++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
 void imprimir_menu_inicio(){
-    printf("\n");
+    printf("\n%48s", " ");
     imprimir_linea("=", 18);
     printf("%s"," MENU DE INICIO ");
     imprimir_linea("=", 18);
-    printf("\n|%-50s|\n|%-50s|\n|%-50s|\n|%-50s|\n", "E - Ingresar archivo del entrenador principal", "A - Agregar gimnasio","I - Comenzar partida","S - Simular partida");
+    printf("\n%48s|%-50s|\n%48s|%-50s|\n%48s|%-50s|\n%48s|%-50s|\n%48s", " ", "E - Ingresar archivo del entrenador principal", " ", "A - Agregar gimnasio", " ", "I - Comenzar partida", " ", "S - Simular partida", " ");
     imprimir_linea("=", 52);
     printf("\n");
 }
 
 void imprimir_menu_gimnasio(){
-    printf("\n");
+    printf("\n%48s", " ");
     imprimir_linea("=", 18);
     printf("%s"," MENU GIMNASIO ");
     imprimir_linea("=", 19);
-    printf("\n|%-50s|\n|%-50s|\n|%-50s|\n|%-50s|\n", "E - Mostrar entrenador", "G - Mostrar informacion del gimnasio","C - Modificar pokemones de combate","B - Realizar proxima batalla");
+    printf("\n%48s|%-50s|\n%48s|%-50s|\n%48s|%-50s|\n%48s|%-50s|\n%48s", " ", "E - Mostrar entrenador", " ", "G - Mostrar informacion del gimnasio", " ", "C - Modificar pokemones de combate", " ", "B - Realizar proxima batalla", " ");
     imprimir_linea("=", 52);
     printf("\n");
 }
 
 void imprimir_menu_batalla(){
-    printf("\n");
+    printf("\n%48s", " ");
     imprimir_linea("=", 19);
     printf("%s"," MENU BATALLA ");
     imprimir_linea("=", 19);
-    printf("\n|%-50s|\n","N - Proximo combate");
+    printf("\n%48s|%-50s|\n%48s", " ", "N - Proximo combate", " ");
     imprimir_linea("=", 52);
     printf("\n");
 }
 
 void imprimir_menu_victoria(){
-    printf("\n== MENU VICTORIA ==\n");
-    printf("T - Tomar un pokemon del lider\nC - Modificar pokemones de combate\nN - Proximo gimnasio\n");
+    printf("\n%48s", " ");
+    imprimir_linea("=", 18);
+    printf("%s"," MENU VICTORIA ");
+    imprimir_linea("=", 19);
+    printf("\n%48s|%-50s|\n%48s|%-50s|\n%48s|%-50s|\n%48s", " ", "T - Tomar un pokemon del lider", " ", "C - Modificar pokemones de combate", " ", "N - Proximo gimnasio", " ");
+    imprimir_linea("=", 52);
+    printf("\n");
 }
 
 void imprimir_menu_derrota(){
-    printf("\n== MENU DERROTA ==\n");
-    printf("C - Modificar pokemones de combate\nR - Reintentar gimnasio\nF - Finalizar partida\n");
+    printf("\n%48s", " ");
+    imprimir_linea("=", 19);
+    printf("%s"," MENU DERROTA ");
+    imprimir_linea("=", 19);
+    printf("\n%48s|%-50s|\n%48s|%-50s|\n%48s|%-50s|\n%48s", " ", "C - Modificar pokemones de combate", " ", "R - Reintentar gimnasio", " ", "F - Finalizar partida", " ");
+    imprimir_linea("=", 52);
+    printf("\n");
 }
 
 
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++ IMPRESIÓN DE ERRORES ++++++++++++++++++++++++++++++++++++++++++++++++++ */
 void imprimir_error_general(){
-    printf("\n¡ERROR: FALLO EL SISTEMA!\n\n");
+    printf("\n== ¡ERROR: FALLO EL SISTEMA! ==\n\n");
 }
 
 void imprimir_error_input(){
-    printf("\n¡ERROR: LA OPCION SELECCIONADA ES INCORRECTA!\n\n");
+    printf("\n== ¡ERROR: LA OPCION SELECCIONADA ES INCORRECTA! ==\n");
+}
+
+void imprimir_error_doble_seleccionado(){
+    printf("\n== ¡ERROR: EL POKEMON YA HA SIDO SELECCIONADO ANTERIORMENTE! ==\n");
+}
+
+void imprimir_error_archivo_erroneo(){
+    printf("\n== ¡ERROR: EL ARCHIVO INGRESADO ES INCORRECTO! ==\n");
 }
 
 void imprimir_error_inexistencia_personaje(){
-    printf("\n¡ERROR: YA HAY UN JUGADOR EXISTENTE!\n\n");
+    printf("\n== ¡ERROR: YA HAY UN JUGADOR EXISTENTE! ==\n");
 }
 
 void imprimir_error_inexistencia_heap(){
-    printf("\n¡ERROR: NO EXISTE EL HEAP!\n");
+    printf("\n== ¡ERROR: NO EXISTE EL HEAP! ==\n");
 }
 
 void imprimir_error_comiezo_partida(){
-    printf("\n¡ERROR: NO SE ENCONTRO UN PERSONAJE Y/O GIMNASIO EXISTENTE!\n\n");
+    printf("\n== ¡ERROR: NO SE ENCONTRO UN PERSONAJE Y/O GIMNASIO EXISTENTE! ==\n");
 }

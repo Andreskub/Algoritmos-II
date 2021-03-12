@@ -219,11 +219,14 @@ gimnasio_t* lectura_cargado_archivo_gimnasio(FILE* info_gimnasio, gimnasio_t* gi
 }
 
 heap_t* leer_y_cargar_gimnasio(const char* ruta_archivo, heap_t* heap){
-    if(!ruta_archivo || !heap) return NULL;;
+    if(!ruta_archivo && heap) return heap;
+    else if(!heap) return NULL;
 
     FILE* info_gimnasio = fopen(ruta_archivo,"r");
-    if(!info_gimnasio) return NULL;;
-
+    if(!info_gimnasio) {
+        imprimir_error_archivo_erroneo();
+        return heap;
+    }
     bool bandera_archivo = true; //Si hay fallas en la lectura 
     bool bandera_gimnasio = true; //Habilita a crear un nuevo gimnasio
     bool bandera_entrenador = false; //Si se carga un entrenador vacio
