@@ -5,8 +5,8 @@
 #include "m_lista.h"
 
 #include <stdio.h>
-#include <stdbool.h> //printf
-#include <stdlib.h> //calloc
+#include <stdbool.h>
+#include <stdlib.h> 
 #include <string.h>
 
 #define OK 0
@@ -31,7 +31,7 @@ typedef struct pokemon{
 
 typedef struct entrenador{
     char nombre[MAX_NOMBRE];
-    lista_t* v_pokemones; //cola
+    lista_t* v_pokemones; //Cola
     int cantidad_pokemones;
     int medallas;
 }entrenador_t;
@@ -57,18 +57,59 @@ typedef struct juego{
     void* gimnasio_actual;
 }juego_t;
 
+/*
+ * COMPARADOR: compara los nieveles de dos gimnasios. devuelve
+ * 1 se gana el primero o empatan, -1 si gana el segundo.
+ * INPUT: void pointer, void pointer.
+ * OUTPUT: int.
+ */
 int comparar_gimnasios(void* gimnasio1, void* gimnasio2);
 
+
+/*
+ * Funcion que dado un pokemon, libera su memoria dinamica.
+ * INPUT: struct pokemon_t pointer.
+ * OUTPUT: void.
+ */
 void destruir_pokemon(pokemon_t* pokemon);
 
+
+/*
+ * Funcion que dado un entrenador, libera su memoria dinamica.
+ * INPUT: struct entrenador_t pointer.
+ * OUTPUT: void.
+ */
 void destruir_entrenador(entrenador_t* entrenador);
 
+/*
+ * Funcion que dado un gimnasio, libera su memoria dinamica.
+ * INPUT: struct gimnasio_t pointer.
+ * OUTPUT: void.
+ */
 void destruir_gimnasio(void* gimnasio);
 
+/*
+ * Funcion que dado un personaje, libera su memoria dinamica.
+ * INPUT: struct personaje_t pointer.
+ * OUTPUT: void.
+ */
 void destruir_personaje(personaje_t* personaje);
 
+
+/*
+ * Funcion que dado un juego_t, libera su memoria dinamica,
+ * tanto su heap como personaje.
+ * INPUT: struct juego_t pointer.
+ * OUTPUT: void.
+ */
 void destruir_juego(juego_t* juego);
 
+/*
+ * Funcion que crea el juego, y a si mismo, crea su
+ * correspondiente heap.
+ * INPUT: None.
+ * OUTPUT: struct juego_t pointer.
+ */
 juego_t* crear_juego();
 
 #endif /* __AVENTURA_POKEMON__ */

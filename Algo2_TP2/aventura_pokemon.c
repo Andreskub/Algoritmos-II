@@ -3,17 +3,15 @@
 #include "m_lista.h"
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES COMPARADOR ++++++++++++++++++++++++++++++++++++++++++++++++++ */
-
 int comparar_gimnasios(void* gimnasio1, void* gimnasio2){
     if(!gimnasio1 || !gimnasio2) return 0;
 
-    if(((gimnasio_t*)gimnasio1)->dificultad < ((gimnasio_t*)gimnasio2)->dificultad) return -1;
+    if(((gimnasio_t*)gimnasio1)->dificultad <= ((gimnasio_t*)gimnasio2)->dificultad) return -1;
     else if(((gimnasio_t*)gimnasio1)->dificultad > ((gimnasio_t*)gimnasio2)->dificultad) return 1;
     else return 0;
 }
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES DESTRUCCION DE ESTRUCTURAS ++++++++++++++++++++++++++++++++++++++++++++++++++ */
-
 void destruir_pokemon(pokemon_t* pokemon){
     if(pokemon) free(pokemon);
 }
@@ -69,7 +67,6 @@ void destruir_juego(juego_t* juego){
 }
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES CREACION DE ESTRUCTURAS ++++++++++++++++++++++++++++++++++++++++++++++++++ */
-
 juego_t* crear_juego(){
     juego_t* juego = calloc(1, sizeof(juego_t));
     if(!juego) return NULL;
