@@ -3,7 +3,12 @@
 #include "funciones_imprenta.h"
 #include "batallas.h"
 
-
+/*
+ * Funcion que dado dos pokemones y el tipo de combate, los hace combatir
+ * y retorna el resultado.
+ * INPUT: void pointer, void pointer, int.
+ * OUTPUT: int.
+ */
 int seleccionar_batalla(void* pkm_1, void* pkm_2, int id_puntero_funcion){
     if(!pkm_1 || !pkm_2 || !id_puntero_funcion) return -5;
 
@@ -15,6 +20,12 @@ int seleccionar_batalla(void* pkm_1, void* pkm_2, int id_puntero_funcion){
     else return -5;
 }
 
+/*
+ * Funcion que mejora en 1 todas las caracteristicas del pokemon.
+ * Si el pokemon esta al maximo nivel, simplemente lo retorna.
+ * INPUT: struct pokemon_t pointer.
+ * OUTPUT: void pointer.
+ */
 void* mejorar_pokemon(pokemon_t* pokemon){
     if(pokemon->cantidad_victorias >= 63) return pokemon;
 
@@ -25,6 +36,12 @@ void* mejorar_pokemon(pokemon_t* pokemon){
     return (void*)pokemon;
 }
 
+/*
+ * Funcion que dado un pokemon devuelve true si pertenece al personaje,
+ * fasle de caso contrario.
+ * INPUT: sturct personaje_t pointer, int, void pointer.
+ * OUTPUT: bool.
+ */
 bool pokemon_esta_en_pokemones_para_combatir(personaje_t* personaje, int cantidad, void* pokemon){
     if(cantidad > 0 && cantidad <= 6){
         for(int i = 0; i < cantidad; i++){
@@ -34,6 +51,12 @@ bool pokemon_esta_en_pokemones_para_combatir(personaje_t* personaje, int cantida
     return false;
 }
 
+/*
+ * Funcion que modifica el PARTY del personaje, asignando nuevos 
+ * pokemones (de la CAJA) al mismo.
+ * INPUT: struct personaje_t pointer.
+ * OUTPUT: struct personaje_t pointer.
+ */
 personaje_t* cambiar_pokemones_para_combatir(personaje_t* personaje){
     imprimir_personaje_completo(personaje);
     size_t i = 0, posicion; 
@@ -48,9 +71,10 @@ personaje_t* cambiar_pokemones_para_combatir(personaje_t* personaje){
         }
         
     }
-
     return personaje;
 }
+
+
 //FALTA CORREGIR ESTA FUNCIOOOOOOOON Y HACER UNA BANDERA_VICTORIA
 juego_t* tomar_pokemon_prestado(juego_t* juego, entrenador_t* entrenador){
     //Imprimir pokemones de personaje y entrenador
@@ -72,6 +96,12 @@ juego_t* tomar_pokemon_prestado(juego_t* juego, entrenador_t* entrenador){
     return juego;
 }
 
+/*
+ * Imprime el MENU_BATALLA y el resultado de la batalla.
+ * Tambien solicita una eleccion sobre el menu al usuario.
+ * INPUT: struct pokemon_t pointer, struct pokemon_t pointer, int.
+ * OUTPUT: void.
+ */
 void menu_batalla(pokemon_t* pkm_1, pokemon_t* pkm_2, int ganador){
     
     imprimir_batalla_y_resultado(pkm_1, pkm_2, ganador);
@@ -85,6 +115,12 @@ void menu_batalla(pokemon_t* pkm_1, pokemon_t* pkm_2, int ganador){
     }
 }
 
+/*
+ * Imprime el MENU_VICTORIA y le solicita una eleccion sobre el menu 
+ * al usuario.
+ * INPUT: struct juego_t pointer, struct entrenador_t pointer, bool pointer.
+ * OUTPUT: struct juego_t pointer.
+ */
 juego_t* menu_victoria(juego_t* juego, entrenador_t* lider, bool* bandera_sig_gimnasio){
     imprimir_menu_victoria();
     int eleccion_usuario = pedir_letra_menu_victoria();
@@ -100,11 +136,18 @@ juego_t* menu_victoria(juego_t* juego, entrenador_t* lider, bool* bandera_sig_gi
             (*bandera_sig_gimnasio) = false;
             break;
         default:
+            imprimir_error_input();
             break;
     }
     return juego;
 }
 
+/*
+ * Imprime el MENU_DERROTA y le solicita una eleccion sobre el menu 
+ * al usuario.
+ * INPUT: struct juego_t pointer, bool pointer, bool pointer.
+ * OUTPUT: struct juego_t pointer.
+ */
 juego_t* menu_derrota(juego_t* juego, bool* bandera_salir, bool* bandera_eleccion){
     imprimir_menu_derrota();
 
@@ -121,11 +164,18 @@ juego_t* menu_derrota(juego_t* juego, bool* bandera_salir, bool* bandera_eleccio
             (*bandera_salir) = false;
             (*bandera_eleccion) = false;
         default:
+            imprimir_error_input();
             break;
     }
     return juego;
 }
 
+/*
+ * Funcion que realiza la logica de combate de personaje vs entrenador.
+ * Retorna el juego con sus modificaciones correspondientes
+ * INPUT: struct juego_t pointer, struct entrenador_t pointer, int, bool pointer.
+ * OUTPUT: struct juego_t pointer.
+ */
 juego_t* batallar_entrenador(juego_t* juego, entrenador_t* entrenador, int id_puntero_funcion, bool* bandera_derrota_entrenador){
     int pkm_entrenador1 = 0, pkm_entrenador2 = 0;
     
@@ -150,6 +200,13 @@ juego_t* batallar_entrenador(juego_t* juego, entrenador_t* entrenador, int id_pu
     return juego;
 }
 
+/*
+ * Funcion que realiza la logica del gimnasio recorrido y las batallas entre
+ * el personaje vs los entrenadores del gimnasio.
+ * Retorna el juego con sus modificaciones correspondientes.
+ * INPUT: struct juego_t pointer, bool pointer.
+ * OUTPUT: struct juego_t pointer.
+ */
 juego_t* batallar_gimnasio(juego_t* juego, bool* bandera_derrota_gimnasio){
     bool bandera_derrota_entrenador = false;
     int cantidad_entrenadores_en_gimnasio = ((gimnasio_t*)juego->gimnasio_actual)->v_entrenadores->cantidad;
@@ -161,9 +218,10 @@ juego_t* batallar_gimnasio(juego_t* juego, bool* bandera_derrota_gimnasio){
         juego = batallar_entrenador(juego, entrenador_actual, ((gimnasio_t*)juego->gimnasio_actual)->id_puntero_funcion, &bandera_derrota_entrenador);
         
         //ELSE IF ES EL PRIMER ENTRENADOR
-        if(!bandera_derrota_entrenador && i == cantidad_entrenadores_en_gimnasio){
+        /*if(!bandera_derrota_entrenador && i == cantidad_entrenadores_en_gimnasio){
             NULL;
-        }else if(!bandera_derrota_entrenador){
+        }else*/ 
+        if(!bandera_derrota_entrenador){
             destruir_entrenador(entrenador_actual);
             lista_desencolar(((gimnasio_t*)juego->gimnasio_actual)->v_entrenadores);
         } else (*bandera_derrota_gimnasio) = true;
@@ -173,10 +231,15 @@ juego_t* batallar_gimnasio(juego_t* juego, bool* bandera_derrota_gimnasio){
         }*/
         i++;
     }
-
     return juego;
 }
 
+/*
+ * Imprime el MENU_GIMNASIO y le solicita una eleccion sobre el menu 
+ * al usuario.
+ * INPUT: struct juego_t pointer, bool pointer, bool pointer.
+ * OUTPUT: struct juego_t pointer.
+ */
 juego_t* menu_gimnasio(juego_t* juego, bool* bandera_derrota, bool* bandera_eleccion){
     imprimir_menu_gimnasio();
     int eleccion_usuario = pedir_letra_menu_gimnasio();
@@ -202,6 +265,14 @@ juego_t* menu_gimnasio(juego_t* juego, bool* bandera_derrota, bool* bandera_elec
     return juego;
 }
 
+/*
+ * Funcion que realiza la logica de toda la partida, recorriendo 
+ * los gimnasios del heap y haciendo batallar al jugador contra
+ * los mismos.
+ * Retorna el juego con sus modificaciones correspondientes.
+ * INPUT: struct juego_t pointer, bool pointer.
+ * OUTPUT: struct juego_t pointer.
+ */
 juego_t* jugar_partida(juego_t* juego, bool* bandera_interaccion){
     bool bandera = true, bandera_eleccion = true, bandera_derrota = false;
 
@@ -212,7 +283,7 @@ juego_t* jugar_partida(juego_t* juego, bool* bandera_interaccion){
         if(bandera_derrota){
             
         }else if(!juego->gimnasio_actual && !bandera_derrota){
-            
+            imprimir_juego_ganado();
             bandera = false;
         } else{
             while(!bandera_derrota && bandera_eleccion){

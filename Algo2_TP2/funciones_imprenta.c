@@ -29,6 +29,27 @@ void imprimir_mensaje_bienvenida(){
     //imprimir_mensaje_bienvenida_2();
 }
 
+void imprimir_mensaje_despedida(){
+    printf("\n       ,___          .-;' \n");
+    printf("       `'-.`\\_...._/`.`    \n");
+    printf("    ,      \\        /      \n");
+    printf(" .-' ',    / ()   ()\\       ,d88b.d88b,\n");
+    printf("`'._   \\  /()    .  (|      88888888888\n");
+    printf("    > .' ;,     -'-  /      `Y8888888Y'\n");
+    printf("   / <   |;,     __.;         `Y888Y'\n");
+    printf("   '-.'-.|  , \\    , \\          `Y'\n");
+    printf("      `>.|;, \\_)    \\_)   \n");
+    printf("       `-;     ,    /       \n");
+    printf("          \\    /   <       \n");
+    printf("           '. <`'-,_)       \n");
+    printf("        bye '._)            \n\n");
+}
+
+
+void imprimir_juego_ganado(){
+    printf("\n== GANASTE EL JUEGOO!!!! :) ==\n");
+}
+
 void imprimir_linea(char* caracter, int multiplicador){
     for (int i = 0; i < multiplicador ; i++){
         printf("%s", caracter);
@@ -95,6 +116,7 @@ int pedir_letra_menu_inicio(){
     else if (eleccion == 'E' || eleccion == 'e') return E;
     else if (eleccion == 'I' || eleccion == 'i') return I;
     else if (eleccion == 'S' || eleccion == 's') return S;
+    else if (eleccion == 'F' || eleccion == 'f') return F;
     return ERROR;
 }
 
@@ -196,7 +218,7 @@ void imprimir_menu_inicio(){
     imprimir_linea("=", 18);
     printf("%s"," MENU DE INICIO ");
     imprimir_linea("=", 18);
-    printf("\n%48s|%-50s|\n%48s|%-50s|\n%48s|%-50s|\n%48s|%-50s|\n%48s", " ", "E - Ingresar archivo del entrenador principal", " ", "A - Agregar gimnasio", " ", "I - Comenzar partida", " ", "S - Simular partida", " ");
+    printf("\n%48s|%-50s|\n%48s|%-50s|\n%48s|%-50s|\n%48s|%-50s|\n%48s|%-50s|\n%48s", " ", "E - Ingresar archivo del entrenador principal", " ", "A - Agregar gimnasio", " ", "I - Comenzar partida", " ", "S - Simular partida", " ", "F - Finalizar programa", " ");
     imprimir_linea("=", 52);
     printf("\n");
 }

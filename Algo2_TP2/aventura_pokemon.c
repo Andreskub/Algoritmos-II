@@ -75,5 +75,5 @@ juego_t* crear_juego(){
     if(!juego->heap){
         free(juego);
         return NULL;
-    } else return juego;
+    } return juego;
 }

@@ -21,6 +21,10 @@
 /* ++++++++++++++++++++++++++++++++++++ GENERALES ++++++++++++++++++++++++++++++++++++ */
 void imprimir_mensaje_bienvenida();
 
+void imprimir_mensaje_despedida();
+
+void imprimir_juego_ganado();
+
 void imprimir_linea(char* caracter, int multiplicador);
 
 /* +++++++++++++++++++++++++++++++++++ DE ELECCION +++++++++++++++++++++++++++++++++++ */

@@ -4,6 +4,12 @@
 #include "batallas.h"
 #include "funciones_imprenta.h"
 
+/*
+ * Funcion que imprimie el MANU_INICIO y le solicita al usuario
+ * una opcion. En esta funcion se cargan los archivos.
+ * INPUT: struct juego_t pointer, bool pointer.
+ * OUTPUT: struct juego_t pointer.
+ */
 juego_t* menu_inicio(juego_t* juego, bool* bandera_juego){
     if(!juego) return NULL;
 
@@ -33,8 +39,10 @@ juego_t* menu_inicio(juego_t* juego, bool* bandera_juego){
             if(juego->personaje && juego->heap->v_gimnasios)
                 bandera_interaccion_usuario = false;
             break;
-        default:
+        case F:
             (*bandera_juego) = false;
+            break;
+        default:
             imprimir_error_input();
             break;
     }
@@ -43,21 +51,27 @@ juego_t* menu_inicio(juego_t* juego, bool* bandera_juego){
 }
 
 
-
+/*
+ * Funcion principal del programa, donde se crea el juego_t
+ * y comienza el juego.
+ * INPUT: None.
+ * OUTPUT: int.
+ */
 int main(){
     imprimir_mensaje_bienvenida();
     
     juego_t* partida = crear_juego();
     if(!partida) imprimir_error_general();
-
-    bool bandera_juego = true;
-    while(bandera_juego){
-        partida = menu_inicio(partida, &bandera_juego);
+    else{
+        bool bandera_juego = true;
+        while(bandera_juego){
+            partida = menu_inicio(partida, &bandera_juego);
+        }
     }
-    
 
+    //Destuyo el juego
     if(partida) destruir_juego(partida);
 
-
+    imprimir_mensaje_despedida();
     return 0;
 }
