@@ -16,14 +16,24 @@
 #define S 10
 #define T 11
 
+//IMPRESIÓN GENERAL
 void imprimir_mensaje_bienvenida();
 
 void imprimir_linea(char* caracter, int multiplicador);
 
+//IMPRESIÓN DE ELECCION
+int pedir_letra();
+
+char* pedir_nombre_archivo(char array[]);
+
+size_t pedir_posicion_pokemon(size_t* posicion);
+
+//IMPRESIÓN DE ESTRUCTURAS
 void imprimir_pokemon_caracteristicas(pokemon_t* pokemon);
 
 void imprimir_entrenador_completo(entrenador_t* entrenador);
 
+//IMPRESIÓN DE MENUS
 void imprimir_menu_inicio();
 
 void imprimir_menu_gimnasio();
@@ -34,10 +44,7 @@ void imprimir_menu_victoria();
 
 void imprimir_menu_derrota();
 
-int pedir_letra();
-
-char* pedir_nombre_archivo(char array[]);
-
-size_t pedir_posicion_pokemon(size_t* posicion);
+//IMPRESIÓN DE ERRORES
+void imprimir_error_general();
 
 #endif /* __FUNCIONES_IMPRENTA__ */

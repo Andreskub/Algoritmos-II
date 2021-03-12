@@ -69,7 +69,8 @@ int main(){
     imprimir_mensaje_bienvenida();
     
     juego_t* partida = crear_juego();
-    
+    if(!partida) imprimir_error_general();
+
     bool bandera_juego = true;
     while(bandera_juego){
         partida = menu_inicio(partida, &bandera_juego);

@@ -21,53 +21,11 @@ void imprimir_linea(char* caracter, int multiplicador){
         printf("%s", caracter);
     }
 }
-/*Revisar
-void imprimir_pokemon_caracteristicas_aux(){
-    printf("\n\n");
-    imprimir_linea("-", 178);
-    printf("\n| %103s %72s\n", "TABLA DE POKEMONES EN EL ARRECIFE", "|");
-    imprimir_linea("-", 178);
-    printf("\n|%-100s |%5s  |%5s    | %-50s|\n", "Especie:", "Velocidad:", "Peso:", "color:");
-    imprimir_linea("-", 178);
-}
-*/
-void imprimir_pokemon_caracteristicas(pokemon_t* pokemon){
-    printf("|%-50s |%5i km/h  | %5i | %5i |%5i |\n", pokemon->especie, pokemon->velocidad, pokemon->ataque, pokemon->defensa, pokemon->cantidad_victorias);
-}
 
-void imprimir_entrenador_completo(entrenador_t* entrenador){
-    if(!entrenador) return;
-    //imprimir_pokemon_caracteristicas_aux();
-    for(int i = 0; i < entrenador->v_pokemones->cantidad; i++){
-        pokemon_t* pokemon_actual = (pokemon_t*)lista_elemento_en_posicion(entrenador->v_pokemones, i);
-        imprimir_pokemon_caracteristicas(pokemon_actual);
-    }
-}
 
-void imprimir_menu_inicio(){
-    printf("\n== MENU DE INICIO ==\n");
-    printf("E - Ingresar archivo del entrenador principal\nA - Agregar gimnasio\nI - Comenzar partida\nS - Simular partida\n");
-}
 
-void imprimir_menu_gimnasio(){
-    
-    printf("E - Mostrar entrenador\nG - Mostrar informacion del gimnasio\nC - Modificar pokemones de combate\nB - Realizar proxima batalla\n");
-}
 
-void imprimir_menu_batalla(){
-    printf("\n== MENU DEL BATALLA ==\n");
-    printf("N - Proximo combate\n");
-}
-
-void imprimir_menu_victoria(){
-    printf("\n== MENU VICTORIA ==\n");
-    printf("T - Tomar un pokemon del lider\nC - Modificar pokemones de combate\nN - Proximo gimnasio\n");
-}
-
-void imprimir_menu_derrota(){
-    printf("\n== MENU DERROTA ==\n");
-    printf("C - Modificar pokemones de combate\nR - Reintentar gimnasio\nF - Finalizar partida\n");
-}
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++ IMPRESIÓN DE ELECCION ++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
 int pedir_letra(){
     
@@ -101,4 +59,63 @@ size_t pedir_posicion_pokemon(size_t* posicion){
     printf("Ingrese el numero de pokemon deseado: ");
     scanf("%li", posicion);
     return *posicion;
+}
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++ IMPRESIÓN DE ESTRUCTURAS ++++++++++++++++++++++++++++++++++++++++++++++++++ */
+
+/*Revisar
+void imprimir_pokemon_caracteristicas_aux(){
+    printf("\n\n");
+    imprimir_linea("-", 178);
+    printf("\n| %103s %72s\n", "TABLA DE POKEMONES EN EL ARRECIFE", "|");
+    imprimir_linea("-", 178);
+    printf("\n|%-100s |%5s  |%5s    | %-50s|\n", "Especie:", "Velocidad:", "Peso:", "color:");
+    imprimir_linea("-", 178);
+}
+*/
+void imprimir_pokemon_caracteristicas(pokemon_t* pokemon){
+    printf("|%-50s |%5i km/h  | %5i | %5i |%5i |\n", pokemon->especie, pokemon->velocidad, pokemon->ataque, pokemon->defensa, pokemon->cantidad_victorias);
+}
+
+void imprimir_entrenador_completo(entrenador_t* entrenador){
+    if(!entrenador) return;
+    //imprimir_pokemon_caracteristicas_aux();
+    for(int i = 0; i < entrenador->v_pokemones->cantidad; i++){
+        pokemon_t* pokemon_actual = (pokemon_t*)lista_elemento_en_posicion(entrenador->v_pokemones, i);
+        imprimir_pokemon_caracteristicas(pokemon_actual);
+    }
+}
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++ IMPRESIÓN DE MENUS ++++++++++++++++++++++++++++++++++++++++++++++++++ */
+
+void imprimir_menu_inicio(){
+    printf("\n== MENU DE INICIO ==\n");
+    printf("E - Ingresar archivo del entrenador principal\nA - Agregar gimnasio\nI - Comenzar partida\nS - Simular partida\n");
+}
+
+void imprimir_menu_gimnasio(){
+    
+    printf("E - Mostrar entrenador\nG - Mostrar informacion del gimnasio\nC - Modificar pokemones de combate\nB - Realizar proxima batalla\n");
+}
+
+void imprimir_menu_batalla(){
+    printf("\n== MENU DEL BATALLA ==\n");
+    printf("N - Proximo combate\n");
+}
+
+void imprimir_menu_victoria(){
+    printf("\n== MENU VICTORIA ==\n");
+    printf("T - Tomar un pokemon del lider\nC - Modificar pokemones de combate\nN - Proximo gimnasio\n");
+}
+
+void imprimir_menu_derrota(){
+    printf("\n== MENU DERROTA ==\n");
+    printf("C - Modificar pokemones de combate\nR - Reintentar gimnasio\nF - Finalizar partida\n");
+}
+
+
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++ IMPRESIÓN DE ERRORES ++++++++++++++++++++++++++++++++++++++++++++++++++ */
+void imprimir_error_general(){
+    printf("\n¡ERROR FALLO EL SISTEMA!\n\n");
 }
