@@ -69,12 +69,15 @@ int main(){
     imprimir_mensaje_bienvenida();
     
     juego_t* partida = crear_juego();
-
+    
     bool bandera_juego = true;
     while(bandera_juego){
         partida = menu_inicio(partida, &bandera_juego);
     }
+    
 
     if(partida) destruir_juego(partida);
+
+
     return 0;
 }

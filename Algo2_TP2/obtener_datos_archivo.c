@@ -2,6 +2,7 @@
 #include "aventura_pokemon.h"
 #include "m_heap.h"
 #include "m_lista.h"
+#include "funciones_imprenta.h"
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES DE LECTURA ++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
@@ -130,8 +131,7 @@ gimnasio_t* lectura_cargado_archivo_gimnasio(FILE* info_gimnasio, gimnasio_t* gi
 
     switch (comienzo_linea){
         case Gimnasio:
-            if((*bandera_gimnasio) == true){
-
+            if((*bandera_gimnasio) && !gimnasio){
                 gimnasio = crear_gimnasio(info_gimnasio);
                 if(!gimnasio){
                     (*bandera_gimnasio) = false;
@@ -230,11 +230,11 @@ heap_t* leer_y_cargar_gimnasio(const char* ruta_archivo, heap_t* heap){
     int comienzo_linea = leer_comienzo_linea(info_gimnasio);
 
     while(bandera_archivo && comienzo_linea != ERROR){
-        gimnasio_t* nuevo_gimnasio;
+        gimnasio_t* nuevo_gimnasio = NULL;
         while(bandera_archivo && bandera_gimnasio && comienzo_linea != ERROR){
             nuevo_gimnasio = lectura_cargado_archivo_gimnasio(info_gimnasio, nuevo_gimnasio, comienzo_linea, &bandera_archivo, &bandera_gimnasio, &bandera_entrenador);
 
-            comienzo_linea = leer_comienzo_linea(info_gimnasio);
+            if(bandera_gimnasio) comienzo_linea = leer_comienzo_linea(info_gimnasio);
         }
         
         //Si hubo error
@@ -243,17 +243,16 @@ heap_t* leer_y_cargar_gimnasio(const char* ruta_archivo, heap_t* heap){
             heap_destruir(heap);
         }
         //Si hay que guardar el gimnasio
-        if(bandera_archivo && bandera_gimnasio == false && comienzo_linea != ERROR){
+        else if(bandera_archivo && !bandera_gimnasio && comienzo_linea != ERROR){
             heap = heap_insertar_nodo(heap, (void*)nuevo_gimnasio);
             if(!heap) bandera_archivo = false;
             bandera_gimnasio = true;
         }
         //Si se leyo bien y termino
-        if(bandera_archivo && comienzo_linea == ERROR){
+        else if(bandera_archivo && comienzo_linea == ERROR){
             heap = heap_insertar_nodo(heap, (void*)nuevo_gimnasio);
             bandera_archivo = false;
         }
-
     }
 
     fclose(info_gimnasio);

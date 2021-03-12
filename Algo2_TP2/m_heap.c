@@ -40,8 +40,6 @@ void shift_down(heap_t* heap, heap_comparador comparador, int n){
     if(pos_der < heap->cantidad)
         if(comparador(heap->v_gimnasios[pos_der], heap->v_gimnasios[pos_izq]) < 0)
             pos_mayor = pos_der;
-    
-    void* hola = heap->v_gimnasios[pos_der]; 
 
     if(comparador(heap->v_gimnasios[n], heap->v_gimnasios[pos_mayor]) < 0){
         swap(heap->v_gimnasios, n, pos_mayor);
@@ -85,7 +83,7 @@ void* extraer_nodo_raiz(heap_t* heap){
     heap->cantidad--;
 
     void* aux = realloc(heap->v_gimnasios, sizeof(void*) * (heap->cantidad));
-    //if(!aux) 
+    //if(!aux) return elemento_a_eliminar;
     heap->v_gimnasios = aux;
 
     if(heap->cantidad != 0)

@@ -1,4 +1,4 @@
-G;Gimnasio entrenadores con mas de 6 pokemons;15;3
+G;Gimnasio Andandoo;14;3
 L;Misty
 P;Staryu;50;40;50
 P;Starmie;90;50;60

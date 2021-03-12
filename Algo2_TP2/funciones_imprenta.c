@@ -46,12 +46,12 @@ void imprimir_entrenador_completo(entrenador_t* entrenador){
 
 void imprimir_menu_inicio(){
     printf("\n== MENU DE INICIO ==\n");
-    printf("E - Ingresar archivo del entrenador principal\nA - Agregar gimnasio\nI - Comenzar partida\nS - Simular partida\n\n");
+    printf("E - Ingresar archivo del entrenador principal\nA - Agregar gimnasio\nI - Comenzar partida\nS - Simular partida\n");
 }
 
 void imprimir_menu_gimnasio(){
     
-    printf("E - Mostrar entrenador\nG - Mostrar informacion del gimnasio\nC - Modificar pokemones de combate\nB - Realizar proxima batalla\n\n");
+    printf("E - Mostrar entrenador\nG - Mostrar informacion del gimnasio\nC - Modificar pokemones de combate\nB - Realizar proxima batalla\n");
 }
 
 void imprimir_menu_batalla(){
@@ -61,12 +61,12 @@ void imprimir_menu_batalla(){
 
 void imprimir_menu_victoria(){
     printf("\n== MENU VICTORIA ==\n");
-    printf("T - Tomar un pokemon del lider\nC - Modificar pokemones de combate\nN - Proximo gimnasio\n\n");
+    printf("T - Tomar un pokemon del lider\nC - Modificar pokemones de combate\nN - Proximo gimnasio\n");
 }
 
 void imprimir_menu_derrota(){
     printf("\n== MENU DERROTA ==\n");
-    printf("C - Modificar pokemones de combate\nR - Reintentar gimnasio\nF - Finalizar partida\n\n");
+    printf("C - Modificar pokemones de combate\nR - Reintentar gimnasio\nF - Finalizar partida\n");
 }
 
 int pedir_letra(){

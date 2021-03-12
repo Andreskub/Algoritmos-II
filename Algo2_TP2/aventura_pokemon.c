@@ -20,23 +20,24 @@ void destruir_pokemon(pokemon_t* pokemon){
 
 void destruir_entrenador(entrenador_t* entrenador){
     if(entrenador && entrenador->v_pokemones){
-        for(int i = 0; i < entrenador->cantidad_pokemones; i++){
+        while(entrenador->v_pokemones->cantidad > 0){
             destruir_pokemon((pokemon_t*)lista_primero(entrenador->v_pokemones));
             lista_desencolar(entrenador->v_pokemones);
         }
     }
+    
     if(entrenador->v_pokemones) free(entrenador->v_pokemones);
     if(entrenador) free(entrenador);
 }
 
 void aux_destruir_gimnasio(gimnasio_t* gimnasio){
-
-    for(int i = 0; i < gimnasio->cont_entrenadores; i++){
-
-        entrenador_t* ultimo_entrenador = (entrenador_t*)lista_tope(gimnasio->v_entrenadores); //Ultimo entrenador porque es una PILA
-        destruir_entrenador(ultimo_entrenador);
+    
+    while(gimnasio->v_entrenadores->cantidad > 0){
+        void* ultimo_entrenador = lista_tope(gimnasio->v_entrenadores); //Ultimo entrenador porque es una PILA
+        destruir_entrenador((entrenador_t*)ultimo_entrenador);
         lista_desapilar(gimnasio->v_entrenadores);
     }
+
     if(gimnasio->v_entrenadores) free(gimnasio->v_entrenadores);
     if(gimnasio) free(gimnasio);
 }
@@ -49,8 +50,8 @@ void destruir_gimnasio(void* gimnasio){
 void destruir_personaje(personaje_t* personaje){
     if(!personaje) return;
     
-    for (int i = 0; i < personaje->cantidad_pokemones; i++){
-        destruir_pokemon((pokemon_t*)personaje->pokemon_obtenidos->nodo_inicio->elemento);
+    while(personaje->pokemon_obtenidos->cantidad >= 1){
+        if(personaje->pokemon_obtenidos->nodo_inicio->elemento) destruir_pokemon((pokemon_t*)personaje->pokemon_obtenidos->nodo_inicio->elemento);
         lista_desencolar(personaje->pokemon_obtenidos);
     }
 
