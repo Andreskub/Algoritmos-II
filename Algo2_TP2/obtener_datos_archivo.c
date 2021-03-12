@@ -20,8 +20,9 @@ int leer_comienzo_linea (FILE* info_gimnasio){
 
 pokemon_t leer_pokemon(FILE* info_gimnasio){
     pokemon_t pokemon;
-    int leer_linea = fscanf(info_gimnasio, FORMATO_LECTURA_POKEMON, pokemon.especie, &(pokemon).velocidad, &(pokemon).defensa, &(pokemon).ataque);
-    if(leer_linea != 4) pokemon.especie == NULL;
+    //int leer_linea = 
+    fscanf(info_gimnasio, FORMATO_LECTURA_POKEMON, pokemon.especie, &(pokemon).velocidad, &(pokemon).defensa, &(pokemon).ataque);
+    //if(leer_linea != 4) pokemon.especie == NULL;
     
     return pokemon;
 }
@@ -29,8 +30,9 @@ pokemon_t leer_pokemon(FILE* info_gimnasio){
 entrenador_t leer_entrenador(FILE* info_gimnasio){
 
     entrenador_t entrenador;
-    int leer_linea = fscanf(info_gimnasio, FORMATO_LECTURA_ENTRENADOR, entrenador.nombre);
-    if(leer_linea != 1) entrenador.nombre == NULL;
+    //int leer_linea = 
+    fscanf(info_gimnasio, FORMATO_LECTURA_ENTRENADOR, entrenador.nombre);
+    //if(leer_linea != 1) entrenador.nombre = NULL;
 
     return entrenador;
 }
@@ -38,16 +40,18 @@ entrenador_t leer_entrenador(FILE* info_gimnasio){
 gimnasio_t leer_gimnasio(FILE* info_gimnasio){
 
     gimnasio_t gimnasio;
-    int leer_linea = fscanf(info_gimnasio, FORMATO_LECTURA_GIMANSIO, gimnasio.nombre, &(gimnasio).dificultad, &(gimnasio).id_puntero_funcion);
-    if(leer_linea != 3) gimnasio.nombre == NULL;
+    //int leer_linea = 
+    fscanf(info_gimnasio, FORMATO_LECTURA_GIMANSIO, gimnasio.nombre, &(gimnasio).dificultad, &(gimnasio).id_puntero_funcion);
+    //if(leer_linea != 3) gimnasio.nombre == NULL;
 
     return gimnasio;
 }
 
 personaje_t leer_personaje(FILE* info_personaje){
     personaje_t personaje;
-    int leer_linea = fscanf(info_personaje, FORMATO_LECTURA_ENTRENADOR, personaje.nombre);
-    if(leer_linea != 1) personaje.nombre == NULL;
+    //int leer_linea = 
+    fscanf(info_personaje, FORMATO_LECTURA_ENTRENADOR, personaje.nombre);
+    //if(leer_linea != 1) personaje.nombre == NULL;
     
     return personaje;
 }
@@ -58,7 +62,7 @@ pokemon_t* crear_pokemon(FILE* info_gimnasio){
     if(!info_gimnasio) return NULL;
 
     pokemon_t pokemon_leido = leer_pokemon(info_gimnasio);
-    if(!pokemon_leido.especie) return NULL;
+    if(!pokemon_leido.especie || pokemon_leido.ataque < 0 || pokemon_leido.defensa < 0 || pokemon_leido.velocidad < 0) return NULL;
 
     pokemon_t* pokemon = calloc(1, sizeof(pokemon_t));
     if(!pokemon) return NULL;
@@ -117,6 +121,11 @@ personaje_t* crear_personaje(FILE* info_personaje){
     strcpy(personaje->nombre, personaje_leido.nombre);
     personaje->pokemon_obtenidos = lista_crear();
     if(!personaje->pokemon_obtenidos) destruir_personaje(personaje);
+
+    personaje->pokemon_para_combatir = malloc(6 * sizeof(pokemon_t*));
+    if(!personaje->pokemon_para_combatir){
+        destruir_personaje(personaje);
+    }
 
     return personaje;
 }

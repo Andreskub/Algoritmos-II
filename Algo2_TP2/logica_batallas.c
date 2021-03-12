@@ -59,7 +59,7 @@ bool pokemon_esta_en_pokemones_para_combatir(personaje_t* personaje, int cantida
  */
 personaje_t* cambiar_pokemones_para_combatir(personaje_t* personaje){
     imprimir_personaje_completo(personaje);
-    size_t i = 0, posicion; 
+    size_t i = 0, posicion = 0; 
     while (i < 6){
         pedir_posicion_pokemon(&posicion);
         if(posicion <= personaje->pokemon_obtenidos->cantidad){
@@ -181,7 +181,7 @@ juego_t* batallar_entrenador(juego_t* juego, entrenador_t* entrenador, int id_pu
     
     while(!(*bandera_derrota_entrenador) && (pkm_entrenador2 < entrenador->v_pokemones->cantidad)){
         void* pkm_1 = juego->personaje->pokemon_para_combatir[pkm_entrenador1];
-        void* pkm_2 = lista_elemento_en_posicion(entrenador->v_pokemones, pkm_entrenador2);
+        void* pkm_2 = lista_elemento_en_posicion(entrenador->v_pokemones, (size_t)pkm_entrenador2);
 
         int ganador = seleccionar_batalla(pkm_1, pkm_2, id_puntero_funcion);
         if(ganador != -5){
@@ -194,9 +194,6 @@ juego_t* batallar_entrenador(juego_t* juego, entrenador_t* entrenador, int id_pu
 
         if(pkm_entrenador1 >= MAX_POKEMONES_PARTY) (*bandera_derrota_entrenador) = true;
     }
-
-    if(!(*bandera_derrota_entrenador))
-
     return juego;
 }
 
@@ -209,7 +206,7 @@ juego_t* batallar_entrenador(juego_t* juego, entrenador_t* entrenador, int id_pu
  */
 juego_t* batallar_gimnasio(juego_t* juego, bool* bandera_derrota_gimnasio){
     bool bandera_derrota_entrenador = false;
-    int cantidad_entrenadores_en_gimnasio = ((gimnasio_t*)juego->gimnasio_actual)->v_entrenadores->cantidad;
+    int cantidad_entrenadores_en_gimnasio = (int)((gimnasio_t*)juego->gimnasio_actual)->v_entrenadores->cantidad;
 
     int i = 0;
     while(!(*bandera_derrota_gimnasio) && i < cantidad_entrenadores_en_gimnasio){

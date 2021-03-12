@@ -63,7 +63,7 @@ heap_t* crear_heap(heap_comparador comparador, heap_destructor_elemento destruct
 heap_t* heap_insertar_nodo(heap_t* heap, void* elemento){
     if(!heap || !elemento) return NULL;
 
-    void* aux = realloc(heap->v_gimnasios, sizeof(void*) * (heap->cantidad+1));
+    void* aux = realloc(heap->v_gimnasios, sizeof(void*) * (size_t)(heap->cantidad+1));
     if(!aux) return NULL;
 
     heap->v_gimnasios = aux;
@@ -82,7 +82,7 @@ void* extraer_nodo_raiz(heap_t* heap){
     swap(heap->v_gimnasios, 0, heap->cantidad-1);
     heap->cantidad--;
 
-    void* aux = realloc(heap->v_gimnasios, sizeof(void*) * (heap->cantidad));
+    void* aux = realloc(heap->v_gimnasios, sizeof(void*) * (size_t)(heap->cantidad));
     //if(!aux) return elemento_a_eliminar;
     heap->v_gimnasios = aux;
 

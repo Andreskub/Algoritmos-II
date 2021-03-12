@@ -56,10 +56,6 @@ void imprimir_linea(char* caracter, int multiplicador){
     }
 }
 
-int longitud_string(char* string){
-    return strlen(string);
-}
-
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++ IMPRESIÓN DE ELECCION ++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
 int pedir_letra_menu_derrota(){
@@ -128,7 +124,7 @@ char* pedir_nombre_archivo(char array[]){
 
 size_t pedir_posicion_pokemon(size_t* posicion){
     printf("Ingrese el numero de pokemon deseado: ");
-    scanf("%li", posicion);
+    scanf("%li", (long int *)posicion);
     return *posicion;
 }
 
@@ -151,7 +147,7 @@ void imprimir_entrenador_completo(entrenador_t* entrenador){
     if(!entrenador) return;
     imprimir_pokemon_caracteristicas_aux_1(entrenador);
     for(int i = 0; i < entrenador->v_pokemones->cantidad; i++){
-        pokemon_t* pokemon_actual = (pokemon_t*)lista_elemento_en_posicion(entrenador->v_pokemones, i);
+        pokemon_t* pokemon_actual = (pokemon_t*)lista_elemento_en_posicion(entrenador->v_pokemones, (size_t)i);
         imprimir_pokemon_caracteristicas_1(pokemon_actual);
     }
     imprimir_linea("-", 120);
@@ -175,7 +171,7 @@ void imprimir_pokemon_caracteristicas_2(pokemon_t* pokemon, int i, char* afirmac
 void imprimir_personaje_completo(personaje_t* personaje){
     imprimir_pokemon_caracteristicas_aux_2(personaje);
     for(int i = 0; i < personaje->cantidad_pokemones; i++){
-        void* pokemon = lista_elemento_en_posicion(personaje->pokemon_obtenidos, i);
+        void* pokemon = lista_elemento_en_posicion(personaje->pokemon_obtenidos, (size_t)i);
         bool afirmacion = pokemon_esta_en_pokemones_para_combatir(personaje, 6, pokemon);
         if(afirmacion) imprimir_pokemon_caracteristicas_2((pokemon_t*)pokemon, i+1, "Si");
         else imprimir_pokemon_caracteristicas_2((pokemon_t*)pokemon, i+1, "No");
@@ -187,7 +183,7 @@ void imprimir_personaje_completo(personaje_t* personaje){
 void imprimir_gimnasio_completo(gimnasio_t* gimnasio){
     printf("\nInformacion del gimnasio %s\n", gimnasio->nombre);
     for(int i = 0; i < gimnasio->v_entrenadores->cantidad; i++){
-        imprimir_entrenador_completo((entrenador_t*)lista_elemento_en_posicion(gimnasio->v_entrenadores, i));
+        imprimir_entrenador_completo((entrenador_t*)lista_elemento_en_posicion(gimnasio->v_entrenadores, (size_t)i));
     }
 }
 

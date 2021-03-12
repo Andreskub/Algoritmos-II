@@ -56,7 +56,7 @@ El trabajo practico consiste de un videojuego en el cual el objetivo es converir
 2) - personaje_t
 >Esta estructura corresponde al personaje principal del juego. Esta compuesta por:
 > - su nombre.
-> - un vector puntero puntero de tipo pokemon_t, el cual corresponde a los pokemones de combate *(o Party)*. Estos punteros apuntan a los pokemones obtenidos del jugador *(o Caja)*, que se encuentran en una lista.
+> - un vector dinamico puntero puntero de tipo pokemon_t, el cual corresponde a los pokemones de combate *(o Party)*. Estos punteros apuntan a los pokemones obtenidos del jugador *(o Caja)*, que se encuentran en una lista. Se ultilizo un puntero dinamico ya que es mas facil y comodo acceder a sus valores(pokemones).
 > - un punero a una lista de tipo COLA, donde se almacenan como elementos de lista todos los pokemones obtenidos por el jugador. La razon de ultilizar una Cola para almacenar los elementos es que facilita los enfrentamientos de sus pokemones, siendo asi el primero de la cola el primero en batallar, donde los entrenadores suelen poner sus mejores pokemones al frente de la batalla.
 > - un contador de la cantidad de pokemones obtenidos.
 
