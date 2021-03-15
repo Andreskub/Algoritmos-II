@@ -1,0 +1,29 @@
+G;Gimnasio Nueva Era;14;3
+L;Andando
+P;Omanyte;35;40;30
+P;Kabuto;55;39;62
+P;Staryu;77;80;71
+E;Roberto Carlos
+P;Exeggutor;55;49;32
+P;Cubone;35;61;37
+P;Starmie;90;61;24
+P;Hitmonlee;33;63;53
+E;Pedrito Picapiedra
+P;Goldeen;40;61;30
+P;Kabutops;54;31;22
+P;Bayleef;24;62;39
+P;Meganium;34;35;61
+P;Cyndaquil;24;52;43
+E;Roman Riquelme
+P;Horsea;45;30;20
+P;Shellder;30;20;45
+P;Wooper;15;47;45
+P;Quagsire;35;47;61
+P;Espeon;36;47;65
+P;Umbreon;52;55;61
+P;Slowking;30;12;34
+P;Misdreavus;37;20;54
+E;Pantera Rosa
+P;Omastar;55;24;45
+P;Voltorb;48;30;61
+P;Electrode;47;61;55
