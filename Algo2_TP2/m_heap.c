@@ -41,7 +41,7 @@ void shift_down(heap_t* heap, heap_comparador comparador, int n){
         if(comparador(heap->v_gimnasios[pos_der], heap->v_gimnasios[pos_izq]) < 0)
             pos_menor = pos_der;
 
-    if(comparador(heap->v_gimnasios[n], heap->v_gimnasios[pos_menor]) > 0){//ACA
+    if(comparador(heap->v_gimnasios[n], heap->v_gimnasios[pos_menor]) > 0){
         swap(heap->v_gimnasios, n, pos_menor);
         shift_down(heap, comparador, pos_menor);
     }

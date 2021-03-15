@@ -75,7 +75,7 @@ personaje_t* cambiar_pokemones_para_combatir(personaje_t* personaje){
 }
 
 
-//FALTA CORREGIR ESTA FUNCIOOOOOOOON Y HACER UNA BANDERA_VICTORIA
+//FALTA CORREGIR ESTA FUNCIOOOOOOOON
 personaje_t* tomar_pokemon_prestado(personaje_t* personaje, entrenador_t* entrenador, int* posicion){
     //Imprimir pokemones de personaje y entrenador
     //size_t posicion = 1;
@@ -98,6 +98,7 @@ personaje_t* tomar_pokemon_prestado(personaje_t* personaje, entrenador_t* entren
 void menu_batalla(){
     imprimir_menu_batalla();
     int eleccion_usuario = pedir_letra_menu_batalla();
+
     while(eleccion_usuario != N){
         imprimir_error_input();
         eleccion_usuario = pedir_letra_menu_batalla();
@@ -139,7 +140,6 @@ juego_t* menu_victoria(juego_t* juego, entrenador_t* lider, bool* bandera_sig_gi
  */
 juego_t* menu_derrota(juego_t* juego, bool* bandera_salir, bool* bandera_eleccion){
     imprimir_menu_derrota();
-
     int eleccion_usuario = pedir_letra_menu_victoria();
 
     switch (eleccion_usuario){
@@ -251,7 +251,6 @@ juego_t* menu_gimnasio(juego_t* juego, bool* bandera_derrota, bool* bandera_elec
             imprimir_error_input();
             break;
     }
-
     return juego;
 }
 
@@ -268,11 +267,11 @@ juego_t* jugar_partida(juego_t* juego, bool* bandera_interaccion){
 
     while(bandera && juego->heap->cantidad >= 0){
         if(juego->gimnasio_actual) juego->heap->destructor(juego->gimnasio_actual);
-        printf("A\n");
         juego->gimnasio_actual = (gimnasio_t*)extraer_nodo_raiz(juego->heap);
-        printf("B\n");
+        
         if(bandera_derrota){
-            NULL;
+            bool bandera_continuar = true;
+            while(bandera_continuar) menu_derrota(juego, &bandera, &bandera_continuar);
         }else if(!juego->gimnasio_actual && !bandera_derrota){
             imprimir_juego_ganado();
             bandera = false;
