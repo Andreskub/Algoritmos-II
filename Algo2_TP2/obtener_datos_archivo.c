@@ -20,39 +20,28 @@ int leer_comienzo_linea (FILE* info_gimnasio){
 
 pokemon_t leer_pokemon(FILE* info_gimnasio){
     pokemon_t pokemon;
-    //int leer_linea = 
     fscanf(info_gimnasio, FORMATO_LECTURA_POKEMON, pokemon.especie, &(pokemon).velocidad, &(pokemon).defensa, &(pokemon).ataque);
-    //if(leer_linea != 4) pokemon.especie == NULL;
     
     return pokemon;
 }
 
 entrenador_t leer_entrenador(FILE* info_gimnasio){
-
     entrenador_t entrenador;
-    //int leer_linea = 
     fscanf(info_gimnasio, FORMATO_LECTURA_ENTRENADOR, entrenador.nombre);
-    //if(leer_linea != 1) entrenador.nombre = NULL;
 
     return entrenador;
 }
 
 gimnasio_t leer_gimnasio(FILE* info_gimnasio){
-
     gimnasio_t gimnasio;
-    //int leer_linea = 
     fscanf(info_gimnasio, FORMATO_LECTURA_GIMANSIO, gimnasio.nombre, &(gimnasio).dificultad, &(gimnasio).id_puntero_funcion);
-    //if(leer_linea != 3) gimnasio.nombre == NULL;
 
     return gimnasio;
 }
 
 personaje_t leer_personaje(FILE* info_personaje){
     personaje_t personaje;
-    //int leer_linea = 
     fscanf(info_personaje, FORMATO_LECTURA_ENTRENADOR, personaje.nombre);
-    //if(leer_linea != 1) personaje.nombre == NULL;
-    
     return personaje;
 }
 
@@ -149,7 +138,7 @@ gimnasio_t* lectura_cargado_archivo_gimnasio(FILE* info_gimnasio, gimnasio_t* gi
             } else (*bandera_gimnasio) = false;
             break;
         case Lider:
-            if(gimnasio->v_entrenadores->nodo_inicio != NULL){//!gimnasio->v_entrenadores->nodo_inicio
+            if(gimnasio->v_entrenadores->nodo_inicio){
                 (*bandera_gimnasio) = false;
                 (*bandera_archivo) = false;
             } else {
@@ -165,10 +154,7 @@ gimnasio_t* lectura_cargado_archivo_gimnasio(FILE* info_gimnasio, gimnasio_t* gi
                     destruir_entrenador(nuevo_entrenador);
                     (*bandera_gimnasio) = false;
                     (*bandera_archivo) = false;
-                } else {
-                    (*bandera_entrenador) = true;
-                    gimnasio->cont_entrenadores++;
-                }
+                } else (*bandera_entrenador) = true;
             }
 
             break;
@@ -190,10 +176,7 @@ gimnasio_t* lectura_cargado_archivo_gimnasio(FILE* info_gimnasio, gimnasio_t* gi
                     destruir_entrenador(nuevo_entrenador);
                     (*bandera_gimnasio) = false;
                     (*bandera_archivo) = false;
-                } else {
-                    (*bandera_entrenador) = true;
-                    gimnasio->cont_entrenadores++;
-                }
+                } else (*bandera_entrenador) = true;
             }
             break;
         case Pokemon:
@@ -211,11 +194,7 @@ gimnasio_t* lectura_cargado_archivo_gimnasio(FILE* info_gimnasio, gimnasio_t* gi
                         destruir_pokemon(nuevo_pokemon);
                         (*bandera_gimnasio) = false;
                         (*bandera_archivo) = false;
-                    } else {
-                        entrenador_t* ultimo_entrenador = (entrenador_t*)lista_ultimo((void*)gimnasio->v_entrenadores);
-                        ultimo_entrenador->cantidad_pokemones++;
-                        (*bandera_entrenador) = false;
-                    }
+                    } else (*bandera_entrenador) = false;
                 }
             }
             break;
@@ -274,16 +253,13 @@ heap_t* leer_y_cargar_gimnasio(const char* ruta_archivo, heap_t* heap){
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES GENERALES LECTURA PERSONAJE ++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
 personaje_t* agregar_pokemon_para_combatir(personaje_t* personaje, pokemon_t* pokemon){
-    if(!personaje) return NULL;
+    if(!personaje || !pokemon) return NULL;
 
-    if (personaje->cantidad_pokemones >= 0){
-		void* aux = realloc(personaje->pokemon_para_combatir, (size_t)(personaje->cantidad_pokemones + 1) * sizeof(pokemon_t*)); //Extiende el espacio de memoria
-		if (!aux) return NULL;
-		
-		personaje->pokemon_para_combatir = aux;
-	}
-
-    personaje->pokemon_para_combatir[personaje->cantidad_pokemones] = pokemon;
+    void* aux = realloc(personaje->pokemon_para_combatir, (size_t)(personaje->pokemon_obtenidos->cantidad) * sizeof(pokemon_t*)); //Extiende el espacio de memoria
+    if (!aux) return NULL;
+	
+    personaje->pokemon_para_combatir = aux;
+    personaje->pokemon_para_combatir[personaje->pokemon_obtenidos->cantidad -1] = pokemon;
     return personaje;
 }
 
@@ -309,9 +285,8 @@ personaje_t* obtener_datos_personaje(FILE* info_personaje, personaje_t* personaj
             if(nuevo_pokemon && bandera_insercion_lista == ERROR){
                 destruir_pokemon(nuevo_pokemon);
                 (*bandera) = false;
-            } else{
-                if(personaje->cantidad_pokemones <= 6) personaje = agregar_pokemon_para_combatir(personaje, nuevo_pokemon);
-                personaje->cantidad_pokemones++;
+            } else {
+                if(personaje->pokemon_obtenidos->cantidad <= 6) personaje = agregar_pokemon_para_combatir(personaje, nuevo_pokemon);
             }
             break;
         default:

@@ -43,7 +43,7 @@ void* mejorar_pokemon(pokemon_t* pokemon){
  * OUTPUT: bool.
  */
 bool pokemon_esta_en_pokemones_para_combatir(personaje_t* personaje, int cantidad, void* pokemon){
-    if(cantidad > 0 && cantidad <= 6){
+    if(0 < cantidad  && cantidad <= 6){
         for(int i = 0; i < cantidad; i++){
             if(personaje->pokemon_para_combatir[i] == (pokemon_t*)pokemon) return true;
         }
@@ -84,14 +84,8 @@ juego_t* tomar_pokemon_prestado(juego_t* juego, entrenador_t* entrenador){
     
     void* pokemon_prestado = lista_elemento_en_posicion(entrenador->v_pokemones, posicion);
     //Saco el nodo del entrenador (NO el elemento)
-    if(pokemon_prestado) {
-        lista_borrar_de_posicion(entrenador->v_pokemones, posicion-1);
-        entrenador->cantidad_pokemones--;
-    }
-    if(pokemon_prestado) {
-        lista_encolar(juego->personaje->pokemon_obtenidos, pokemon_prestado);
-        juego->personaje->cantidad_pokemones++;
-    }
+    if(pokemon_prestado) lista_borrar_de_posicion(entrenador->v_pokemones, posicion-1);
+    if(pokemon_prestado) lista_encolar(juego->personaje->pokemon_obtenidos, pokemon_prestado);
 
     return juego;
 }
@@ -103,13 +97,10 @@ juego_t* tomar_pokemon_prestado(juego_t* juego, entrenador_t* entrenador){
  * OUTPUT: void.
  */
 void menu_batalla(pokemon_t* pkm_1, pokemon_t* pkm_2, int ganador){
-    
     imprimir_batalla_y_resultado(pkm_1, pkm_2, ganador);
-
     imprimir_menu_batalla();
     int eleccion_usuario = pedir_letra_menu_batalla();
-
-    while(eleccion_usuario != N) {
+    while(eleccion_usuario != N){
         imprimir_error_input();
         eleccion_usuario = pedir_letra_menu_batalla();
     }

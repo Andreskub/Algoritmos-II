@@ -32,7 +32,6 @@ typedef struct pokemon{
 typedef struct entrenador{
     char nombre[MAX_NOMBRE];
     lista_t* v_pokemones; //Cola
-    int cantidad_pokemones;
     int medallas;
 }entrenador_t;
 
@@ -40,7 +39,6 @@ typedef struct gimnasio{
     char nombre[MAX_NOMBRE];
     int dificultad;
     lista_t* v_entrenadores; //Pila
-    int cont_entrenadores;
     int id_puntero_funcion;
 }gimnasio_t;
 
@@ -48,7 +46,6 @@ typedef struct personaje{
     char nombre[MAX_NOMBRE];
     pokemon_t** pokemon_para_combatir; //PARTY //Vector que apunte a los elementos de la cola
     lista_t* pokemon_obtenidos; //CAJA //Cola
-    int cantidad_pokemones;
 }personaje_t;
 
 typedef struct juego{
