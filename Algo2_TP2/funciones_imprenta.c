@@ -61,7 +61,7 @@ void imprimir_linea(char* caracter, int multiplicador){
 int pedir_letra_menu_derrota(){
     printf("Ingrese su eleccion: ");
     char eleccion;
-    scanf("%s", &eleccion);
+    scanf("%c", &eleccion);
 
     if (eleccion == 'C' || eleccion == 'c') return C;
     else if (eleccion == 'F' || eleccion == 'f') return F;
@@ -72,7 +72,7 @@ int pedir_letra_menu_derrota(){
 int pedir_letra_menu_victoria(){
     printf("Ingrese su eleccion: ");
     char eleccion;
-    scanf("%s", &eleccion);
+    scanf("%c", &eleccion);
 
     if (eleccion == 'C' || eleccion == 'c') return C;
     else if (eleccion == 'N' || eleccion == 'n') return N;
@@ -83,8 +83,8 @@ int pedir_letra_menu_victoria(){
 int pedir_letra_menu_batalla(){
     printf("Ingrese su eleccion: ");
     char eleccion;
-    scanf("%s", &eleccion);
-
+    scanf(" %c", &eleccion);
+    
     if (eleccion == 'N' || eleccion == 'n') return N;
     else return ERROR;
 }
@@ -92,7 +92,7 @@ int pedir_letra_menu_batalla(){
 int pedir_letra_menu_gimnasio(){
     printf("Ingrese su eleccion: ");
     char eleccion;
-    scanf("%s", &eleccion);
+    scanf("%c", &eleccion);
 
     if (eleccion == 'E' || eleccion == 'e') return E;
     else if (eleccion == 'B' || eleccion == 'b') return B;
