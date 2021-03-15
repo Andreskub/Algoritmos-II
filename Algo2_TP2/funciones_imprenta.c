@@ -170,7 +170,7 @@ void imprimir_pokemon_caracteristicas_2(pokemon_t* pokemon, int i, char* afirmac
 
 void imprimir_personaje_completo(personaje_t* personaje){
     imprimir_pokemon_caracteristicas_aux_2(personaje);
-    for(int i = 0; i < personaje->cantidad_pokemones; i++){
+    for(int i = 0; i < personaje->pokemon_obtenidos->cantidad; i++){
         void* pokemon = lista_elemento_en_posicion(personaje->pokemon_obtenidos, (size_t)i);
         bool afirmacion = pokemon_esta_en_pokemones_para_combatir(personaje, 6, pokemon);
         if(afirmacion) imprimir_pokemon_caracteristicas_2((pokemon_t*)pokemon, i+1, "Si");
