@@ -76,18 +76,17 @@ personaje_t* cambiar_pokemones_para_combatir(personaje_t* personaje){
 
 
 //FALTA CORREGIR ESTA FUNCIOOOOOOOON Y HACER UNA BANDERA_VICTORIA
-juego_t* tomar_pokemon_prestado(juego_t* juego, entrenador_t* entrenador){
+personaje_t* tomar_pokemon_prestado(personaje_t* personaje, entrenador_t* entrenador, int* posicion){
     //Imprimir pokemones de personaje y entrenador
-    size_t posicion = 1;
+    //size_t posicion = 1;
     
     //while(posicion < 0 && posicion > entrenador->cantidad_pokemones) posicion = pedir_posicion_pokemon(&posicion); //pedir cual quiere
     
-    void* pokemon_prestado = lista_elemento_en_posicion(entrenador->v_pokemones, posicion);
+    void* pokemon_prestado = lista_elemento_en_posicion(entrenador->v_pokemones, (size_t)posicion);
     //Saco el nodo del entrenador (NO el elemento)
-    if(pokemon_prestado) lista_borrar_de_posicion(entrenador->v_pokemones, posicion-1);
-    if(pokemon_prestado) lista_encolar(juego->personaje->pokemon_obtenidos, pokemon_prestado);
+    if(pokemon_prestado) lista_encolar(personaje->pokemon_obtenidos, pokemon_prestado);
 
-    return juego;
+    return personaje;
 }
 
 /*
@@ -207,11 +206,14 @@ juego_t* batallar_gimnasio(juego_t* juego, bool* bandera_derrota_gimnasio){
         juego = batallar_entrenador(juego, entrenador_actual, ((gimnasio_t*)juego->gimnasio_actual)->id_puntero_funcion, &bandera_derrota_entrenador);
         
         //ELSE IF ES EL PRIMER ENTRENADOR
-        if(!bandera_derrota_entrenador && ((gimnasio_t*)juego->gimnasio_actual)->v_entrenadores->cantidad == 1){
+        /*if(!bandera_derrota_entrenador && ((gimnasio_t*)juego->gimnasio_actual)->v_entrenadores->cantidad == 1){
+            int posicion = 1;
+
+            juego->personaje = tomar_pokemon_prestado(juego->personaje, entrenador_actual, &posicion);
+            lista_borrar_de_posicion(entrenador_actual->v_pokemones, (size_t)posicion-1);
             destruir_entrenador(entrenador_actual);
-            lista_desencolar(((gimnasio_t*)juego->gimnasio_actual)->v_entrenadores);
-            NULL;
-        }else if(!bandera_derrota_entrenador){
+            lista_desapilar(((gimnasio_t*)juego->gimnasio_actual)->v_entrenadores);
+        }else*/ if(!bandera_derrota_entrenador){
             destruir_entrenador(entrenador_actual);
             lista_desapilar(((gimnasio_t*)juego->gimnasio_actual)->v_entrenadores);
         } else (*bandera_derrota_gimnasio) = true;
@@ -246,6 +248,7 @@ juego_t* menu_gimnasio(juego_t* juego, bool* bandera_derrota, bool* bandera_elec
             (*bandera_eleccion) = false;
             break;        
         default:
+            imprimir_error_input();
             break;
     }
 
@@ -265,10 +268,11 @@ juego_t* jugar_partida(juego_t* juego, bool* bandera_interaccion){
 
     while(bandera && juego->heap->cantidad >= 0){
         if(juego->gimnasio_actual) juego->heap->destructor(juego->gimnasio_actual);
+        printf("A\n");
         juego->gimnasio_actual = (gimnasio_t*)extraer_nodo_raiz(juego->heap);
-        
+        printf("B\n");
         if(bandera_derrota){
-            
+            NULL;
         }else if(!juego->gimnasio_actual && !bandera_derrota){
             imprimir_juego_ganado();
             bandera = false;

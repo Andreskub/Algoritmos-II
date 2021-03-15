@@ -24,7 +24,7 @@ void shift_up(heap_t* heap, heap_comparador comparador, int pos_hijo){
 
     int pos_padre = posicion_padre(pos_hijo);
 
-    if(comparador(heap->v_gimnasios[pos_hijo], heap->v_gimnasios[pos_padre]) > 0){
+    if(comparador(heap->v_gimnasios[pos_hijo], heap->v_gimnasios[pos_padre]) < 0){//Heap
         swap(heap->v_gimnasios, pos_hijo, pos_padre);
         shift_up(heap, comparador, pos_padre);
     }
@@ -36,14 +36,14 @@ void shift_down(heap_t* heap, heap_comparador comparador, int n){
 
     if(pos_izq >= heap->cantidad) return;
 
-    int pos_mayor = pos_izq;
+    int pos_menor = pos_izq;
     if(pos_der < heap->cantidad)
         if(comparador(heap->v_gimnasios[pos_der], heap->v_gimnasios[pos_izq]) < 0)
-            pos_mayor = pos_der;
+            pos_menor = pos_der;
 
-    if(comparador(heap->v_gimnasios[n], heap->v_gimnasios[pos_mayor]) < 0){
-        swap(heap->v_gimnasios, n, pos_mayor);
-        shift_down(heap, comparador, pos_mayor);
+    if(comparador(heap->v_gimnasios[n], heap->v_gimnasios[pos_menor]) > 0){//ACA
+        swap(heap->v_gimnasios, n, pos_menor);
+        shift_down(heap, comparador, pos_menor);
     }
 
 }

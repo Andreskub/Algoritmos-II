@@ -5,9 +5,9 @@
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++ FUNCIONES COMPARADOR ++++++++++++++++++++++++++++++++++++++++++++++++++ */
 int comparar_gimnasios(void* gimnasio1, void* gimnasio2){
     if(!gimnasio1 || !gimnasio2) return 0;
-
-    if(((gimnasio_t*)gimnasio1)->dificultad <= ((gimnasio_t*)gimnasio2)->dificultad) return -1;
-    else if(((gimnasio_t*)gimnasio1)->dificultad > ((gimnasio_t*)gimnasio2)->dificultad) return 1;
+    
+    if(((gimnasio_t*)gimnasio1)->dificultad > ((gimnasio_t*)gimnasio2)->dificultad) return 1;
+    else if(((gimnasio_t*)gimnasio1)->dificultad <= ((gimnasio_t*)gimnasio2)->dificultad) return -1;
     else return 0;
 }
 
