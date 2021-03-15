@@ -202,16 +202,19 @@ juego_t* batallar_gimnasio(juego_t* juego, bool* bandera_derrota_gimnasio){
     int i = 0;
     while(!(*bandera_derrota_gimnasio) && i < cantidad_entrenadores_en_gimnasio){
         
-        entrenador_t* entrenador_actual = (entrenador_t*)lista_primero(((gimnasio_t*)juego->gimnasio_actual)->v_entrenadores);
+        entrenador_t* entrenador_actual = (entrenador_t*)lista_ultimo(((gimnasio_t*)juego->gimnasio_actual)->v_entrenadores); //lista primero
         juego = batallar_entrenador(juego, entrenador_actual, ((gimnasio_t*)juego->gimnasio_actual)->id_puntero_funcion, &bandera_derrota_entrenador);
         
         //ELSE IF ES EL PRIMER ENTRENADOR
-        /*if(!bandera_derrota_entrenador && i == cantidad_entrenadores_en_gimnasio){
-            NULL;
-        }else*/ 
-        if(!bandera_derrota_entrenador){
+        /*if(!bandera_derrota_entrenador && ((gimnasio_t*)juego->gimnasio_actual)->v_entrenadores->cantidad == 1){
+            printf("Aca va el lider: %s\ncantidad en lista: %li\ni=%i\n", entrenador_actual->nombre, entrenador_actual->v_pokemones->cantidad, i);
             destruir_entrenador(entrenador_actual);
             lista_desencolar(((gimnasio_t*)juego->gimnasio_actual)->v_entrenadores);
+            NULL;
+        }else*/
+        if(!bandera_derrota_entrenador){
+            destruir_entrenador(entrenador_actual);
+            lista_desapilar(((gimnasio_t*)juego->gimnasio_actual)->v_entrenadores);
         } else (*bandera_derrota_gimnasio) = true;
 
         /*if(!(*bandera_derrota) && (((gimnasio_t*)juego->gimnasio_actual)->v_entrenadores->cantidad -i) == 0){
@@ -267,7 +270,7 @@ juego_t* jugar_partida(juego_t* juego, bool* bandera_interaccion){
     while(bandera && juego->heap->cantidad >= 0){
         if(juego->gimnasio_actual) juego->heap->destructor(juego->gimnasio_actual);
         juego->gimnasio_actual = (gimnasio_t*)extraer_nodo_raiz(juego->heap);
-
+        
         if(bandera_derrota){
             
         }else if(!juego->gimnasio_actual && !bandera_derrota){
