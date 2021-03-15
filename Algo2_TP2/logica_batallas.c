@@ -96,8 +96,7 @@ juego_t* tomar_pokemon_prestado(juego_t* juego, entrenador_t* entrenador){
  * INPUT: struct pokemon_t pointer, struct pokemon_t pointer, int.
  * OUTPUT: void.
  */
-void menu_batalla(pokemon_t* pkm_1, pokemon_t* pkm_2, int ganador){
-    imprimir_batalla_y_resultado(pkm_1, pkm_2, ganador);
+void menu_batalla(){
     imprimir_menu_batalla();
     int eleccion_usuario = pedir_letra_menu_batalla();
     while(eleccion_usuario != N){
@@ -175,9 +174,11 @@ juego_t* batallar_entrenador(juego_t* juego, entrenador_t* entrenador, int id_pu
         void* pkm_2 = lista_elemento_en_posicion(entrenador->v_pokemones, (size_t)pkm_entrenador2);
 
         int ganador = seleccionar_batalla(pkm_1, pkm_2, id_puntero_funcion);
-        if(ganador != -5){
-            menu_batalla((pokemon_t*)pkm_1, (pokemon_t*)pkm_2, ganador);
+        if(ganador != -5) {
+            imprimir_batalla_y_resultado((pokemon_t*)pkm_1, (pokemon_t*)pkm_2, ganador);
+            menu_batalla();
         }
+
         if(ganador == GANO_PRIMERO){
             juego->personaje->pokemon_para_combatir[pkm_entrenador1] = mejorar_pokemon((pokemon_t*)pkm_1);
             pkm_entrenador2++;
@@ -206,20 +207,15 @@ juego_t* batallar_gimnasio(juego_t* juego, bool* bandera_derrota_gimnasio){
         juego = batallar_entrenador(juego, entrenador_actual, ((gimnasio_t*)juego->gimnasio_actual)->id_puntero_funcion, &bandera_derrota_entrenador);
         
         //ELSE IF ES EL PRIMER ENTRENADOR
-        /*if(!bandera_derrota_entrenador && ((gimnasio_t*)juego->gimnasio_actual)->v_entrenadores->cantidad == 1){
-            printf("Aca va el lider: %s\ncantidad en lista: %li\ni=%i\n", entrenador_actual->nombre, entrenador_actual->v_pokemones->cantidad, i);
+        if(!bandera_derrota_entrenador && ((gimnasio_t*)juego->gimnasio_actual)->v_entrenadores->cantidad == 1){
             destruir_entrenador(entrenador_actual);
             lista_desencolar(((gimnasio_t*)juego->gimnasio_actual)->v_entrenadores);
             NULL;
-        }else*/
-        if(!bandera_derrota_entrenador){
+        }else if(!bandera_derrota_entrenador){
             destruir_entrenador(entrenador_actual);
             lista_desapilar(((gimnasio_t*)juego->gimnasio_actual)->v_entrenadores);
         } else (*bandera_derrota_gimnasio) = true;
 
-        /*if(!(*bandera_derrota) && (((gimnasio_t*)juego->gimnasio_actual)->v_entrenadores->cantidad -i) == 0){
-            juego = tomar_pokemon_prestado(juego, entrenador_actual); //Preguntar si quiere guardarse uno de sus pokemones
-        }*/
         i++;
     }
     return juego;
@@ -232,7 +228,7 @@ juego_t* batallar_gimnasio(juego_t* juego, bool* bandera_derrota_gimnasio){
  * OUTPUT: struct juego_t pointer.
  */
 juego_t* menu_gimnasio(juego_t* juego, bool* bandera_derrota, bool* bandera_eleccion){
-    imprimir_menu_gimnasio();
+    imprimir_menu_gimnasio((gimnasio_t*)juego->gimnasio_actual);
     int eleccion_usuario = pedir_letra_menu_gimnasio();
 
     switch (eleccion_usuario){

@@ -97,7 +97,7 @@ int pedir_letra_menu_batalla(){
 int pedir_letra_menu_gimnasio(){
     printf("Ingrese su eleccion: ");
     char eleccion;
-    scanf("%c", &eleccion);
+    scanf(" %c", &eleccion);
 
     if (eleccion == 'E' || eleccion == 'e') return E;
     else if (eleccion == 'B' || eleccion == 'b') return B;
@@ -224,11 +224,13 @@ void imprimir_menu_inicio(){
     printf("\n");
 }
 
-void imprimir_menu_gimnasio(){
+void imprimir_menu_gimnasio(gimnasio_t* gimnasio){
     printf("\n%48s", " ");
     imprimir_linea("=", 18);
     printf("%s"," MENU GIMNASIO ");
     imprimir_linea("=", 19);
+    printf("\n%48s|Gimnasio: %-40s|\n%48s", " ",gimnasio->nombre, " ");
+    imprimir_linea("=", 52);
     printf("\n%48s|%-50s|\n%48s|%-50s|\n%48s|%-50s|\n%48s|%-50s|\n%48s", " ", "E - Mostrar entrenador", " ", "G - Mostrar informacion del gimnasio", " ", "C - Modificar pokemones de combate", " ", "B - Realizar proxima batalla", " ");
     imprimir_linea("=", 52);
     printf("\n");
