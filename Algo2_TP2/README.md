@@ -3,7 +3,7 @@
 ### Autor: Andrés Kübler
 #
 
-## **1. Objetivo""
+## **1. Objetivo**
 El presente trabajo práctico tiene como finalidad que el alumno se familiarice con las diferentes estructuras de datos dinámicas implementadas, aplicándolas a un problema concreto y poniendo en práctica su uso integrado.
 
 ## **2. Enunciado**
