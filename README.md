@@ -9,10 +9,9 @@
 | --- | --- | --- |
 ||  [TP1 - Gran Pesca Pokémon](#TP1)  |  [TDA - Lista](#TDA_lista)  |
 ||  [TP2 - Una Aventura Pokémon](#TP2)  |  [TDA - ABB](#TDA_ABB)  |
-|||  [TDA - Hash](#TDA_Hash)  |
+
 
 #
-
 # **[Introducción](./Introducción)**
 El repositorio consta de los diferentes Trabajos Practicos realizados en la materia *Algoritmos y Programación II* de la *Cátedra Méndez* de la *Facultad de Ingeniería de la Universidad de Buenos Aires (FIUBA)*. El desarrollo de los mismos es en *Lenguaje C* y dentro de sus respectivas carpetas encontraran tanto los enunciados de los trabajos como su implementación.
 
@@ -28,8 +27,5 @@ El presente trabajo tiene como finalidad la implementación de una Lista simplem
 ## [TDA ABB](./TDA_ABB)
 El presente trabajo tiene como finalidad la implementación de un Arbol Binario de Búsqueda *(ABB)*. Para ello se brindan las firmas de las funciones públicas a implementar y se deja a criterio del alumno la creación de las funciones privadas del TDA para el correcto funcionamiento del Arbol cumpliendo con las buenas prácticas de programación. Adicionalmente se pide la implementación de un iterador interno para la estructura.
 
-## [TDA Hash](./TDA_Hash)
-Proximamente...
-
 ## [TP2 - Una Aventura Pokémon](./TP2)
-Proximamente...
+El presente trabajo práctico tiene como finalidad que el alumno se familiarice con las diferentes estructuras de datos dinámicas implementadas, aplicándolas a un problema concreto y poniendo en práctica su uso integrado.
