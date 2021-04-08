@@ -76,15 +76,16 @@ personaje_t* cambiar_pokemones_para_combatir(personaje_t* personaje){
 
 
 //FALTA CORREGIR ESTA FUNCIOOOOOOOON
-personaje_t* tomar_pokemon_prestado(personaje_t* personaje, entrenador_t* entrenador, int* posicion){
+personaje_t* tomar_pokemon_prestado(personaje_t* personaje, entrenador_t* entrenador, size_t* posicion){
     //Imprimir pokemones de personaje y entrenador
-    //size_t posicion = 1;
     
     //while(posicion < 0 && posicion > entrenador->cantidad_pokemones) posicion = pedir_posicion_pokemon(&posicion); //pedir cual quiere
-    
+    printf("\nCantidad Entrenador: %li\nCantidad Personaje: %li\n", entrenador->v_pokemones->cantidad, personaje->pokemon_obtenidos->cantidad);
     void* pokemon_prestado = lista_elemento_en_posicion(entrenador->v_pokemones, (size_t)posicion);
     //Saco el nodo del entrenador (NO el elemento)
+    //if(pokemon_prestado) lista_borrar_de_posicion(entrenador->v_pokemones, posicion);
     if(pokemon_prestado) lista_encolar(personaje->pokemon_obtenidos, pokemon_prestado);
+    printf("\nCantidad Entrenador: %li\nCantidad Personaje: %li\n", entrenador->v_pokemones->cantidad, personaje->pokemon_obtenidos->cantidad);
 
     return personaje;
 }
@@ -207,12 +208,13 @@ juego_t* batallar_gimnasio(juego_t* juego, bool* bandera_derrota_gimnasio){
         
         //ELSE IF ES EL PRIMER ENTRENADOR
         /*if(!bandera_derrota_entrenador && ((gimnasio_t*)juego->gimnasio_actual)->v_entrenadores->cantidad == 1){
-            int posicion = 1;
+            size_t posicion = 1;
 
             juego->personaje = tomar_pokemon_prestado(juego->personaje, entrenador_actual, &posicion);
             lista_borrar_de_posicion(entrenador_actual->v_pokemones, (size_t)posicion-1);
             destruir_entrenador(entrenador_actual);
             lista_desapilar(((gimnasio_t*)juego->gimnasio_actual)->v_entrenadores);
+            
         }else*/ if(!bandera_derrota_entrenador){
             destruir_entrenador(entrenador_actual);
             lista_desapilar(((gimnasio_t*)juego->gimnasio_actual)->v_entrenadores);
